@@ -8,7 +8,7 @@
  
 ## 硬件 ##
 - 开发环境：Altium Designer10
-- STM32F103RCT6、DM9000、SHT10、DS1231、...
+- STM32F103RCT6、DM9000、SHT10、DS3231SN、...
 
 ## 软件 ##
 - 开发环境：Keil5
