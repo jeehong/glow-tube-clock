@@ -9,13 +9,14 @@
 ## 硬件 ##
 - 开发环境：Altium Designer10
 - STM32F103RCT6、DM9000、SHT10、DS1231、...
+
 ## 软件 ##
 - 开发环境：Keil5
 - 操作系统：FreeRTOS
 - 网络协议栈：LwIP
 
 ## 项目进展 ##
-请跳转至个人博客：[Jeehong's blog](https://jeehong.github.io)
+请跳转至个人博客：[Jeehong's blog](https://jeehong.github.io/blog/2016/04/project-glow-tube-clock.html)
 
 
 
