@@ -1,0 +1,13 @@
+!.gitignore
+*.bak
+*.Administrator
+*.dep
+*.o
+*.crf
+*.d
+*.axf
+Obj/*
+Lst/*
+.Jeehong
+IAR/*
+TrueSTUDIO/*

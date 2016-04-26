@@ -1,0 +1,16 @@
+Added Component: Designator=D4(NEON-DIP2)
+Added Component: Designator=D5(NEON-DIP2)
+Added Component: Designator=D6(NEON-DIP2)
+Added Component: Designator=D7(NEON-DIP2)
+Added Pin To Net: NetName=NetD4_1 Pin=D4-1
+Added Pin To Net: NetName=NetD4_2 Pin=D4-2
+Added Pin To Net: NetName=NetD5_1 Pin=D5-1
+Added Pin To Net: NetName=NetD5_2 Pin=D5-2
+Added Pin To Net: NetName=NetD6_1 Pin=D6-1
+Added Pin To Net: NetName=NetD6_2 Pin=D6-2
+Added Pin To Net: NetName=NetD7_1 Pin=D7-1
+Added Pin To Net: NetName=NetD7_2 Pin=D7-2
+Added Member To Class: ClassName=Sheet Member=Component D4 LED0
+Added Member To Class: ClassName=Sheet Member=Component D5 LED0
+Added Member To Class: ClassName=Sheet Member=Component D6 LED0
+Added Member To Class: ClassName=Sheet Member=Component D7 LED0
