@@ -19,13 +19,13 @@ __IO uint32_t ARPTimer = 0;
 
 #endif 
  	
-struct netif DM9000AEP;	   		                        	//ÍøÂçÓ²¼ş½Ó¿Ú½á¹¹ÌØĞÔ
-//uint8_t macaddress[6]={0x54,0x55,0x58,0x10,0x00,0x88};	//ÉèÖÃÓ²¼şÍøÂç½Ó¿ÚµÄmacµØÖ·
+struct netif DM9000AEP;	   		                        		 /* ç½‘ç»œç¡¬ä»¶æ¥å£ç»“æ„ç‰¹æ€§ */
+//uint8_t macaddress[6]={0x54,0x55,0x58,0x10,0x00,0x88};		/* è®¾ç½®ç¡¬ä»¶ç½‘ç»œæ¥å£çš„macåœ°å€*/
 
 uint8_t m_mac[6],serverIP[4],maskIP[4],gateIP[4];
 
-extern err_t ethernetif_init( struct netif *netif );    //ÒÔÌ«Íø³õÊ¼»¯º¯Êı
-extern err_t ethernetif_input( struct netif *netif );   //ÒÔÌ«ÍøÊäÈëº¯Êı
+extern err_t ethernetif_init( struct netif *netif );    /* ä»¥å¤ªç½‘åˆå§‹åŒ–å‡½æ•° */
+extern err_t ethernetif_input( struct netif *netif );   /* ä»¥å¤ªç½‘è¾“å…¥å‡½æ•° */
 
 /**
   * @brief  LwIP periodic tasks
@@ -75,11 +75,11 @@ void LwIP_Periodic_Handle(__IO uint32_t localtime)
  
 
 /*
- * º¯ÊıÃû£ºLWIP_Init
- * ÃèÊö  £º³õÊ¼»¯LWIPĞ­ÒéÕ»£¬Ö÷ÒªÊÇ°ÑDM9000AEPÓëLWIPÁ¬½ÓÆğÀ´¡£°üÀ¨IP¡¢MACµØÖ·£¬½Ó¿Úº¯Êı 			
- * ÊäÈë  £ºÎŞ
- * Êä³ö  : ÎŞ
- * µ÷ÓÃ  £ºÍâ²¿µ÷ÓÃ
+ * å‡½æ•°åï¼šLWIP_Init
+ * æè¿°  ï¼šåˆå§‹åŒ–LWIPåè®®æ ˆï¼Œä¸»è¦æ˜¯æŠŠDM9000AEPä¸LWIPè¿æ¥èµ·æ¥ã€‚åŒ…æ‹¬IPã€MACåœ°å€ï¼Œæ¥å£å‡½æ•° 			
+ * è¾“å…¥  ï¼šæ— 
+ * è¾“å‡º  : æ— 
+ * è°ƒç”¨  ï¼šå¤–éƒ¨è°ƒç”¨
  */
 void LwIP_Init( void )
 {
@@ -102,9 +102,9 @@ void LwIP_Init( void )
 	serverIP[2] = 11;
 	serverIP[3] = 1;
 	
-	lwip_init();								    //µ÷ÓÃLWIP³õÊ¼»¯º¯Êı³õÊ¼»¯ÍøÂç½Ó¿Ú½á¹¹ÌåÁ´±í¡¢ÄÚ´æ³Ø¡¢pbuf½á¹¹Ìå 
+	lwip_init();								    /* è°ƒç”¨LWIPåˆå§‹åŒ–å‡½æ•°åˆå§‹åŒ–ç½‘ç»œæ¥å£ç»“æ„ä½“é“¾è¡¨ã€å†…å­˜æ± ã€pbufç»“æ„ä½“ */
 												    
-	#if LWIP_DHCP			   					    //ÈôÊ¹ÓÃDHCPĞ­Òé
+	#if LWIP_DHCP			   					    /* è‹¥ä½¿ç”¨DHCPåè®® */
 		ipaddr.addr = 0;
 		netmask.addr = 0;
 		gw.addr = 0; 
@@ -114,19 +114,19 @@ void LwIP_Init( void )
 		IP4_ADDR( &gw, gateIP[0], gateIP[1], gateIP[2], 1);	
 	#endif
 	
-	//³õÊ¼»¯DM9000AEPÓëLWIPµÄ½Ó¿Ú£¬²ÎÊıÎªÍøÂç½Ó¿Ú½á¹¹Ìå¡¢ipµØÖ·¡¢×ÓÍøÑÚÂë¡¢Íø¹Ø¡¢Íø¿¨ĞÅÏ¢Ö¸Õë¡¢³õÊ¼»¯º¯Êı¡¢ÊäÈëº¯Êı  
+	/* åˆå§‹åŒ–DM9000AEPä¸LWIPçš„æ¥å£ï¼Œå‚æ•°ä¸ºç½‘ç»œæ¥å£ç»“æ„ä½“ã€ipåœ°å€ã€å­ç½‘æ©ç ã€ç½‘å…³ã€ç½‘å¡ä¿¡æ¯æŒ‡é’ˆã€åˆå§‹åŒ–å‡½æ•°ã€è¾“å…¥å‡½æ•° */
 	netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
 		
-	netif_set_default(&DM9000AEP);					//°ÑDM9000AEPÉèÖÃÎªÄ¬ÈÏÍø¿¨ 
+	netif_set_default(&DM9000AEP);					/* æŠŠDM9000AEPè®¾ç½®ä¸ºé»˜è®¤ç½‘å¡ */
 	
 	
-	#if LWIP_DHCP	   		                     	//ÈôÊ¹ÓÃÁËDHCP
+	#if LWIP_DHCP	   		                    /* è‹¥ä½¿ç”¨äº†DHCP */
 	/*  Creates a new DHCP client for this interface on the first call.
 	Note: you must call dhcp_fine_tmr() and dhcp_coarse_tmr() at
 	the predefined regular intervals after starting the client.
 	You can peek in the netif->dhcp struct for the actual DHCP status.*/
-		dhcp_start(&DM9000AEP);                      //Æô¶¯DHCP
+		dhcp_start(&DM9000AEP);               /* å¯åŠ¨DHCP */
 	#endif
 	
-	netif_set_up(&DM9000AEP);                        //Ê¹ÄÜÓ²¼şÍøÂçĞ¾Æ¬½Ó¿ÚÇı¶¯DM9000AEP
+	netif_set_up(&DM9000AEP);               /* ä½¿èƒ½ç¡¬ä»¶ç½‘ç»œèŠ¯ç‰‡æ¥å£é©±åŠ¨DM9000AEP */
 }

@@ -160,12 +160,10 @@ void LwIPEntry(void * pvArg)
 			while(netconn_delete(__pstNewConn) != ERR_OK)
 				vTaskDelay(1);
 		}
-
-
-//	ethernetif_input(NULL);
-//  tcp_tmr();	
- // etharp_tmr();  
-     }			   
+	/* ethernetif_input(NULL); */
+	/* tcp_tmr(); */
+	/* etharp_tmr(); */ 
+  }			   
 }
 
 
