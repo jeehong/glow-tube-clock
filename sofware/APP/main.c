@@ -111,7 +111,7 @@
 #include "netconfig.h"
 
 #include "app_led.h"
-
+#include "LwIPEntry.h"
 
 /* The check task uses the sprintf function so requires a little more stack. */
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
@@ -129,6 +129,8 @@ int main( void )
 	
 	BSP_LED_Init();
 
+	sys_thread_new((void * )NULL, LwIPEntry, ( void * )NULL, 350, 1);
+	
 	/* Start the tasks defined within this file/specific to this demo. */
   xTaskCreate( vLed1Task, "Led1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL );
 //	xTaskCreate( vLed2Task, "Led2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );

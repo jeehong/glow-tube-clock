@@ -1,0 +1,33 @@
+*** Creating Trace Output File '.\Obj\OS.tra' Ok.
+### Preparing for ADS-LD.
+### Creating ADS-LD Command Line
+### List of Objects: adding '".\obj\main.o"'
+### List of Objects: adding '".\obj\app_led.o"'
+### List of Objects: adding '".\obj\cstartup.o"'
+### List of Objects: adding '".\obj\stm32f10x_gpio.o"'
+### List of Objects: adding '".\obj\stm32f10x_rcc.o"'
+### List of Objects: adding '".\obj\system_stm32f10x.o"'
+### List of Objects: adding '".\obj\croutine.o"'
+### List of Objects: adding '".\obj\event_groups.o"'
+### List of Objects: adding '".\obj\list.o"'
+### List of Objects: adding '".\obj\queue.o"'
+### List of Objects: adding '".\obj\tasks.o"'
+### List of Objects: adding '".\obj\timers.o"'
+### List of Objects: adding '".\obj\port.o"'
+### List of Objects: adding '".\obj\heap_2.o"'
+### ADS-LD Command completed:
+--cpu Cortex-M3 ".\obj\main.o" ".\obj\app_led.o" ".\obj\cstartup.o" ".\obj\stm32f10x_gpio.o" ".\obj\stm32f10x_rcc.o" ".\obj\system_stm32f10x.o" ".\obj\croutine.o" ".\obj\event_groups.o" ".\obj\list.o" ".\obj\queue.o" ".\obj\tasks.o" ".\obj\timers.o" ".\obj\port.o" ".\obj\heap_2.o" 
+--library_type=microlib --strict --scatter ".\Obj\OS.sct" 
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\OS.map" -o .\Obj\OS.axf### Preparing Environment (PrepEnvAds)
+### ADS-LD Output File: '.\Obj\OS.axf'
+### ADS-LD Command File: '.\Obj\OS.lnp'
+### Checking for dirty Components...
+### Creating CmdFile '.\Obj\OS.lnp', Handle=0x00000204
+### Writing '.lnp' file
+### ADS-LD Command file '.\Obj\OS.lnp' is ready.
+### ADS-LD: About to start ADS-LD Thread.
+### ADS-LD: executed with 0 errors
+### Updating obj list
+### LDADS_file() completed.
