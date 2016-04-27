@@ -125,8 +125,6 @@ int main( void )
 #endif
 	SystemInit();
 	
-	LwIP_Init();
-	
 	BSP_LED_Init();
 
 	sys_thread_new((void * )NULL, LwIPEntry, ( void * )NULL, 350, 1);
