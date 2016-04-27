@@ -108,7 +108,7 @@
 /* Library includes. */
 #include "stm32f10x.h"
 
-#include "lwip/init.h"
+#include "netconfig.h"
 
 #include "app_led.h"
 
@@ -125,7 +125,7 @@ int main( void )
 #endif
 	SystemInit();
 	
-	lwip_init();
+	LwIP_Init();
 	
 	BSP_LED_Init();
 

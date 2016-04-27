@@ -36,7 +36,7 @@
  *
  */
 
-#include "opt.h"
+#include "lwip/opt.h"
 
 #include "lwip/init.h"
 #include "lwip/stats.h"

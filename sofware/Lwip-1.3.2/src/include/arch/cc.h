@@ -32,7 +32,7 @@
 #ifndef __CC_H__
 #define __CC_H__
 
-#include "cpu.h"
+#include "arch/cpu.h"
 
 typedef unsigned   char    u8_t;
 typedef signed     char    s8_t;
