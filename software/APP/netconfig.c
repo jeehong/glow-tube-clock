@@ -89,18 +89,18 @@ void LwIP_Init( void )
 	
 	serverIP[0] = 172;
 	serverIP[1] = 10;
-	serverIP[2] = 11;
-	serverIP[3] = 73;
+	serverIP[2] = 12;
+	serverIP[3] = 157;
 	
 	maskIP[0] = 255;
 	maskIP[1] = 255;
 	maskIP[2] = 0;
 	maskIP[3] = 0;
 
-	serverIP[0] = 172;
-	serverIP[1] = 10;
-	serverIP[2] = 11;
-	serverIP[3] = 1;
+	gateIP[0] = 172;
+	gateIP[1] = 10;
+	gateIP[2] = 11;
+	gateIP[3] = 1;
 	
 	lwip_init();								    /* 调用LWIP初始化函数初始化网络接口结构体链表、内存池、pbuf结构体 */
 												    

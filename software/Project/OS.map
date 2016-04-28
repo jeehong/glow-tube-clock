@@ -2079,51 +2079,51 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       816         50          0          0          0      19376   api_lib.o
-      2752         38          0          0          0      23244   api_msg.o
-       160          6          0          0          0       1357   app_led.o
-        52         18        236          0        512        792   cstartup.o
-      1328        130          0          0          0       4630   dm9000x.o
-      1444         58          0         13       1632       6133   dns.o
-      2452         38         12          1        200      17577   etharp.o
-       340         20          0          0       3032       3957   ethernetif.o
-         0          0          0          0          0       9524   event_groups.o
-       292         20          0         24      17408       3128   heap_2.o
-       684          6          0          0          0       2526   icmp.o
-       540         12          0          0         16       3132   inet.o
-       342          0          0          0          0       5158   inet_chksum.o
-        24          0          0          0          0       2592   init.o
-      1038         26          0         10          0       5850   ip.o
-        78          0          8          0          0       5405   ip_addr.o
-      1560         24          0          6       1504       6376   ip_frag.o
-       148          0          0          0          0       1806   list.o
-       236         94          0          0          0      19295   lwipentry.o
-        72         16          0          0          0     248482   main.o
-      1040         26          0         16       2020       3718   mem.o
-       348         20         56          0      12107       2330   memp.o
-       288          0          0          0          0       6413   netbuf.o
-       312         36          0         38         96      15236   netconfig.o
-       516         22          0          9          0       5228   netif.o
-      1172          0          0          0          0       5296   pbuf.o
-       378         28          0          4          0       6976   port.o
-      1724         10          0          0          0      10222   queue.o
-       412          4          0          4          0       3973   raw.o
-      4384         60         60         12         80      37246   sockets.o
-         0          0          0          0        330       3313   stats.o
-       860         38          0          0          0       5589   stm32f10x_gpio.o
-       932         36          0         20          0       8748   stm32f10x_rcc.o
-       588          4          0          0          0       3232   sys.o
-       748         12          0          2         40       7934   sys_arch.o
-       480         38          0         20          0       1807   system_stm32f10x.o
-      4012        258          0         60        200      26249   tasks.o
-      2964        120        137         76          0      17728   tcp.o
-      4896        214          0         32         20      13180   tcp_in.o
-      2812         26          0          0          0       6882   tcp_out.o
-       852         76          0         16          0      20836   tcpip.o
-      1228         16          0          4          0       6229   udp.o
+       816         50          0          0          0      19436   api_lib.o
+      2752         38          0          0          0      23308   api_msg.o
+       160          6          0          0          0       1365   app_led.o
+        52         18        236          0        512        800   cstartup.o
+      1328        130          0          0          0       4642   dm9000x.o
+      1444         58          0         13       1632       6157   dns.o
+      2452         38         12          1        200      17649   etharp.o
+       340         20          0          0       3032       3985   ethernetif.o
+         0          0          0          0          0       9540   event_groups.o
+       292         20          0         24      17408       3148   heap_2.o
+       684          6          0          0          0       2542   icmp.o
+       540         12          0          0         16       3140   inet.o
+       342          0          0          0          0       5170   inet_chksum.o
+        24          0          0          0          0       2612   init.o
+      1038         26          0         10          0       5878   ip.o
+        78          0          8          0          0       5445   ip_addr.o
+      1560         24          0          6       1504       6400   ip_frag.o
+       148          0          0          0          0       1822   list.o
+       236         94          0          0          0      19379   lwipentry.o
+        72         16          0          0          0     248614   main.o
+      1040         26          0         16       2020       3734   mem.o
+       348         20         56          0      12107       2354   memp.o
+       288          0          0          0          0       6433   netbuf.o
+       312         36          0         38         96      15296   netconfig.o
+       516         22          0          9          0       5260   netif.o
+      1172          0          0          0          0       5304   pbuf.o
+       378         28          0          4          0       7016   port.o
+      1724         10          0          0          0      10234   queue.o
+       412          4          0          4          0       4005   raw.o
+      4384         60         60         12         80      37334   sockets.o
+         0          0          0          0        330       3329   stats.o
+       860         38          0          0          0       5605   stm32f10x_gpio.o
+       932         36          0         20          0       8772   stm32f10x_rcc.o
+       588          4          0          0          0       3248   sys.o
+       748         12          0          2         40       7978   sys_arch.o
+       480         38          0         20          0       1831   system_stm32f10x.o
+      4012        258          0         60        200      26293   tasks.o
+      2964        120        137         76          0      17756   tcp.o
+      4896        214          0         32         20      13204   tcp_in.o
+      2812         26          0          0          0       6894   tcp_out.o
+       852         76          0         16          0      20908   tcpip.o
+      1228         16          0          4          0       6261   udp.o
 
     ----------------------------------------------------------------------
-     45308       1600        546        380      39200     608705   Object Totals
+     45308       1600        546        380      39200     610081   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          4          0          5         13          3          0   (incl. Padding)
 
@@ -2216,8 +2216,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     49286       1800        598        392      39552     607289   Grand Totals
-     49286       1800        598         80      39552     607289   ELF Image Totals (compressed)
+     49286       1800        598        392      39552     608665   Grand Totals
+     49286       1800        598         80      39552     608665   ELF Image Totals (compressed)
      49286       1800        598         80          0          0   ROM Totals
 
 ==============================================================================

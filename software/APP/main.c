@@ -127,7 +127,7 @@ int main( void )
 	
 	BSP_LED_Init();
 
-	sys_thread_new((void * )NULL, LwIPEntry, ( void * )NULL, 350, 1);
+	sys_thread_new((void * )NULL, LwIPEntry, ( void * )NULL, 350, 6);
 	
 	/* Start the tasks defined within this file/specific to this demo. */
   xTaskCreate( vLed1Task, "Led1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL );
