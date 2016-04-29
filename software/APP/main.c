@@ -112,6 +112,7 @@
 
 #include "app_led.h"
 #include "LwIPEntry.h"
+#include "clock-arch.h"
 
 /* The check task uses the sprintf function so requires a little more stack. */
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
@@ -124,17 +125,21 @@ int main( void )
   debug();
 #endif
 	SystemInit();
-	
+	LwIP_Init();
+	clock_arch_init(); 
 	BSP_LED_Init();
 
-	sys_thread_new((void * )NULL, LwIPEntry, ( void * )NULL, 350, 6);
+	 //sys_thread_new((void * )NULL, LwIPEntry, ( void * )NULL, 350, 6); 
 	
 	/* Start the tasks defined within this file/specific to this demo. */
-  xTaskCreate( vLed1Task, "Led1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL );
-//	xTaskCreate( vLed2Task, "Led2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
-//	xTaskCreate( vLed3Task, "Led3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL );
+	
+  xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL );
+	xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL );
+//	xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
+//	xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL );
 
-
+	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 8, NULL );
+	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
 

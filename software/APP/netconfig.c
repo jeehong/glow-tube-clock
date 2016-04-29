@@ -5,8 +5,10 @@
 #include "netif/etharp.h"
 #include "lwip/dhcp.h"
 #include "netconfig.h"	
+#include "tcpip.h"
+#include "clock-arch.h"
 
-//#include "anbus.h"
+#define	localtime		sys_ticks
 
 struct netif netif;
 __IO uint32_t TCPTimer = 0;
@@ -32,44 +34,49 @@ extern err_t ethernetif_input( struct netif *netif );   /* 以太网输入函数
   * @param  localtime the current LocalTime value
   * @retval None
   */
-void LwIP_Periodic_Handle(__IO uint32_t localtime)
-{
-  /* TCP periodic process every 250 ms */
-  if ((localtime - TCPTimer) >= TCP_TMR_INTERVAL)
-  {
-    TCPTimer =  localtime;
-    tcp_tmr();
-  }
-	
-  /* DNS periodic process every 1000 ms */
-  if ((localtime - DNSTimer) >= DNS_TMR_INTERVAL)
-  {
-    DNSTimer =  localtime;
-    dns_tmr();
-  }
-	
-  /* ARP periodic process every 5s */
-  if ((localtime - ARPTimer) >= ARP_TMR_INTERVAL)
-  {
-    ARPTimer =  localtime;
-    etharp_tmr();
-  }
+void LwIP_Periodic_Handle(void *pvParameters)
+{     
+	while(1)
+	{
+		if(ethernetif_input(&DM9000AEP) == ERR_OK) 	  //ÂÖÑ¯ÊÇ·ñ½ÓÊÕµ½Êý¾Ý
+		{
+			/* TCP periodic process every 250 ms */
+			if ((localtime - TCPTimer) >= TCP_TMR_INTERVAL)
+			{
+				TCPTimer =  localtime;
+				tcp_tmr();
+			}
+			
+			/* DNS periodic process every 1000 ms */
+			if ((localtime - DNSTimer) >= DNS_TMR_INTERVAL)
+			{
+				DNSTimer =  localtime;
+				dns_tmr();
+			}
+			
+			/* ARP periodic process every 5s */
+			if ((localtime - ARPTimer) >= ARP_TMR_INTERVAL)
+			{
+				ARPTimer =  localtime;
+				etharp_tmr();
+			}
 
-#if LWIP_DHCP
-  /* Fine DHCP periodic process every 500ms */
-  if (localtime - DHCPfineTimer >= DHCP_FINE_TIMER_MSECS)
-  {
-    DHCPfineTimer =  localtime;
-    dhcp_fine_tmr();
-  }
-  /* DHCP Coarse periodic process every 60s */
-  if (localtime - DHCPcoarseTimer >= DHCP_COARSE_TIMER_MSECS)
-  {
-    DHCPcoarseTimer =  localtime;
-    dhcp_coarse_tmr();
-  }
-#endif
-
+		#if LWIP_DHCP
+			/* Fine DHCP periodic process every 500ms */
+			if (localtime - DHCPfineTimer >= DHCP_FINE_TIMER_MSECS)
+			{
+				DHCPfineTimer =  localtime;
+				dhcp_fine_tmr();
+			}
+			/* DHCP Coarse periodic process every 60s */
+			if (localtime - DHCPcoarseTimer >= DHCP_COARSE_TIMER_MSECS)
+			{
+				DHCPcoarseTimer =  localtime;
+				dhcp_coarse_tmr();
+			}
+		#endif
+		}
+	}
 }
 
  
@@ -89,7 +96,7 @@ void LwIP_Init( void )
 	
 	serverIP[0] = 172;
 	serverIP[1] = 10;
-	serverIP[2] = 12;
+	serverIP[2] = 11;
 	serverIP[3] = 157;
 	
 	maskIP[0] = 255;
@@ -116,7 +123,8 @@ void LwIP_Init( void )
 	
 	/* 初始化DM9000AEP与LWIP的接口，参数为网络接口结构体、ip地址、子网掩码、网关、网卡信息指针、初始化函数、输入函数 */
 	netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
-		
+	//netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
+	
 	netif_set_default(&DM9000AEP);					/* 把DM9000AEP设置为默认网卡 */
 	
 	

@@ -223,7 +223,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -346,7 +346,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -421,6 +421,11 @@
               <FileName>netconfig.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\netconfig.c</FilePath>
+            </File>
+            <File>
+              <FileName>clock-arch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\clock-arch.c</FilePath>
             </File>
           </Files>
         </Group>

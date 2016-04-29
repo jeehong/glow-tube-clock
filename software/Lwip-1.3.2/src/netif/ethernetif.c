@@ -164,7 +164,15 @@ err_t  ethernetif_input(struct netif *netif)
 
 	return err;
 }
-  
+
+static void arp_timer( void *arg )
+{
+	( void ) arg;
+
+    etharp_tmr();
+    sys_timeout( ARP_TMR_INTERVAL, arp_timer, NULL );
+}
+
 /**
  * Should be called at the beginning of the program to set up the
  * network interface. It calls the function low_level_init() to do the
@@ -200,7 +208,8 @@ err_t ethernetif_init( struct netif *netif )
 	ethernetif->ethaddr = ( struct eth_addr * ) &( netif->hwaddr[0] );
 
 	low_level_init( netif );
-
+//	etharp_init();
+//	sys_timeout( ARP_TMR_INTERVAL, arp_timer, NULL );
 	return ERR_OK;
 }
 /*************************************************************************************************************/

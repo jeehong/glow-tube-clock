@@ -6,9 +6,10 @@
 #define mainDELAY						( ( TickType_t ) 100 / portTICK_PERIOD_MS )
 	 
 void  BSP_LED_Init(void);
-void vLed1Task( void *pvParameters );
-void vLed2Task( void *pvParameters );
-void vLed3Task( void *pvParameters );
+void vLedTask( void *pvParameters );
+void vRelay1Task( void *pvParameters );
+void vRelay2Task( void *pvParameters );
+void vRelay3Task( void *pvParameters );
 	 
 
 #endif

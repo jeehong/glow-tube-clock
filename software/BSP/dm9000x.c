@@ -157,9 +157,9 @@ unsigned int dm9000x_read_id(void)
 	id |= (ior( DM9000_PIDL )&0x00ff) << 16;
 	id |= (ior( DM9000_PIDH )&0x00ff) << 24;
 	
-	printf("DM9000x ID:0x%x \n",id); 
+	//printf("DM9000x ID:0x%x \n",id); 
 
-	if(DM9000_ID == id)
+//	if(DM9000_ID == id)
 	  return  id;
 	
 	return 0;	 
@@ -261,7 +261,7 @@ void dm9000x_sendpacket( uint8_t* packet, uint16_t len)
 			{
 			iow(DM9000_MWCMD,*(packet++));
 			}
-		printf("dm9000x_sendpacket:dm9000 io mode is 8bit.....!\n");
+		//printf("dm9000x_sendpacket:dm9000 io mode is 8bit.....!\n");
 	}
     else 
 	{
@@ -320,7 +320,7 @@ uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen)
       {
         iow(DM9000_IMR, 0x80);		//屏幕网卡中断
         dm9000x_inital(m_mac);//重新初始化
-				printf("System is restart\n");
+				//printf("System is restart\n");
         iow(DM9000_IMR, 0x81);		//打开网卡中断
       }
       return 0;

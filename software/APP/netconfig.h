@@ -12,8 +12,7 @@
 
 void LwIP_Init( void );
 void Time_Update(void);
-void LwIP_Periodic_Handle(__IO uint32_t localtime);
-void LwIP_Periodic_Handle(__IO uint32_t localtime);
+void LwIP_Periodic_Handle(void *pvParameters);
 
 #endif
 

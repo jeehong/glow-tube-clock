@@ -134,7 +134,7 @@ void LwIPEntry(void * pvArg)
 	struct netbuf	*__pstNetbuf;
 
 	//* 初始化LwIP
-	/* vlwIPInit();	*/
+	vlwIPInit();
 	/* 设置LwIP，包括添加配置网络接口、建立接收任务等工作 */
 	SetLwIP();
 	__pstConn = netconn_new(NETCONN_TCP);

@@ -2,6 +2,7 @@
 ".\obj\main.o"
 ".\obj\app_led.o"
 ".\obj\netconfig.o"
+".\obj\clock-arch.o"
 ".\obj\dm9000x.o"
 ".\obj\cstartup.o"
 ".\obj\stm32f10x_gpio.o"
@@ -48,7 +49,7 @@
 ".\obj\netifapi.o"
 ".\obj\sockets.o"
 ".\obj\tcpip.o"
---strict --scatter ".\Obj\OS.sct"
+--library_type=microlib --strict --scatter ".\Obj\OS.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\OS.map" -o .\Obj\OS.axf

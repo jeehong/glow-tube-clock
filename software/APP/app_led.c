@@ -15,7 +15,7 @@ void  BSP_LED_Init(void)
 		RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOC, ENABLE); 
 
 		/*选择要控制的GPIOB引脚*/															   
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;	
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_12;	
 
 		/*设置引脚模式为通用推挽输出*/
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   
@@ -27,21 +27,32 @@ void  BSP_LED_Init(void)
 		GPIO_Init(GPIOC, &GPIO_InitStructure);			  
 
 		/* 关闭所有led灯	*/
-		GPIO_ResetBits(GPIOC, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_12);
 }
 
-void vLed1Task( void *pvParameters )
+void vLedTask( void *pvParameters )
+{
+  while(1)
+	{
+		GPIO_SetBits(GPIOC, GPIO_Pin_12);
+		vTaskDelay(1920);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
+		vTaskDelay(80);
+	}
+}
+
+void vRelay1Task( void *pvParameters )
 {
   while(1)
 	{
 		GPIO_SetBits(GPIOC, GPIO_Pin_0);
-		vTaskDelay(3000);
+		vTaskDelay(10000);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_0);
-		vTaskDelay(500);
+		vTaskDelay(10000);
 	}
 }
 
-void vLed2Task( void *pvParameters )
+void vRelay2Task( void *pvParameters )
 {
   while(1)
 	{
@@ -52,7 +63,7 @@ void vLed2Task( void *pvParameters )
 	}
 }
 
-void vLed3Task( void *pvParameters )
+void vRelay3Task( void *pvParameters )
 {
   while(1)
 	{
