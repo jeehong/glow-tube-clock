@@ -29,6 +29,8 @@
  * Author: Adam Dunkels <adam@sics.se>
  *
  */
+#include "FreeRTOS.h"
+#include "task.h"
 #include "stm32f10x.h"
 #include <string.h>
 #include "err.h"
@@ -41,6 +43,8 @@
 
 #include "DM9000x.h"              //网卡芯片DM9000AEP底层驱动函数
 
+#define netifINTERFACE_TASK_STACK_SIZE		( 350 )
+
 #define IFNAME0 'S'
 #define IFNAME1 'T'
 
@@ -49,6 +53,7 @@ extern  uint8_t m_mac[6];	        //存放硬件网卡地址值大小
 unsigned char Data_Buf[1516];	    //存放接收数据缓冲器
 unsigned char Tx_Data_Buf[1516]; //存放发送数据缓冲器
 
+err_t  ethernetif_input(struct netif *netif);
 
 struct ethernetif
 {
@@ -57,6 +62,7 @@ struct ethernetif
 
 static void low_level_init( struct netif *netif )	  //底层硬件驱动网卡初始化函数
 {
+	//unsigned portBASE_TYPE uxPriority;
 	
 	netif->hwaddr_len = 6;						//设置硬件网卡地址值长度 
 
@@ -77,8 +83,17 @@ static void low_level_init( struct netif *netif )	  //底层硬件驱动网卡初始化函数
 	time.  To prevent this starving lower priority tasks of processing time we
 	lower our priority prior to the call, then raise it back again once the
 	initialisation is complete. */
-                 
+  //uxPriority = uxTaskPriorityGet( NULL );  //得到现在运行任务优先级       
+	//vTaskPrioritySet( NULL, tskIDLE_PRIORITY );   //设置为最低优先级
   dm9000x_inital(netif->hwaddr);     //底层硬件网卡芯片DM9000AEP初始化函数
+	
+	//uxPriority=(char)dm9000x_read_id();
+
+
+	//vTaskPrioritySet( NULL, uxPriority );  //恢复优先级
+	/* Create the task that handles the EMAC. */
+	//              任务入口函数           创建任务的名字           任务堆栈的长度            给任务的参数       优先级       句柄反馈使用任务的
+	xTaskCreate( (pdTASK_CODE)ethernetif_input, "ETH_INT", netifINTERFACE_TASK_STACK_SIZE, netif, 3, NULL );
 }		   
 /*-----------------------------------------------------------*/
 
@@ -147,22 +162,24 @@ err_t  ethernetif_input(struct netif *netif)
 {  	
 	err_t err = ERR_OK;		
 	struct pbuf *p = NULL;
-						
-	/* move received packet into a new pbuf */
-	p = low_level_input(netif);
+	
+  for(;;)
+  {
+		 /* move received packet into a new pbuf */
+		p = low_level_input(netif);
 
-	if (p == NULL) 
-		return ERR_MEM;   //-1
-
-	err = netif->input(p, netif);
-	if (err != ERR_OK)
-	{
-		//LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
-		pbuf_free(p);
-		p = NULL;
-	}
-
-	return err;
+		/* no packet could be read, silently ignore this */
+		if (p == NULL) { continue;}
+		 
+		err = netif->input(p, netif);
+		if (err != ERR_OK)
+		{
+			LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+			pbuf_free(p);
+			p = NULL;
+		}
+  }
+	//return err;
 }
 
 static void arp_timer( void *arg )
@@ -204,12 +221,11 @@ err_t ethernetif_init( struct netif *netif )
 	netif->output = etharp_output;
 
 	netif->linkoutput = low_level_output;
-
 	ethernetif->ethaddr = ( struct eth_addr * ) &( netif->hwaddr[0] );
 
 	low_level_init( netif );
-//	etharp_init();
-//	sys_timeout( ARP_TMR_INTERVAL, arp_timer, NULL );
+	etharp_init();
+	sys_timeout( ARP_TMR_INTERVAL, arp_timer, NULL );
 	return ERR_OK;
 }
 /*************************************************************************************************************/

@@ -4,6 +4,8 @@
 #ifndef _DM9000X_H_
 #define _DM9000X_H_
 
+#include "stdint.h"
+
 #define DM9000_ID		    0x90000A46
 
 /* although the registers are 16 bit, they are 32-bit aligned.

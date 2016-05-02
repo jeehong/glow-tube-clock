@@ -200,7 +200,7 @@ ARM Macro Assembler    Page 4
 
 
   119 00000000                 IMPORT           __main
-  120 00000000 4805            LDR              R0, =__main
+  120 00000000 4808            LDR              R0, =__main
   121 00000002 4700            BX               R0
   122 00000004                 ENDP
   123 00000004         
@@ -426,21 +426,31 @@ ARM Macro Assembler    Page 7
   267 00000018         ; User Initial Stack & Heap
   268 00000018         
   269 00000018                 IF               :DEF:__MICROLIB
-  270 00000018         
-  271 00000018                 EXPORT           __initial_sp
-  272 00000018                 EXPORT           __heap_base
-  273 00000018                 EXPORT           __heap_limit
-  274 00000018         
-  275 00000018                 ELSE
-  289                          ENDIF
-  290 00000018         
-  291 00000018         
-  292 00000018                 END
+  276 00000018         
+  277 00000018                 IMPORT           __use_two_region_memory
+  278 00000018                 EXPORT           __user_initial_stackheap
+  279 00000018         __user_initial_stackheap
+  280 00000018         
+  281 00000018 4803            LDR              R0, =  Heap_Mem
+  282 0000001A 4904            LDR              R1, =(Stack_Mem + Stack_Size)
+  283 0000001C 4A02            LDR              R2, = (Heap_Mem +  Heap_Size)
+  284 0000001E 4B04            LDR              R3, = Stack_Mem
+  285 00000020 4770            BX               LR
+  286 00000022         
+  287 00000022 00 00           ALIGN
+  288 00000024         
+  289 00000024                 ENDIF
+  290 00000024         
+  291 00000024         
+  292 00000024                 END
+              00000000 
+              00000000 
+              00000200 
               00000000 
 Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=.\obj\cs
-tartup.d -o.\obj\cstartup.o -Id:\Keil_v5\ARM\RV31\INC -Id:\Keil_v5\ARM\PACK\ARM
-\CMSIS\4.1.0\CMSIS\Include -Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0 --pre
-define="__MICROLIB SETA 1" --list=.\cstartup.lst ..\STMLIB\startup\cstartup.s
+tartup.d -o.\obj\cstartup.o -Ie:\Keil_v5\ARM\RV31\INC -Ie:\Keil_v5\ARM\PACK\ARM
+\CMSIS\3.20.4\CMSIS\Include -Ie:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0 --li
+st=.\cstartup.lst ..\STMLIB\startup\cstartup.s
 
 
 
@@ -461,8 +471,9 @@ Symbol: Stack_Mem
    Definitions
       At line 21 in file ..\STMLIB\startup\cstartup.s
    Uses
-      None
-Comment: Stack_Mem unused
+      At line 282 in file ..\STMLIB\startup\cstartup.s
+      At line 284 in file ..\STMLIB\startup\cstartup.s
+
 __initial_sp 00000200
 
 Symbol: __initial_sp
@@ -470,8 +481,7 @@ Symbol: __initial_sp
       At line 22 in file ..\STMLIB\startup\cstartup.s
    Uses
       At line 49 in file ..\STMLIB\startup\cstartup.s
-      At line 271 in file ..\STMLIB\startup\cstartup.s
-
+Comment: __initial_sp used once
 3 symbols
 
 
@@ -493,24 +503,25 @@ Symbol: Heap_Mem
    Definitions
       At line 33 in file ..\STMLIB\startup\cstartup.s
    Uses
-      None
-Comment: Heap_Mem unused
+      At line 281 in file ..\STMLIB\startup\cstartup.s
+      At line 283 in file ..\STMLIB\startup\cstartup.s
+
 __heap_base 00000000
 
 Symbol: __heap_base
    Definitions
       At line 32 in file ..\STMLIB\startup\cstartup.s
    Uses
-      At line 272 in file ..\STMLIB\startup\cstartup.s
-Comment: __heap_base used once
+      None
+Comment: __heap_base unused
 __heap_limit 00000000
 
 Symbol: __heap_limit
    Definitions
       At line 34 in file ..\STMLIB\startup\cstartup.s
    Uses
-      At line 273 in file ..\STMLIB\startup\cstartup.s
-Comment: __heap_limit used once
+      None
+Comment: __heap_limit unused
 4 symbols
 
 
@@ -1079,7 +1090,15 @@ Symbol: WWDG_IRQHandler
       At line 67 in file ..\STMLIB\startup\cstartup.s
       At line 171 in file ..\STMLIB\startup\cstartup.s
 
-55 symbols
+__user_initial_stackheap 00000018
+
+Symbol: __user_initial_stackheap
+   Definitions
+      At line 279 in file ..\STMLIB\startup\cstartup.s
+   Uses
+      At line 278 in file ..\STMLIB\startup\cstartup.s
+Comment: __user_initial_stackheap used once
+56 symbols
 
 
 
@@ -1093,7 +1112,8 @@ Symbol: Heap_Size
       At line 29 in file ..\STMLIB\startup\cstartup.s
    Uses
       At line 33 in file ..\STMLIB\startup\cstartup.s
-Comment: Heap_Size used once
+      At line 283 in file ..\STMLIB\startup\cstartup.s
+
 Stack_Size 00000200
 
 Symbol: Stack_Size
@@ -1101,7 +1121,8 @@ Symbol: Stack_Size
       At line 18 in file ..\STMLIB\startup\cstartup.s
    Uses
       At line 21 in file ..\STMLIB\startup\cstartup.s
-Comment: Stack_Size used once
+      At line 282 in file ..\STMLIB\startup\cstartup.s
+
 2 symbols
 
 
@@ -1117,6 +1138,14 @@ Symbol: __main
    Uses
       At line 120 in file ..\STMLIB\startup\cstartup.s
 Comment: __main used once
+__use_two_region_memory 00000000
+
+Symbol: __use_two_region_memory
+   Definitions
+      At line 277 in file ..\STMLIB\startup\cstartup.s
+   Uses
+      None
+Comment: __use_two_region_memory unused
 vPortSVCHandler 00000000
 
 Symbol: vPortSVCHandler
@@ -1141,5 +1170,5 @@ Symbol: xPortSysTickHandler
    Uses
       At line 64 in file ..\STMLIB\startup\cstartup.s
 Comment: xPortSysTickHandler used once
-4 symbols
-403 symbols in table
+5 symbols
+406 symbols in table

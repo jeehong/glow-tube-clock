@@ -43,7 +43,7 @@
  * will be set to standard values. Override anything you dont like!
  */
 #include "lwipopts.h"
-#include "lwip/debug.h"
+#include "debug.h"
 
 /*
    -----------------------------------------------
@@ -255,7 +255,7 @@
  * reassembly (whole packets, not fragments!)
  */
 #ifndef MEMP_NUM_REASSDATA
-#define MEMP_NUM_REASSDATA              5
+#define MEMP_NUM_REASSDATA              10
 #endif
 
 /**
@@ -433,7 +433,7 @@
  * packets even if the maximum amount of fragments is enqueued for reassembly!
  */
 #ifndef IP_REASS_MAX_PBUFS
-#define IP_REASS_MAX_PBUFS              10
+#define IP_REASS_MAX_PBUFS              20
 #endif
 
 /**
@@ -450,7 +450,7 @@
  * (requires IP_FRAG_USES_STATIC_BUF==1)
  */
 #if IP_FRAG_USES_STATIC_BUF && !defined(IP_FRAG_MAX_MTU)
-#define IP_FRAG_MAX_MTU                 1500
+#define IP_FRAG_MAX_MTU                 2000
 #endif
 
 /**
@@ -647,7 +647,7 @@
  * transport.
  */
 #ifndef LWIP_DNS
-#define LWIP_DNS                        1
+#define LWIP_DNS                        0
 #endif
 
 /** DNS maximum number of entries to maintain locally. */
@@ -1037,7 +1037,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef TCPIP_THREAD_STACKSIZE
-#define TCPIP_THREAD_STACKSIZE          0
+#define TCPIP_THREAD_STACKSIZE          350
 #endif
 
 /**
@@ -1046,7 +1046,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef TCPIP_THREAD_PRIO
-#define TCPIP_THREAD_PRIO               1
+#define TCPIP_THREAD_PRIO               configMAX_PRIORITIES-1
 #endif
 
 /**
@@ -1071,7 +1071,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef SLIPIF_THREAD_STACKSIZE
-#define SLIPIF_THREAD_STACKSIZE         0
+#define SLIPIF_THREAD_STACKSIZE         configMINIMAL_STACK_SIZE
 #endif
 
 /**
@@ -1096,7 +1096,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef PPP_THREAD_STACKSIZE
-#define PPP_THREAD_STACKSIZE            0
+#define PPP_THREAD_STACKSIZE            configMINIMAL_STACK_SIZE
 #endif
 
 /**
@@ -1121,7 +1121,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef DEFAULT_THREAD_STACKSIZE
-#define DEFAULT_THREAD_STACKSIZE        0
+#define DEFAULT_THREAD_STACKSIZE        configMINIMAL_STACK_SIZE
 #endif
 
 /**
@@ -1602,7 +1602,7 @@
  * debug messages of certain types.
  */
 #ifndef LWIP_DBG_TYPES_ON
-#define LWIP_DBG_TYPES_ON               LWIP_DBG_OFF
+#define LWIP_DBG_TYPES_ON               LWIP_DBG_ON
 #endif
 
 /**

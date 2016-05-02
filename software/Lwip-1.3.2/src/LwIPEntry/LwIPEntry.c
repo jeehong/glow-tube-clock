@@ -108,24 +108,6 @@ void vlwIPInit( void )
 }
 /*------------------------------------------------------------*/
 extern   void  ethernetif_input( void *pReserved);
-__inline void SetLwIP(void)
-{
-//extern err_t ethernetif_init( struct netif *netif );
-//struct ip_addr xIpAddr, xNetMast, xGateway;
-//	/* Create and configure the EMAC interface. */
-//	IP4_ADDR(&xIpAddr,emacIPADDR0,emacIPADDR1,emacIPADDR2,emacIPADDR3);
-//	IP4_ADDR(&xNetMast,emacNET_MASK0,emacNET_MASK1,emacNET_MASK2,emacNET_MASK3);
-//	IP4_ADDR(&xGateway,emacGATEWAY_ADDR0,emacGATEWAY_ADDR1,emacGATEWAY_ADDR2,emacGATEWAY_ADDR3);
-
-//	netif_add(&DM9000AEP, &xIpAddr, &xNetMast, &xGateway, NULL, ethernetif_init, tcpip_input);
-//	/* make it the default interface */
-//    netif_set_default(&DM9000AEP);
-//	/* bring it up */
-//    netif_set_up(&DM9000AEP);
-	LwIP_Init();
-}
-
-
 
 
 void LwIPEntry(void * pvArg)
@@ -133,10 +115,7 @@ void LwIPEntry(void * pvArg)
   struct netconn  *__pstConn, *__pstNewConn;
 	struct netbuf	*__pstNetbuf;
 
-	//* 初始化LwIP
-	vlwIPInit();
-	/* 设置LwIP，包括添加配置网络接口、建立接收任务等工作 */
-	SetLwIP();
+
 	__pstConn = netconn_new(NETCONN_TCP);
 	netconn_bind(__pstConn, NULL, 80);
 	netconn_listen(__pstConn);

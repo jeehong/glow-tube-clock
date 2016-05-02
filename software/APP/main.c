@@ -125,18 +125,22 @@ int main( void )
   debug();
 #endif
 	SystemInit();
-	LwIP_Init();
-	clock_arch_init(); 
+	//LwIP_Init();
+	//clock_arch_init(); 
 	BSP_LED_Init();
-
-	 //sys_thread_new((void * )NULL, LwIPEntry, ( void * )NULL, 350, 6); 
+	
+	//* 初始化LwIP
+	vlwIPInit();
+	/* 设置LwIP，包括添加配置网络接口、建立接收任务等工作 */
+	LwIP_Init();
+	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 1); 
 	
 	/* Start the tasks defined within this file/specific to this demo. */
 	
-  xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL );
-	xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL );
-//	xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
-//	xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL );
+  //xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL );
+	//xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL );
+	//xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
+	//xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL );
 
 	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 8, NULL );
 	

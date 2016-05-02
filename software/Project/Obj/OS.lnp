@@ -49,7 +49,7 @@
 ".\obj\netifapi.o"
 ".\obj\sockets.o"
 ".\obj\tcpip.o"
---library_type=microlib --strict --scatter ".\Obj\OS.sct"
+--strict --scatter ".\Obj\OS.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\OS.map" -o .\Obj\OS.axf

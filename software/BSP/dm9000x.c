@@ -1,5 +1,10 @@
-#include "stm32f10x.h"
 #include <stdio.h>
+
+//#include "FreeRTOS.h"
+//#include "task.h"
+
+#include "stm32f10x.h"
+
 
 #include "DM9000x.h"
 
@@ -159,7 +164,7 @@ unsigned int dm9000x_read_id(void)
 	
 	//printf("DM9000x ID:0x%x \n",id); 
 
-//	if(DM9000_ID == id)
+	if(DM9000_ID == id)
 	  return  id;
 	
 	return 0;	 
@@ -170,38 +175,34 @@ void dm9000x_inital(uint8_t *macaddr)
 	unsigned char i = 0x00;
 
 	dm9000x_gpio_inital();
-//    dm9000_delay (5000);
-	dm9000_delay (10000);
+	dm9000_delay (5000);
 	
-    /* 设置 GPCR(1EH) bit[0]=1，使DM9000的GPIO3为输出 */
+	/* 设置 GPCR(1EH) bit[0]=1，使DM9000的GPIO3为输出 */
 	iow(DM9000_GPCR, 0x01);
 
-    /* GPR bit[0]=0 使DM9000的GPIO3输出为低以激活内部PHY */
-    iow(DM9000_GPR, 0x00);
+	/* GPR bit[0]=0 使DM9000的GPIO3输出为低以激活内部PHY */
+	iow(DM9000_GPR, 0x00);
 	
     /* 延时2ms以上等待PHY上电 */
-//	  dm9000_delay(20000);
-    dm9000_delay(30000);
+	dm9000_delay(20000);
+
 
 	/* 软件复位 */
     iow(DM9000_NCR, 0x03);
 
 	/* 延时20us以上等待软件复位完成 */
-//    dm9000_delay(5000);
-	dm9000_delay(10000);
+	dm9000_delay(5000);
 
 	/* 复位完成，设置正常工作模式 */
-    iow(DM9000_NCR, 0x00);
+  iow(DM9000_NCR, 0x00);
 
 	/* 第二次软件复位，为了确保软件复位完全成功。此步骤是必要的 */
-    iow(DM9000_NCR, 0x03);
+  iow(DM9000_NCR, 0x03);
+	dm9000_delay(5000);
 
-//    dm9000_delay(5000);
-	dm9000_delay(10000);
+  iow(DM9000_NCR, 0x00);
 
-    iow(DM9000_NCR, 0x00);
-
-    /*以上完成了DM9000的复位操作*/
+  /*以上完成了DM9000的复位操作*/
 
 	 /* 设置 GPCR(1EH) bit[0]=1，使DM9000的GPIO3为输出 */
 	iow(DM9000_GPCR, 0x01);
