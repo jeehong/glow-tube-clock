@@ -63,15 +63,6 @@ struct ethernetif
 static void low_level_init( struct netif *netif )	  //底层硬件驱动网卡初始化函数
 {
 	//unsigned portBASE_TYPE uxPriority;
-	
-	netif->hwaddr_len = 6;						//设置硬件网卡地址值长度 
-
-	netif->hwaddr[0] = m_mac[0];			//硬件网卡地址值大小
-	netif->hwaddr[1] = m_mac[1];
-	netif->hwaddr[2] = m_mac[2];
-	netif->hwaddr[3] = m_mac[3];
-	netif->hwaddr[4] = m_mac[4];
-	netif->hwaddr[5] = m_mac[5];
 
 	netif->mtu = 1500;		            // 最大传输单元
 
@@ -83,14 +74,9 @@ static void low_level_init( struct netif *netif )	  //底层硬件驱动网卡初始化函数
 	time.  To prevent this starving lower priority tasks of processing time we
 	lower our priority prior to the call, then raise it back again once the
 	initialisation is complete. */
-  //uxPriority = uxTaskPriorityGet( NULL );  //得到现在运行任务优先级       
-	//vTaskPrioritySet( NULL, tskIDLE_PRIORITY );   //设置为最低优先级
+
   dm9000x_inital(netif->hwaddr);     //底层硬件网卡芯片DM9000AEP初始化函数
-	
-	//uxPriority=(char)dm9000x_read_id();
 
-
-	//vTaskPrioritySet( NULL, uxPriority );  //恢复优先级
 	/* Create the task that handles the EMAC. */
 	//              任务入口函数           创建任务的名字           任务堆栈的长度            给任务的参数       优先级       句柄反馈使用任务的
 	xTaskCreate( (pdTASK_CODE)ethernetif_input, "ETH_INT", netifINTERFACE_TASK_STACK_SIZE, netif, 3, NULL );
@@ -165,10 +151,8 @@ err_t  ethernetif_input(struct netif *netif)
 	
   for(;;)
   {
-		 /* move received packet into a new pbuf */
 		p = low_level_input(netif);
 
-		/* no packet could be read, silently ignore this */
 		if (p == NULL) { continue;}
 		 
 		err = netif->input(p, netif);
@@ -179,15 +163,6 @@ err_t  ethernetif_input(struct netif *netif)
 			p = NULL;
 		}
   }
-	//return err;
-}
-
-static void arp_timer( void *arg )
-{
-	( void ) arg;
-
-    etharp_tmr();
-    sys_timeout( ARP_TMR_INTERVAL, arp_timer, NULL );
 }
 
 /**
@@ -224,8 +199,7 @@ err_t ethernetif_init( struct netif *netif )
 	ethernetif->ethaddr = ( struct eth_addr * ) &( netif->hwaddr[0] );
 
 	low_level_init( netif );
-	etharp_init();
-	sys_timeout( ARP_TMR_INTERVAL, arp_timer, NULL );
+	
 	return ERR_OK;
 }
 /*************************************************************************************************************/

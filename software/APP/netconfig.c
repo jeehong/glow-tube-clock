@@ -1,3 +1,4 @@
+#include "string.h"
 #include "lwip/memp.h"
 #include "lwip/tcp.h"
 #include "lwip/udp.h"
@@ -100,9 +101,9 @@ void LwIP_Init( void )
 	struct ip_addr netmask;
 	struct ip_addr gw;
 	
-	serverIP[0] = 192;
-	serverIP[1] = 168;
-	serverIP[2] = 1;
+	serverIP[0] = 172;
+	serverIP[1] = 10;
+	serverIP[2] = 11;
 	serverIP[3] = 110;
 	
 	maskIP[0] = 255;
@@ -110,9 +111,9 @@ void LwIP_Init( void )
 	maskIP[2] = 255;
 	maskIP[3] = 0;
 
-	gateIP[0] = 192;
-	gateIP[1] = 168;
-	gateIP[2] = 1;
+	gateIP[0] = 172;
+	gateIP[1] = 10;
+	gateIP[2] = 11;
 	gateIP[3] = 1;
 	
 	m_mac[0] = 0x54;	
@@ -124,7 +125,7 @@ void LwIP_Init( void )
 	
 	//lwip_init();								    /* 调用LWIP初始化函数初始化网络接口结构体链表、内存池、pbuf结构体 */
 												    
-	#if /* LWIP_DHCP */ 0			   					    /* 若使用DHCP协议 */
+	#if LWIP_DHCP			   					    /* 若使用DHCP协议 */
 		ipaddr.addr = 0;
 		netmask.addr = 0;
 		gw.addr = 0; 
@@ -133,19 +134,15 @@ void LwIP_Init( void )
     IP4_ADDR( &netmask, maskIP[0], maskIP[1], maskIP[2], maskIP[3]);
 		IP4_ADDR( &gw, gateIP[0], gateIP[1], gateIP[2], gateIP[3]);	
 	#endif
-	
+	memcpy(&DM9000AEP.hwaddr, m_mac, NETIF_MAX_HWADDR_LEN);
+	DM9000AEP.hwaddr_len = NETIF_MAX_HWADDR_LEN;
 	/* 初始化DM9000AEP与LWIP的接口，参数为网络接口结构体、ip地址、子网掩码、网关、网卡信息指针、初始化函数、输入函数 */
-	//netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
-	netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
+	netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, /*&tcpip_input*/&ethernetif_input);
 	
 	netif_set_default(&DM9000AEP);					/* 把DM9000AEP设置为默认网卡 */
 	
 	
-	#if /* LWIP_DHCP */ 0	   		                    /* 若使用了DHCP */
-	/*  Creates a new DHCP client for this interface on the first call.
-	Note: you must call dhcp_fine_tmr() and dhcp_coarse_tmr() at
-	the predefined regular intervals after starting the client.
-	You can peek in the netif->dhcp struct for the actual DHCP status.*/
+	#if  LWIP_DHCP  	   		                    /* 若使用了DHCP */
 		dhcp_start(&DM9000AEP);               /* 启动DHCP */
 	#endif
 	

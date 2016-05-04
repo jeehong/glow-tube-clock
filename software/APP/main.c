@@ -107,6 +107,8 @@
 #include "task.h"
 /* Library includes. */
 #include "stm32f10x.h"
+#include <stm32f10x.h>
+#include "stm32f10x_flash.h"
 
 #include "netconfig.h"
 
@@ -118,22 +120,20 @@
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
 
 /* The time between cycles of the 'check' task. */
-
 int main( void )
 {
 #ifdef DEBUG
   debug();
 #endif
 	SystemInit();
-	//LwIP_Init();
 	//clock_arch_init(); 
 	BSP_LED_Init();
 	
 	//* 初始化LwIP
 	vlwIPInit();
-	/* 设置LwIP，包括添加配置网络接口、建立接收任务等工作 */
 	LwIP_Init();
-	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 1); 
+
+	//sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 1); 
 	
 	/* Start the tasks defined within this file/specific to this demo. */
 	
@@ -147,8 +147,6 @@ int main( void )
 	/* Start the scheduler. */
 	vTaskStartScheduler();
 
-	/* Will only get here if there was not enough heap space to create the
-	idle task. */
 	return 0;
 }
 

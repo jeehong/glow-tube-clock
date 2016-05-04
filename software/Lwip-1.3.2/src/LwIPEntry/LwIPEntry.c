@@ -107,9 +107,6 @@ void vlwIPInit( void )
 	tcpip_init( NULL, NULL );
 }
 /*------------------------------------------------------------*/
-extern   void  ethernetif_input( void *pReserved);
-
-
 void LwIPEntry(void * pvArg)
 {
   struct netconn  *__pstConn, *__pstNewConn;

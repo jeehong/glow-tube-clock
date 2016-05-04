@@ -27,7 +27,8 @@ void  BSP_LED_Init(void)
 		GPIO_Init(GPIOC, &GPIO_InitStructure);			  
 
 		/* πÿ±’À˘”–ledµ∆	*/
-		GPIO_ResetBits(GPIOC, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_12);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2);
+	  GPIO_SetBits(GPIOC, GPIO_Pin_12);
 }
 
 void vLedTask( void *pvParameters )

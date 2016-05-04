@@ -1,7 +1,0 @@
-Change Component Footprint: Designator=C17 Old Footprint=470/50V New Footprint=SMT_CAP_DAN
-Added Component: Designator=Q36(TO-220)
-Added Pin To Net: NetName=NetQ35_2 Pin=Q36-1
-Added Pin To Net: NetName=NetD3_1 Pin=Q36-2
-Added Pin To Net: NetName=GND Pin=Q36-3
-Added Member To Class: ClassName=Sheet Member=Component Q36 MOSFET-N
-Added Room: Name=Sheet
