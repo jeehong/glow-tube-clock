@@ -140,8 +140,8 @@ int main( void )
 	/* xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
 	/* xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL ); */
 
-	/* xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 8, NULL ); */
-	sys_thread_new("Led", vLedTask, NULL, mainLED_TASK_STACK_SIZE, 3);
+	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 3, NULL );
+	/* sys_thread_new("Led", vLedTask, NULL, mainLED_TASK_STACK_SIZE, 3); */
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
