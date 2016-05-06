@@ -81,6 +81,9 @@
  *
  * See http://www.freertos.org/a00110.html.
  *----------------------------------------------------------*/
+/* 任务优先级管理 */
+
+
 
 #define configUSE_PREEMPTION		1
 #define configUSE_IDLE_HOOK			0

@@ -107,11 +107,10 @@
 #include "task.h"
 /* Library includes. */
 #include "stm32f10x.h"
-#include <stm32f10x.h>
-#include "stm32f10x_flash.h"
 
 #include "netconfig.h"
 
+#include "bsp.h"
 #include "app_led.h"
 #include "LwIPEntry.h"
 #include "clock-arch.h"
@@ -123,26 +122,26 @@
 int main( void )
 {
 #ifdef DEBUG
-  debug();
+	debug();
 #endif
-	SystemInit();
-	//clock_arch_init(); 
-	BSP_LED_Init();
+	prvSetupHardware();
+	bsp_led_init();
 	
-	//* 初始化LwIP
+	/* 初始化LwIP */
 	vlwIPInit();
 	LwIP_Init();
 
-	//sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 1); 
+	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 6); 
 	
 	/* Start the tasks defined within this file/specific to this demo. */
 	
-  //xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL );
-	//xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL );
-	//xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
-	//xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL );
+	/* xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL ); */
+	/* xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL ); */
+	/* xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
+	/* xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL ); */
 
-	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 8, NULL );
+	/* xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 8, NULL ); */
+	sys_thread_new("Led", vLedTask, NULL, mainLED_TASK_STACK_SIZE, 3);
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();

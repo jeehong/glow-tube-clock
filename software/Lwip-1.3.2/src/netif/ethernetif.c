@@ -29,29 +29,31 @@
  * Author: Adam Dunkels <adam@sics.se>
  *
  */
+ #include <string.h>
+ 
 #include "FreeRTOS.h"
 #include "task.h"
+
 #include "stm32f10x.h"
-#include <string.h>
+
 #include "err.h"
 #include "netif.h"
-
 #include "etharp.h"
 
 #include "mem.h"
 #include "sys.h" 
 
-#include "DM9000x.h"              //网卡芯片DM9000AEP底层驱动函数
+#include "DM9000x.h"              
 
 #define netifINTERFACE_TASK_STACK_SIZE		( 350 )
 
 #define IFNAME0 'S'
 #define IFNAME1 'T'
 
-extern  uint8_t m_mac[6];	        //存放硬件网卡地址值大小
+extern  uint8_t m_mac[6];	        /* 存放硬件网卡地址值大小 */
 
-unsigned char Data_Buf[1516];	    //存放接收数据缓冲器
-unsigned char Tx_Data_Buf[1516]; //存放发送数据缓冲器
+unsigned char Rx_Data_Buf[1516];	    /* 存放接收数据缓冲器 */
+unsigned char Tx_Data_Buf[1516]; /* 存放发送数据缓冲器 */
 
 err_t  ethernetif_input(struct netif *netif);
 
@@ -60,12 +62,12 @@ struct ethernetif
 	struct eth_addr *ethaddr;
 };
 
-static void low_level_init( struct netif *netif )	  //底层硬件驱动网卡初始化函数
+static void low_level_init( struct netif *netif )	  /* 底层硬件驱动网卡初始化函数 */
 {
 	//unsigned portBASE_TYPE uxPriority;
-
-	netif->mtu = 1500;		            // 最大传输单元
-
+		
+	netif->mtu = 1500;		            /* 最大传输单元 */
+		
 	/* broadcast capability */
 	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP;
 
@@ -74,11 +76,9 @@ static void low_level_init( struct netif *netif )	  //底层硬件驱动网卡初始化函数
 	time.  To prevent this starving lower priority tasks of processing time we
 	lower our priority prior to the call, then raise it back again once the
 	initialisation is complete. */
-
-  dm9000x_inital(netif->hwaddr);     //底层硬件网卡芯片DM9000AEP初始化函数
+	dm9000x_inital(netif->hwaddr);     
 
 	/* Create the task that handles the EMAC. */
-	//              任务入口函数           创建任务的名字           任务堆栈的长度            给任务的参数       优先级       句柄反馈使用任务的
 	xTaskCreate( (pdTASK_CODE)ethernetif_input, "ETH_INT", netifINTERFACE_TASK_STACK_SIZE, netif, 3, NULL );
 }		   
 /*-----------------------------------------------------------*/
@@ -92,15 +92,15 @@ static err_t low_level_output( struct netif *netif, struct pbuf *p )  //底层硬件
 {     
 	struct pbuf *q;
 	int len = 0;   		                 //发送数据长度
-
+	
 	for(q = p; q != NULL; q = q->next) 
 	{
-		memcpy(&Tx_Data_Buf[len], (u8_t*)q->payload, q->len);  //建立链表指针存放发送的数据
-		len = len + q->len;
+			memcpy(&Tx_Data_Buf[len], (u8_t*)q->payload, q->len);  //建立链表指针存放发送的数据
+			len = len + q->len;
 	}		
-														
+										
 	dm9000x_sendpacket(Tx_Data_Buf,len);//通过底层硬件网卡DM9000AEP发送数据包
-
+	
 	return ERR_OK;
 }
 
@@ -113,11 +113,11 @@ static err_t low_level_output( struct netif *netif, struct pbuf *p )  //底层硬件
 static struct pbuf *low_level_input( struct netif *netif )	//底层硬件网卡DM9000AEP接收数据函数
 {	                                                   
 
-	struct pbuf *q,*p = NULL;
+	struct pbuf *q, *p = NULL;
 	u16 Len = 0; 
 	int i =0;                  	
-	
-	Len =dm9000x_receivepacket(Data_Buf,1516);   //返回接收到的数据包长度	
+
+	Len = dm9000x_receivepacket(Rx_Data_Buf, 1516);   //返回接收到的数据包长度	
 
 	if ( Len == 0 ) return 0;
 		
@@ -127,13 +127,13 @@ static struct pbuf *low_level_input( struct netif *netif )	//底层硬件网卡DM9000A
 	{
 		for (q = p; q != NULL; q = q->next) 
 		{	 
-			memcpy((u8_t*)q->payload, (u8_t*)&Data_Buf[i], q->len);
+			memcpy((u8_t*)q->payload, (u8_t*)&Rx_Data_Buf[i], q->len);
 			i = i + q->len;
 		}
-		if( i != p->tot_len )                      //相等时表明到了数据尾，发送完成
+		if(i != p->tot_len)                      //相等时表明到了数据尾，发送完成
 		{ 
 			return 0;
-    }                                 
+		}                                 
 	}
 
 	return p;
@@ -149,8 +149,8 @@ err_t  ethernetif_input(struct netif *netif)
 	err_t err = ERR_OK;		
 	struct pbuf *p = NULL;
 	
-  for(;;)
-  {
+	for(;;)
+	{
 		p = low_level_input(netif);
 
 		if (p == NULL) { continue;}
@@ -162,7 +162,7 @@ err_t  ethernetif_input(struct netif *netif)
 			pbuf_free(p);
 			p = NULL;
 		}
-  }
+  	}
 }
 
 /**

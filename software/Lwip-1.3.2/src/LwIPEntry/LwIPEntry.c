@@ -97,7 +97,7 @@ extern struct netif DM9000AEP;
 
 void vlwIPInit( void )
 {
-    /* Initialize lwIP and its interface layer. */
+  /* Initialize lwIP and its interface layer. */
 	sys_init();
 	mem_init();								
 	memp_init();
@@ -112,6 +112,7 @@ void LwIPEntry(void * pvArg)
   struct netconn  *__pstConn, *__pstNewConn;
 	struct netbuf	*__pstNetbuf;
 
+	char *web_page = "<html><body><center><hl>hello,World!</hl><br><hr><font size=15>hello,world!</font></center></body></html>";
 
 	__pstConn = netconn_new(NETCONN_TCP);
 	netconn_bind(__pstConn, NULL, 80);
@@ -126,8 +127,7 @@ void LwIPEntry(void * pvArg)
 			__pstNetbuf = netconn_recv(__pstNewConn);
 			if(__pstNetbuf != NULL)
 			{
-				netconn_write(__pstNewConn, "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n", 44, NETCONN_COPY);
-				netconn_write(__pstNewConn, "<body><h1>’‚ «LWIP TCP≤‚ ‘£°</h1></body>", 40, NETCONN_COPY);
+				netconn_write(__pstNewConn, web_page, strlen(web_page), NETCONN_COPY);
 				
 				netbuf_delete(__pstNetbuf);	
 			}

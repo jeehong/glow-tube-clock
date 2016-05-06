@@ -131,18 +131,18 @@ void LwIP_Init( void )
 		gw.addr = 0; 
 	#else										
 		IP4_ADDR( &ipaddr, serverIP[0], serverIP[1], serverIP[2], serverIP[3]);	
-    IP4_ADDR( &netmask, maskIP[0], maskIP[1], maskIP[2], maskIP[3]);
+    	IP4_ADDR( &netmask, maskIP[0], maskIP[1], maskIP[2], maskIP[3]);
 		IP4_ADDR( &gw, gateIP[0], gateIP[1], gateIP[2], gateIP[3]);	
 	#endif
 	memcpy(&DM9000AEP.hwaddr, m_mac, NETIF_MAX_HWADDR_LEN);
 	DM9000AEP.hwaddr_len = NETIF_MAX_HWADDR_LEN;
 	/* 初始化DM9000AEP与LWIP的接口，参数为网络接口结构体、ip地址、子网掩码、网关、网卡信息指针、初始化函数、输入函数 */
-	netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, /*&tcpip_input*/&ethernetif_input);
+	netif_add(&DM9000AEP, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
 	
 	netif_set_default(&DM9000AEP);					/* 把DM9000AEP设置为默认网卡 */
 	
 	
-	#if  LWIP_DHCP  	   		                    /* 若使用了DHCP */
+	#if  LWIP_DHCP  	   		                 
 		dhcp_start(&DM9000AEP);               /* 启动DHCP */
 	#endif
 	

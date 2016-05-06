@@ -3,11 +3,13 @@
 ".\obj\app_led.o"
 ".\obj\netconfig.o"
 ".\obj\clock-arch.o"
+".\obj\bsp.o"
 ".\obj\dm9000x.o"
 ".\obj\cstartup.o"
 ".\obj\stm32f10x_gpio.o"
 ".\obj\stm32f10x_rcc.o"
 ".\obj\system_stm32f10x.o"
+".\obj\misc.o"
 ".\obj\croutine.o"
 ".\obj\event_groups.o"
 ".\obj\list.o"
@@ -49,7 +51,7 @@
 ".\obj\netifapi.o"
 ".\obj\sockets.o"
 ".\obj\tcpip.o"
---strict --scatter ".\Obj\OS.sct"
+--library_type=microlib --strict --scatter ".\Obj\OS.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\OS.map" -o .\Obj\OS.axf

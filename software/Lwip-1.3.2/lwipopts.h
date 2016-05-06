@@ -39,7 +39,7 @@
 
 
 #define SYS_LIGHTWEIGHT_PROT    1
-#define TCPIP_THREAD_PRIO       4
+#define TCPIP_THREAD_PRIO       5
 
 //#define LWIP_DEBUG              1
 //#define DBG_TYPES_ON            ( DBG_LEVEL_WARNING | DBG_LEVEL_SEVERE | DBG_LEVEL_SERIOUS )
