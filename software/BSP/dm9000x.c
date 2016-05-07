@@ -121,8 +121,7 @@ static __inline u16 dm9000_in_byte(u16 reg)
 	DM9000X_CS(0);				  
 	DM9000X_IOR(0);				  
 	DM9000X_IOW(1);   
-	indata = DM9000X_DATA_IN();  
-	DM9000X_IOW(1);				  
+	indata = DM9000X_DATA_IN();  			  
 	DM9000X_CS(1);
 	
 	return indata;
@@ -200,13 +199,13 @@ void dm9000x_inital(uint8_t *macaddr)
 	dm9000x_read_id();
 	
 	/*  */
-	iow(DM9000_NSR, 0x2c);//清除各种状态标志位
+	iow(DM9000_NSR, 0x2c);/* 清除各种状态标志位 */
 	
-	iow(DM9000_ISR, 0x3f);//清除所有中断标志位 
+	iow(DM9000_ISR, 0x3f);/* 清除所有中断标志位 */
 	
-	iow(DM9000_RCR, 0x39);//接收控制
+	iow(DM9000_RCR, 0x39);/* 接收控制 */
 	
-	iow(DM9000_TCR, 0x00);//发送控制
+	iow(DM9000_TCR, 0x00);/* 发送控制 */
 	
 	iow(DM9000_BPTR, 0x3f);
 	
@@ -240,7 +239,7 @@ void dm9000x_sendpacket( uint8_t* packet, uint16_t len)
 	uint16_t io_mode;
 	u16 i,Temp;		
 	
-	iow(DM9000_IMR, 0x80);//先禁止网卡中断，防止在发送数据时被中断干扰
+	iow(DM9000_IMR, 0x80);/* 先禁止网卡中断，防止在发送数据时被中断干扰 */
 
 	io_mode = ior(DM9000_ISR) >> 7;  
 	
@@ -283,10 +282,10 @@ uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen)
 	unsigned int  rx_status = 0x00;
 	unsigned int  rx_length = 0x00;
 	unsigned int  rx_length_bak = 0x00;
-	unsigned int  temp=0x0000;
+	unsigned int  temp = 0x0000;
 	unsigned int  i;
 	
-	ready = 0;//希望读取到“01H”
+	ready = 0;/* 希望读取到“01H” */
 
 	/*以上为有效数据包前的4个状态字节*/
 	if(ior(DM9000_ISR) & 0x01)

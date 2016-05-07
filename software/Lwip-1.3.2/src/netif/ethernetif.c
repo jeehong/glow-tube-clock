@@ -88,18 +88,18 @@ static void low_level_init( struct netif *netif )	  /* µ×²ãÓ²¼þÇý¶¯Íø¿¨³õÊ¼»¯º¯Ê
  * packet is contained in the pbuf that is passed to the function. This pbuf 
  * might be chained.
  */
-static err_t low_level_output( struct netif *netif, struct pbuf *p )  //µ×²ãÓ²¼þÍø¿¨DM9000AEP·¢ËÍÊý¾Ýº¯Êý
+static err_t low_level_output( struct netif *netif, struct pbuf *p ) 
 {     
 	struct pbuf *q;
-	int len = 0;   		                 //·¢ËÍÊý¾Ý³¤¶È
+	int len = 0;   		                
 	
 	for(q = p; q != NULL; q = q->next) 
 	{
-			memcpy(&Tx_Data_Buf[len], (u8_t*)q->payload, q->len);  //½¨Á¢Á´±íÖ¸Õë´æ·Å·¢ËÍµÄÊý¾Ý
+			memcpy(&Tx_Data_Buf[len], (u8_t*)q->payload, q->len);
 			len = len + q->len;
 	}		
 										
-	dm9000x_sendpacket(Tx_Data_Buf,len);//Í¨¹ýµ×²ãÓ²¼þÍø¿¨DM9000AEP·¢ËÍÊý¾Ý°ü
+	dm9000x_sendpacket(Tx_Data_Buf,len);
 	
 	return ERR_OK;
 }
@@ -110,14 +110,14 @@ static err_t low_level_output( struct netif *netif, struct pbuf *p )  //µ×²ãÓ²¼þ
  * incoming packet from the interface into the pbuf. 
  */
 
-static struct pbuf *low_level_input( struct netif *netif )	//µ×²ãÓ²¼þÍø¿¨DM9000AEP½ÓÊÕÊý¾Ýº¯Êý
+static struct pbuf *low_level_input( struct netif *netif )	
 {	                                                   
 
 	struct pbuf *q, *p = NULL;
 	u16 Len = 0; 
 	int i =0;                  	
 
-	Len = dm9000x_receivepacket(Rx_Data_Buf, 1516);   //·µ»Ø½ÓÊÕµ½µÄÊý¾Ý°ü³¤¶È	
+	Len = dm9000x_receivepacket(Rx_Data_Buf, 1516);   
 
 	if ( Len == 0 ) return 0;
 		
@@ -130,7 +130,7 @@ static struct pbuf *low_level_input( struct netif *netif )	//µ×²ãÓ²¼þÍø¿¨DM9000A
 			memcpy((u8_t*)q->payload, (u8_t*)&Rx_Data_Buf[i], q->len);
 			i = i + q->len;
 		}
-		if(i != p->tot_len)                      //ÏàµÈÊ±±íÃ÷µ½ÁËÊý¾ÝÎ²£¬·¢ËÍÍê³É
+		if(i != p->tot_len)                    
 		{ 
 			return 0;
 		}                                 
