@@ -1243,83 +1243,83 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x08000000   0x000000ec   Data   RO          370    RESET               cstartup.o
-    0x080000ec   0x00000000   Code   RO         1545  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
-    0x080000ec   0x00000004   Code   RO         1562    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
-    0x080000f0   0x00000004   Code   RO         1565    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
-    0x080000f4   0x00000000   Code   RO         1567    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
-    0x080000f4   0x00000000   Code   RO         1569    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
-    0x080000f4   0x00000008   Code   RO         1570    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
-    0x080000fc   0x00000000   Code   RO         1572    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
-    0x080000fc   0x00000000   Code   RO         1574    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
-    0x080000fc   0x00000004   Code   RO         1563    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
-    0x08000100   0x00000096   Code   RO          575    .emb_text           port.o
+    0x08000000   0x000000ec   Data   RO          474    RESET               cstartup.o
+    0x080000ec   0x00000000   Code   RO         1690  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
+    0x080000ec   0x00000004   Code   RO         1707    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
+    0x080000f0   0x00000004   Code   RO         1710    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
+    0x080000f4   0x00000000   Code   RO         1712    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
+    0x080000f4   0x00000000   Code   RO         1714    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
+    0x080000f4   0x00000008   Code   RO         1715    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
+    0x080000fc   0x00000000   Code   RO         1717    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
+    0x080000fc   0x00000000   Code   RO         1719    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
+    0x080000fc   0x00000004   Code   RO         1708    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
+    0x08000100   0x00000096   Code   RO          679    .emb_text           port.o
     0x08000196   0x00000002   PAD
     0x08000198   0x00000054   Code   RO            3    .text               main.o
     0x080001ec   0x00000098   Code   RO          181    .text               app_led.o
     0x08000284   0x000001f4   Code   RO          207    .text               netconfig.o
-    0x08000478   0x000000d0   Code   RO          326    .text               bsp.o
-    0x08000548   0x000004a8   Code   RO          346    .text               dm9000x.o
-    0x080009f0   0x0000001c   Code   RO          371    .text               cstartup.o
-    0x08000a0c   0x0000035c   Code   RO          377    .text               stm32f10x_gpio.o
-    0x08000d68   0x000003a4   Code   RO          397    .text               stm32f10x_rcc.o
-    0x0800110c   0x000000dc   Code   RO          445    .text               misc.o
-    0x080011e8   0x00000094   Code   RO          511    .text               list.o
-    0x0800127c   0x000006d4   Code   RO          523    .text               queue.o
-    0x08001950   0x000011dc   Code   RO          538    .text               tasks.o
-    0x08002b2c   0x000000e4   Code   RO          576    .text               port.o
-    0x08002c10   0x00000124   Code   RO          605    .text               heap_2.o
-    0x08002d34   0x00000138   Code   RO          622    .text               ethernetif.o
-    0x08002e6c   0x000002ec   Code   RO          658    .text               sys_arch.o
-    0x08003158   0x00000994   Code   RO          704    .text               etharp.o
-    0x08003aec   0x000005a4   Code   RO          790    .text               dns.o
-    0x08004090   0x00000018   Code   RO          808    .text               init.o
-    0x080040a8   0x00000426   Code   RO          842    .text               mem.o
+    0x08000478   0x000000d0   Code   RO          430    .text               bsp.o
+    0x08000548   0x000004a8   Code   RO          450    .text               dm9000x.o
+    0x080009f0   0x0000001c   Code   RO          475    .text               cstartup.o
+    0x08000a0c   0x0000035c   Code   RO          481    .text               stm32f10x_gpio.o
+    0x08000d68   0x000003a4   Code   RO          501    .text               stm32f10x_rcc.o
+    0x0800110c   0x000000dc   Code   RO          549    .text               misc.o
+    0x080011e8   0x00000094   Code   RO          615    .text               list.o
+    0x0800127c   0x000006d4   Code   RO          627    .text               queue.o
+    0x08001950   0x000011dc   Code   RO          642    .text               tasks.o
+    0x08002b2c   0x000000e4   Code   RO          680    .text               port.o
+    0x08002c10   0x00000124   Code   RO          709    .text               heap_2.o
+    0x08002d34   0x00000138   Code   RO          726    .text               ethernetif.o
+    0x08002e6c   0x000002ec   Code   RO          765    .text               sys_arch.o
+    0x08003158   0x00000994   Code   RO          814    .text               etharp.o
+    0x08003aec   0x000005a4   Code   RO          900    .text               dns.o
+    0x08004090   0x00000018   Code   RO          936    .text               init.o
+    0x080040a8   0x00000426   Code   RO          981    .text               mem.o
     0x080044ce   0x00000002   PAD
-    0x080044d0   0x0000017c   Code   RO          860    .text               memp.o
-    0x0800464c   0x00000204   Code   RO          893    .text               netif.o
-    0x08004850   0x00000536   Code   RO          915    .text               pbuf.o
+    0x080044d0   0x0000017c   Code   RO          999    .text               memp.o
+    0x0800464c   0x00000204   Code   RO         1035    .text               netif.o
+    0x08004850   0x00000536   Code   RO         1057    .text               pbuf.o
     0x08004d86   0x00000002   PAD
-    0x08004d88   0x0000019c   Code   RO          941    .text               raw.o
-    0x08004f24   0x0000024c   Code   RO          967    .text               sys.o
-    0x08005170   0x00000c08   Code   RO          988    .text               tcp.o
-    0x08005d78   0x0000174c   Code   RO         1009    .text               tcp_in.o
-    0x080074c4   0x00000afc   Code   RO         1032    .text               tcp_out.o
-    0x08007fc0   0x000004cc   Code   RO         1044    .text               udp.o
-    0x0800848c   0x000002ac   Code   RO         1062    .text               icmp.o
-    0x08008738   0x0000021c   Code   RO         1080    .text               inet.o
-    0x08008954   0x00000156   Code   RO         1093    .text               inet_chksum.o
+    0x08004d88   0x0000019c   Code   RO         1083    .text               raw.o
+    0x08004f24   0x0000024c   Code   RO         1109    .text               sys.o
+    0x08005170   0x00000c08   Code   RO         1130    .text               tcp.o
+    0x08005d78   0x0000174c   Code   RO         1151    .text               tcp_in.o
+    0x080074c4   0x00000afc   Code   RO         1174    .text               tcp_out.o
+    0x08007fc0   0x000004cc   Code   RO         1186    .text               udp.o
+    0x0800848c   0x000002ac   Code   RO         1207    .text               icmp.o
+    0x08008738   0x0000021c   Code   RO         1225    .text               inet.o
+    0x08008954   0x00000156   Code   RO         1238    .text               inet_chksum.o
     0x08008aaa   0x00000002   PAD
-    0x08008aac   0x000004f0   Code   RO         1109    .text               ip.o
-    0x08008f9c   0x0000004e   Code   RO         1130    .text               ip_addr.o
+    0x08008aac   0x000004f0   Code   RO         1254    .text               ip.o
+    0x08008f9c   0x0000004e   Code   RO         1275    .text               ip_addr.o
     0x08008fea   0x00000002   PAD
-    0x08008fec   0x00000618   Code   RO         1152    .text               ip_frag.o
-    0x08009604   0x00000088   Code   RO         1169    .text               lwipentry.o
-    0x0800968c   0x00000348   Code   RO         1266    .text               api_lib.o
-    0x080099d4   0x00000ae4   Code   RO         1313    .text               api_msg.o
-    0x0800a4b8   0x00000120   Code   RO         1374    .text               netbuf.o
-    0x0800a5d8   0x0000112c   Code   RO         1431    .text               sockets.o
-    0x0800b704   0x00000354   Code   RO         1488    .text               tcpip.o
-    0x0800ba58   0x00000024   Code   RO         1548    .text               mc_w.l(memcpya.o)
-    0x0800ba7c   0x00000024   Code   RO         1550    .text               mc_w.l(memseta.o)
-    0x0800baa0   0x0000000e   Code   RO         1552    .text               mc_w.l(strlen.o)
-    0x0800baae   0x0000001c   Code   RO         1554    .text               mc_w.l(strcmp.o)
-    0x0800baca   0x00000012   Code   RO         1556    .text               mc_w.l(strcpy.o)
-    0x0800badc   0x00000024   Code   RO         1585    .text               mc_w.l(init.o)
-    0x0800bb00   0x00000056   Code   RO         1627    .text               mc_w.l(__dczerorl2.o)
-    0x0800bb56   0x0000000e   Code   RO         1621    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x0800bb64   0x00000002   Code   RO         1622    i.__scatterload_null  mc_w.l(handlers.o)
-    0x0800bb66   0x0000000e   Code   RO         1623    i.__scatterload_zeroinit  mc_w.l(handlers.o)
-    0x0800bb74   0x0000000c   Data   RO          706    .constdata          etharp.o
-    0x0800bb80   0x00000038   Data   RO          862    .constdata          memp.o
-    0x0800bbb8   0x00000014   Data   RO          989    .constdata          tcp.o
-    0x0800bbcc   0x00000008   Data   RO         1131    .constdata          ip_addr.o
-    0x0800bbd4   0x0000003c   Data   RO         1433    .constdata          sockets.o
-    0x0800bc10   0x00000075   Data   RO          990    .conststring        tcp.o
+    0x08008fec   0x00000618   Code   RO         1297    .text               ip_frag.o
+    0x08009604   0x00000088   Code   RO         1314    .text               lwipentry.o
+    0x0800968c   0x00000348   Code   RO         1411    .text               api_lib.o
+    0x080099d4   0x00000ae4   Code   RO         1458    .text               api_msg.o
+    0x0800a4b8   0x00000120   Code   RO         1519    .text               netbuf.o
+    0x0800a5d8   0x0000112c   Code   RO         1576    .text               sockets.o
+    0x0800b704   0x00000354   Code   RO         1633    .text               tcpip.o
+    0x0800ba58   0x00000024   Code   RO         1693    .text               mc_w.l(memcpya.o)
+    0x0800ba7c   0x00000024   Code   RO         1695    .text               mc_w.l(memseta.o)
+    0x0800baa0   0x0000000e   Code   RO         1697    .text               mc_w.l(strlen.o)
+    0x0800baae   0x0000001c   Code   RO         1699    .text               mc_w.l(strcmp.o)
+    0x0800baca   0x00000012   Code   RO         1701    .text               mc_w.l(strcpy.o)
+    0x0800badc   0x00000024   Code   RO         1730    .text               mc_w.l(init.o)
+    0x0800bb00   0x00000056   Code   RO         1772    .text               mc_w.l(__dczerorl2.o)
+    0x0800bb56   0x0000000e   Code   RO         1766    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x0800bb64   0x00000002   Code   RO         1767    i.__scatterload_null  mc_w.l(handlers.o)
+    0x0800bb66   0x0000000e   Code   RO         1768    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x0800bb74   0x0000000c   Data   RO          816    .constdata          etharp.o
+    0x0800bb80   0x00000038   Data   RO         1001    .constdata          memp.o
+    0x0800bbb8   0x00000014   Data   RO         1131    .constdata          tcp.o
+    0x0800bbcc   0x00000008   Data   RO         1276    .constdata          ip_addr.o
+    0x0800bbd4   0x0000003c   Data   RO         1578    .constdata          sockets.o
+    0x0800bc10   0x00000075   Data   RO         1132    .conststring        tcp.o
     0x0800bc85   0x00000003   PAD
-    0x0800bc88   0x0000006a   Data   RO         1170    .conststring        lwipentry.o
+    0x0800bc88   0x0000006a   Data   RO         1315    .conststring        lwipentry.o
     0x0800bcf2   0x00000002   PAD
-    0x0800bcf4   0x00000020   Data   RO         1619    Region$$Table       anon$$obj.o
+    0x0800bcf4   0x00000020   Data   RO         1764    Region$$Table       anon$$obj.o
 
 
     Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00009f70, Max: 0x0000c000, ABSOLUTE, COMPRESSED[0x00000048])
@@ -1327,48 +1327,48 @@ Memory Map of the image
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000000   0x0000002c   Data   RW          209    .data               netconfig.o
-    0x2000002c   0x00000004   Data   RW          294    .data               clock-arch.o
-    0x20000030   0x00000014   Data   RW          398    .data               stm32f10x_rcc.o
-    0x20000044   0x0000003c   Data   RW          540    .data               tasks.o
-    0x20000080   0x00000004   Data   RW          577    .data               port.o
-    0x20000084   0x00000018   Data   RW          607    .data               heap_2.o
-    0x2000009c   0x00000002   Data   RW          660    .data               sys_arch.o
-    0x2000009e   0x00000001   Data   RW          707    .data               etharp.o
+    0x2000002c   0x00000004   Data   RW          398    .data               clock-arch.o
+    0x20000030   0x00000014   Data   RW          502    .data               stm32f10x_rcc.o
+    0x20000044   0x0000003c   Data   RW          644    .data               tasks.o
+    0x20000080   0x00000004   Data   RW          681    .data               port.o
+    0x20000084   0x00000018   Data   RW          711    .data               heap_2.o
+    0x2000009c   0x00000002   Data   RW          767    .data               sys_arch.o
+    0x2000009e   0x00000001   Data   RW          817    .data               etharp.o
     0x2000009f   0x00000001   PAD
-    0x200000a0   0x0000000d   Data   RW          792    .data               dns.o
+    0x200000a0   0x0000000d   Data   RW          902    .data               dns.o
     0x200000ad   0x00000003   PAD
-    0x200000b0   0x00000010   Data   RW          844    .data               mem.o
-    0x200000c0   0x00000009   Data   RW          894    .data               netif.o
-    0x200000c9   0x00000001   Data   RW          916    .data               pbuf.o
+    0x200000b0   0x00000010   Data   RW          983    .data               mem.o
+    0x200000c0   0x00000009   Data   RW         1036    .data               netif.o
+    0x200000c9   0x00000001   Data   RW         1058    .data               pbuf.o
     0x200000ca   0x00000002   PAD
-    0x200000cc   0x00000004   Data   RW          942    .data               raw.o
-    0x200000d0   0x0000004c   Data   RW          991    .data               tcp.o
-    0x2000011c   0x00000020   Data   RW         1011    .data               tcp_in.o
-    0x2000013c   0x00000004   Data   RW         1045    .data               udp.o
-    0x20000140   0x0000000a   Data   RW         1110    .data               ip.o
+    0x200000cc   0x00000004   Data   RW         1084    .data               raw.o
+    0x200000d0   0x0000004c   Data   RW         1133    .data               tcp.o
+    0x2000011c   0x00000020   Data   RW         1153    .data               tcp_in.o
+    0x2000013c   0x00000004   Data   RW         1187    .data               udp.o
+    0x20000140   0x0000000a   Data   RW         1255    .data               ip.o
     0x2000014a   0x00000002   PAD
-    0x2000014c   0x00000006   Data   RW         1154    .data               ip_frag.o
+    0x2000014c   0x00000006   Data   RW         1299    .data               ip_frag.o
     0x20000152   0x00000002   PAD
-    0x20000154   0x0000000c   Data   RW         1434    .data               sockets.o
-    0x20000160   0x00000010   Data   RW         1489    .data               tcpip.o
+    0x20000154   0x0000000c   Data   RW         1579    .data               sockets.o
+    0x20000160   0x00000010   Data   RW         1634    .data               tcpip.o
     0x20000170   0x00000062   Zero   RW          208    .bss                netconfig.o
     0x200001d2   0x00000002   PAD
-    0x200001d4   0x000000c8   Zero   RW          539    .bss                tasks.o
-    0x2000029c   0x00004400   Zero   RW          606    .bss                heap_2.o
-    0x2000469c   0x00000bd8   Zero   RW          623    .bss                ethernetif.o
-    0x20005274   0x00000028   Zero   RW          659    .bss                sys_arch.o
-    0x2000529c   0x000000c8   Zero   RW          705    .bss                etharp.o
-    0x20005364   0x00000660   Zero   RW          791    .bss                dns.o
-    0x200059c4   0x000007e4   Zero   RW          843    .bss                mem.o
-    0x200061a8   0x00003033   Zero   RW          861    .bss                memp.o
+    0x200001d4   0x000000c8   Zero   RW          643    .bss                tasks.o
+    0x2000029c   0x00004400   Zero   RW          710    .bss                heap_2.o
+    0x2000469c   0x00000bd8   Zero   RW          727    .bss                ethernetif.o
+    0x20005274   0x00000028   Zero   RW          766    .bss                sys_arch.o
+    0x2000529c   0x000000c8   Zero   RW          815    .bss                etharp.o
+    0x20005364   0x00000660   Zero   RW          901    .bss                dns.o
+    0x200059c4   0x000007e4   Zero   RW          982    .bss                mem.o
+    0x200061a8   0x00003033   Zero   RW         1000    .bss                memp.o
     0x200091db   0x00000001   PAD
-    0x200091dc   0x0000014a   Zero   RW          955    .bss                stats.o
+    0x200091dc   0x0000014a   Zero   RW         1097    .bss                stats.o
     0x20009326   0x00000002   PAD
-    0x20009328   0x00000014   Zero   RW         1010    .bss                tcp_in.o
-    0x2000933c   0x00000010   Zero   RW         1081    .bss                inet.o
-    0x2000934c   0x000007d4   Zero   RW         1153    .bss                ip_frag.o
-    0x20009b20   0x00000050   Zero   RW         1432    .bss                sockets.o
-    0x20009b70   0x00000400   Zero   RW          368    STACK               cstartup.o
+    0x20009328   0x00000014   Zero   RW         1152    .bss                tcp_in.o
+    0x2000933c   0x00000010   Zero   RW         1226    .bss                inet.o
+    0x2000934c   0x000007d4   Zero   RW         1298    .bss                ip_frag.o
+    0x20009b20   0x00000050   Zero   RW         1577    .bss                sockets.o
+    0x20009b70   0x00000400   Zero   RW          472    STACK               cstartup.o
 
 
 ==============================================================================
@@ -1385,7 +1385,7 @@ Image component sizes
          0          0          0          4          0       2580   clock-arch.o
         28          4        236          0       1024        784   cstartup.o
       1192         38          0          0          0       4538   dm9000x.o
-      1444         58          0         13       1632       6133   dns.o
+      1444         58          0         13       1632      12234   dns.o
       2452         38         12          1        200      17585   etharp.o
        312         26          0          0       3032       3952   ethernetif.o
          0          0          0          0          0       9524   event_groups.o
@@ -1393,7 +1393,7 @@ Image component sizes
        684          6          0          0          0       2526   icmp.o
        540         12          0          0         16       3132   inet.o
        342          0          0          0          0       5158   inet_chksum.o
-        24          0          0          0          0       1140   init.o
+        24          0          0          0          0       8486   init.o
       1264         28          0         10          0       6222   ip.o
         78          0          8          0          0       5413   ip_addr.o
       1560         24          0          6       2004       5788   ip_frag.o
@@ -1404,7 +1404,7 @@ Image component sizes
        380         20         56          0      12339       3014   memp.o
        220         22          0          0          0       1753   misc.o
        288          0          0          0          0       6413   netbuf.o
-       500         60          0         44         98      16079   netconfig.o
+       500         60          0         44         98       9666   netconfig.o
        516         22          0          9          0       5236   netif.o
       1334         12          0          1          0       6092   pbuf.o
        378         28          0          4          0       6980   port.o
@@ -1424,7 +1424,7 @@ Image component sizes
       1228         16          0          4          0       6233   udp.o
 
     ----------------------------------------------------------------------
-     47448       1518        652        368      40448     621323   Object Totals
+     47448       1518        652        368      40448     628357   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         10          0          5         10          5          0   (incl. Padding)
 
@@ -1469,8 +1469,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     47752       1534        652        368      40448     618423   Grand Totals
-     47752       1534        652         72      40448     618423   ELF Image Totals (compressed)
+     47752       1534        652        368      40448     625457   Grand Totals
+     47752       1534        652         72      40448     625457   ELF Image Totals (compressed)
      47752       1534        652         72          0          0   ROM Totals
 
 ==============================================================================

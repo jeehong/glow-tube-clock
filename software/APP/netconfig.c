@@ -104,7 +104,7 @@ void LwIP_Init( void )
 	serverIP[0] = 192;
 	serverIP[1] = 168;
 	serverIP[2] = 1;
-	serverIP[3] = 110;
+	serverIP[3] = 156;
 	
 	maskIP[0] = 255;
 	maskIP[1] = 255;
