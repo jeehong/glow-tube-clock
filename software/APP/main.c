@@ -131,16 +131,16 @@ int main( void )
 	vlwIPInit();
 	LwIP_Init();
 
-	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 6); 
+	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 5); 
 	
 	/* Start the tasks defined within this file/specific to this demo. */
 	
-	/* xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 7, NULL ); */
+	/* xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
 	/* xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL ); */
 	/* xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
 	/* xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL ); */
 
-	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 3, NULL );
+	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();

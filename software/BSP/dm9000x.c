@@ -96,7 +96,7 @@ static __inline void dm9000_out_byte(u16 outdata, u16 reg)
 	GPIO_dm9000x.GPIO_Pin = GPIO_Pin_All;
 	GPIO_dm9000x.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(DATA_PORT, &GPIO_dm9000x);	
+	GPIO_Init(DATA_PORT, &GPIO_dm9000x);
 	DM9000X_DATA_OUT(outdata); 	       		
 	DM9000X_CMD(reg);			   
 	DM9000X_CS(0);				   

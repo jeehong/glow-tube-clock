@@ -10,23 +10,29 @@
 
 void vLedTask(void *pvParameters)
 {
+	portTickType xLastWakeTime;
+
+	xLastWakeTime = xTaskGetTickCount();
+	
 	while(1)
 	{
+
 		GPIO_SetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelay(1920);
+		vTaskDelayUntil(&xLastWakeTime, 1920);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelay(80);
+		vTaskDelayUntil(&xLastWakeTime, 80);
 	}
 }
 
 void vRelay1Task(void *pvParameters)
 {
+
 	while(1)
 	{
 		GPIO_SetBits(GPIOC, GPIO_Pin_0);
-		vTaskDelay(10000);
+		vTaskDelay(1000);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_0);
-		vTaskDelay(10000);
+		vTaskDelay(1000);
 	}
 }
 

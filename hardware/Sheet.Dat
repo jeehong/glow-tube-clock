@@ -1,0 +1,40 @@
+Field=Comment~String~Comment~100|Field=Description~String~Description~100|Field=Designator~String~Designator~100|Field=Footprint~String~Footprint~100|Field=LibRef~String~LibRef~100|Field=Quantity~Integer~Quantity~100|ReportField=Currency~<none>|ReportField=ProductionQuantity~1|ReportField=ProjectFileName~Free Documents|ReportField=ProjectFullPath~Free Documents|ReportField=Title~Bill of Materials For Schematic Document [Sheet.SchDoc]|ReportField=TotalQuantity~254|ReportField=ReportTime~23:04:38|ReportField=ReportDate~2016/5/11|ReportField=ReportDateTime~2016/5/11 23:04:38|ReportField=OutputName~Bill of Materials|ReportField=OutputType~BOM_PartType|ReportField=GeneratorName~BOM|ReportField=GeneratorDescription~Bill of Materials|ReportField=VariantName~None|ReportField=Address1~|ReportField=Address2~|ReportField=Address3~|ReportField=Address4~|ReportField=ApprovedBy~|ReportField=Author~|ReportField=CheckedBy~|ReportField=CompanyName~|ReportField=CurrentDate~2016/5/11|ReportField=CurrentTime~23:04:36|ReportField=Date~|ReportField=DocumentFullPathAndName~C:\Users\Jeehong\projects\glow-tube-clock\hardware\Sheet.SchDoc|ReportField=DocumentName~Sheet.SchDoc|ReportField=DocumentNumber~|ReportField=DrawnBy~|ReportField=Engineer~|ReportField=ImagePath~|ReportField=ModifiedDate~2016/5/10|ReportField=Organization~|ReportField=ProjectName~|ReportField=Revision~|ReportField=Rule~|ReportField=SheetNumber~|ReportField=SheetTotal~|ReportField=Time~|ReportField=Title~|ReportField=DataSourceFileName~Sheet.SchDoc|ReportField=DataSourceFullPath~C:\Users\Jeehong\projects\glow-tube-clock\hardware\Sheet.SchDoc
+Battery|Multicell Battery|BT1|CR1220|Battery|1
+BELL|Bell|BZ1|BEEZ|BELL|1
+Cap Pol1|Polarized Capacitor (Radial)|C1, C5, C8|SMT_CAP_DAN|Cap Pol1|3
+680uF/50V|Electrolytic Capacitor|C2|470/50V|ELECTRO1|1
+220uF/25V|Electrolytic Capacitor|C3|330/25V|ELECTRO1|1
+Cap|Capacitor|C4, C6, C7, C9, C10, C11, C12, C13, C14, C15, C17, C19, C21, C22, C24, C25, C26, C27, C29|SMT0805|Cap|19
+10uF/25V|Electrolytic Capacitor|C16, C18|SMT_CAP_DAN|ELECTRO1|2
+10uF/250V|Electrolytic Capacitor|C20|470/50V|ELECTRO1|1
+Cap|Capacitor|C23|RAD-0.2|Cap|1
+Cap Semi|Capacitor (Semiconductor SIM Model)|C28, C30, C31|SMT0805|Cap Semi|3
+RGB|Header, 3-Pin, Dual row|D1|LED-RGB|Header 3X2A|1
+1N5824|Schottky Diode|D2|FR107|D Schottky|1
+FR107|Schottky Diode|D3|FR107|D Schottky|1
+LED0|Typical INFRARED GaAs LED|D4, D5, D6, D7|DO|LED0|4
+PWR2.5|Low Voltage Power Supply Connector|J1|DC|PWR2.5|1
+Header 4|Header, 4-Pin|J2|HEAD_DIP4|Header 4|1
+Header 10X2H|Header, 10-Pin, Dual row, Right Angle|JTAG1|HDR2X10|Header 10X2H|1
+33uH||L1|L|INDUCTOR IRON|1
+330uH||L2|L|INDUCTOR IRON|1
+8050|NPN General Purpose Amplifier|Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15, Q16, Q17, Q18, Q19, Q20, Q21, Q22, Q23, Q24, Q25, Q26, Q27, Q28, Q29, Q30, Q31, Q32, Q33, Q34, Q38, Q39, Q40, Q41, Q42, Q43, Q44, Q45, Q46, Q47, Q48, Q49, Q50, Q51, Q52, Q53, Q54, Q55, Q56, Q57, Q58, Q59, Q60, Q61, Q62, Q63, Q64, Q65, Q66, Q67|SOP-23|2N3904|64
+A40|NPN General Purpose Amplifier|Q35, Q69, Q70, Q71, Q72|SOP-23|2N3904|5
+MOSFET-N|N-Channel MOSFET|Q36|TO-220|MOSFET-N|1
+8550|PNP General Purpose Amplifier|Q37, Q68|SOP-23|2N3906|2
+IN-4||QS1, QS2, QS3, QS4, QS5, QS6|IN-4|IN-4|6
+Res2|Resistor|R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42, R43, R44, R45, R46, R47, R48, R49, R50, R51, R52, R53, R54, R55, R56, R57, R58, R59, R60, R61, R62, R63, R64, R65, R66, R67, R68, R69, R70, R71, R72, R73, R74, R75, R76, R77, R78, R79, R80, R81, R82, R83, R84, R85, R86, R87, R88, R89, R90, R91, R92, R93, R94, R95, R96, R97, R98, R99, R100, R101, R102, R103, R104, R105, R106, R107, R108, R109, R110|SMT0805|Res2|110
+Header 3X2A|Header, 3-Pin, Dual row|S1|LOCK_SW_DIP6|Header 3X2A|1
+SW-PB|Switch|S2|KEY|SW-PB|1
+||U1|LM2575|LM2596|1
+STM32F103RCT6||U2|LQFP64|STM32F103RCT6|1
+DM9000||U3|LQFP48|DM9000|1
+AO4423L||U4|SOP_8|AO4423L|1
+MC34063||U5|SOP_8|MC34063|1
+74HC595||U6, U7, U8, U9, U10, U11, U12, U13|SOT109-1|74HC595|8
+Header 4|Header, 4-Pin|U14|HDR1X4|Header 4|1
+HN16613CG||U15|SOJ16-T|HN16613CG|1
+RJ-45||U16|RJ45-LED|RJ-45|1
+DS3231||U17|DS3231|DS3231|1
+8M|Crystal Oscillator|Y1|XTAL_DIP|XTAL|1
+25M|Crystal Oscillator|Y2|XTAL_DIP|XTAL|1
