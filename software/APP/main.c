@@ -133,7 +133,6 @@ int main( void )
 	LwIP_Init();
 
 	/* Start the tasks defined within this file/specific to this demo. */
-	vStartComTasks(4);
 	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 5); 
 	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
 	/* xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
