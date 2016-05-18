@@ -151,6 +151,8 @@ err_t  ethernetif_input(struct netif *netif)
 	
 	for(;;)
 	{
+		/* xSemaphoreTake(*dm9000x_get_semap(), portMAX_DELAY); */
+		
 		p = low_level_input(netif);
 
 		if (p == NULL) { continue;}

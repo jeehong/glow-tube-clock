@@ -66,7 +66,54 @@ typedef struct
                                                    will be enabled or disabled. 
                                                    This parameter can be set either to ENABLE or DISABLE */   
 } NVIC_InitTypeDef;
- 
+
+/* Exported constants --------------------------------------------------------*/
+/* IRQ Channels --------------------------------------------------------------*/
+#define WWDG_IRQChannel              ((u8)0x00)  /* Window WatchDog Interrupt */
+#define PVD_IRQChannel               ((u8)0x01)  /* PVD through EXTI Line detection Interrupt */
+#define TAMPER_IRQChannel            ((u8)0x02)  /* Tamper Interrupt */
+#define RTC_IRQChannel               ((u8)0x03)  /* RTC global Interrupt */
+#define FLASH_IRQChannel             ((u8)0x04)  /* FLASH global Interrupt */
+#define RCC_IRQChannel               ((u8)0x05)  /* RCC global Interrupt */
+#define EXTI0_IRQChannel             ((u8)0x06)  /* EXTI Line0 Interrupt */
+#define EXTI1_IRQChannel             ((u8)0x07)  /* EXTI Line1 Interrupt */
+#define EXTI2_IRQChannel             ((u8)0x08)  /* EXTI Line2 Interrupt */
+#define EXTI3_IRQChannel             ((u8)0x09)  /* EXTI Line3 Interrupt */
+#define EXTI4_IRQChannel             ((u8)0x0A)  /* EXTI Line4 Interrupt */
+#define DMAChannel1_IRQChannel       ((u8)0x0B)  /* DMA Channel 1 global Interrupt */
+#define DMAChannel2_IRQChannel       ((u8)0x0C)  /* DMA Channel 2 global Interrupt */
+#define DMAChannel3_IRQChannel       ((u8)0x0D)  /* DMA Channel 3 global Interrupt */
+#define DMAChannel4_IRQChannel       ((u8)0x0E)  /* DMA Channel 4 global Interrupt */
+#define DMAChannel5_IRQChannel       ((u8)0x0F)  /* DMA Channel 5 global Interrupt */
+#define DMAChannel6_IRQChannel       ((u8)0x10)  /* DMA Channel 6 global Interrupt */
+#define DMAChannel7_IRQChannel       ((u8)0x11)  /* DMA Channel 7 global Interrupt */
+#define ADC_IRQChannel               ((u8)0x12)  /* ADC global Interrupt */
+#define USB_HP_CAN_TX_IRQChannel     ((u8)0x13)  /* USB High Priority or CAN TX Interrupts */
+#define USB_LP_CAN_RX0_IRQChannel    ((u8)0x14)  /* USB Low Priority or CAN RX0 Interrupts */
+#define CAN_RX1_IRQChannel           ((u8)0x15)  /* CAN RX1 Interrupt */
+#define CAN_SCE_IRQChannel           ((u8)0x16)  /* CAN SCE Interrupt */
+#define EXTI9_5_IRQChannel           ((u8)0x17)  /* External Line[9:5] Interrupts */
+#define TIM1_BRK_IRQChannel          ((u8)0x18)  /* TIM1 Break Interrupt */
+#define TIM1_UP_IRQChannel           ((u8)0x19)  /* TIM1 Update Interrupt */
+#define TIM1_TRG_COM_IRQChannel      ((u8)0x1A)  /* TIM1 Trigger and Commutation Interrupt */
+#define TIM1_CC_IRQChannel           ((u8)0x1B)  /* TIM1 Capture Compare Interrupt */
+#define TIM2_IRQChannel              ((u8)0x1C)  /* TIM2 global Interrupt */
+#define TIM3_IRQChannel              ((u8)0x1D)  /* TIM3 global Interrupt */
+#define TIM4_IRQChannel              ((u8)0x1E)  /* TIM4 global Interrupt */
+#define I2C1_EV_IRQChannel           ((u8)0x1F)  /* I2C1 Event Interrupt */
+#define I2C1_ER_IRQChannel           ((u8)0x20)  /* I2C1 Error Interrupt */
+#define I2C2_EV_IRQChannel           ((u8)0x21)  /* I2C2 Event Interrupt */
+#define I2C2_ER_IRQChannel           ((u8)0x22)  /* I2C2 Error Interrupt */
+#define SPI1_IRQChannel              ((u8)0x23)  /* SPI1 global Interrupt */
+#define SPI2_IRQChannel              ((u8)0x24)  /* SPI2 global Interrupt */
+#define USART1_IRQChannel            ((u8)0x25)  /* USART1 global Interrupt */
+#define USART2_IRQChannel            ((u8)0x26)  /* USART2 global Interrupt */
+#define USART3_IRQChannel            ((u8)0x27)  /* USART3 global Interrupt */
+#define EXTI15_10_IRQChannel         ((u8)0x28)  /* External Line[15:10] Interrupts */
+#define RTCAlarm_IRQChannel          ((u8)0x29)  /* RTC Alarm through EXTI Line Interrupt */
+#define USBWakeUp_IRQChannel         ((u8)0x2A)  /* USB WakeUp from suspend through EXTI Line Interrupt */
+
+
 /**
   * @}
   */

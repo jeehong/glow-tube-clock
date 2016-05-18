@@ -543,7 +543,7 @@ tcpip_netifapi_lock(struct netifapi_msg* netifapimsg)
 void
 tcpip_init(void (* initfunc)(void *), void *arg)
 {
-  lwip_init();
+  /* lwip_init(); */
 
   tcpip_init_done = initfunc;
   tcpip_init_done_arg = arg;

@@ -6,6 +6,7 @@
 
 #include "stdint.h"
 
+
 #define DM9000_ID		    0x90000A46
 
 /* although the registers are 16 bit, they are 32-bit aligned.

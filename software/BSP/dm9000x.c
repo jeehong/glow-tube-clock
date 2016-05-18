@@ -357,5 +357,3 @@ uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen)
     }
     return rx_length;
 }
-
-

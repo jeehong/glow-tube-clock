@@ -112,7 +112,7 @@ void LwIPEntry(void * pvArg)
   struct netconn  *__pstConn, *__pstNewConn;
 	struct netbuf	*__pstNetbuf;
 
-	char *web_page = "<html><body><center><hl>hello,World!</hl><br><hr><font size=15>hello,world!</font></center></body></html>";
+	char *web_page = "<html><body><center><hl>hello,World!</hl><br><hr><font size=15><b><i>hello,world!</i></b></font></center></body></html>";
 
 	__pstConn = netconn_new(NETCONN_TCP);
 	netconn_bind(__pstConn, NULL, 80);

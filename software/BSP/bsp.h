@@ -1,8 +1,9 @@
 #ifndef __BSP_H__
 #define __BSP_H__
 
-void prvSetupHardware(void);
-void  bsp_led_init(void);
+#define mainCOM_BAUD_RATE		( 115200 )
+
+void  bsp_init(void);
 
 
 #endif
