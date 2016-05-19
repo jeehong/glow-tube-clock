@@ -7,57 +7,39 @@
 #include "app_led.h"
 #include "app_serial.h"
 
-#define mainDELAY			( ( TickType_t ) 100 / portTICK_PERIOD_MS )
 
-void vLedTask(void *pvParameters)
+
+void app_led_init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	RCC_APB2PeriphClockCmd(LED_RCC_APB, ENABLE); 													   
+	GPIO_InitStructure.GPIO_Pin = LED_PIN_R | LED_PIN_G | LED_PIN_B;	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;     
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+	GPIO_Init(GPIOC, &GPIO_InitStructure);			  
+	GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
+}
+
+
+void app_led_task_blink(void *pvParameters)
 {
 	portTickType xLastWakeTime;
-
-	unsigned char counter = 0;
+	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
+	unsigned char index = 0;
 	
 	xLastWakeTime = xTaskGetTickCount();
 	
 	while(1)
 	{
-		GPIO_SetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelayUntil(&xLastWakeTime, 1920);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelayUntil(&xLastWakeTime, 80);
-		dbg_string("[%d]\r\n", counter++);
-	}
-}
-
-void vRelay1Task(void *pvParameters)
-{
-
-	while(1)
-	{
-		GPIO_SetBits(GPIOC, GPIO_Pin_0);	/* ON */
-		vTaskDelay(10000);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_0);	/* OFF */
-		vTaskDelay(10000);
-	}
-}
-
-void vRelay2Task(void *pvParameters)
-{
-	while(1)
-	{
-		GPIO_SetBits(GPIOC, GPIO_Pin_1);
-		vTaskDelay(1000);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_1);
-		vTaskDelay(3000);
-	}
-}
-
-void vRelay3Task(void *pvParameters)
-{
-	while(1)
-	{
-		GPIO_SetBits(GPIOC, GPIO_Pin_2);
-		vTaskDelay(1000);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_2);
-		vTaskDelay(7000);
+		/* GPIO_ResetBits(LED_PIN_GROUP, port_list[index % 3]); */
+		LED_PIN_GROUP->BRR = port_list[index % 3];
+		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(80));
+		/* GPIO_SetBits(LED_PIN_GROUP, port_list[index % 3]); */
+		LED_PIN_GROUP->BSRR = port_list[index % 3];
+		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
+		index++;
+		dbg_string("[%d]\r\n", index);	
 	}
 }
 

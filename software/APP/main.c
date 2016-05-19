@@ -134,7 +134,7 @@ int main( void )
 
 	/* Start the tasks defined within this file/specific to this demo. */
 	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 5); 
-	xTaskCreate( vLedTask, "Led", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
+	xTaskCreate( app_led_task_blink, "Led", mainLED_TASK_STACK_SIZE, NULL, 6, NULL );
 	/* xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
 	/* xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL ); */
 	/* xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
