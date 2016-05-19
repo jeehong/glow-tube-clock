@@ -19,7 +19,6 @@ void vLedTask(void *pvParameters)
 	
 	while(1)
 	{
-
 		GPIO_SetBits(GPIOC, GPIO_Pin_12);
 		vTaskDelayUntil(&xLastWakeTime, 1920);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
@@ -33,10 +32,10 @@ void vRelay1Task(void *pvParameters)
 
 	while(1)
 	{
-		GPIO_SetBits(GPIOC, GPIO_Pin_0);
-		vTaskDelay(5000);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_0);
-		vTaskDelay(2000);
+		GPIO_SetBits(GPIOC, GPIO_Pin_0);	/* ON */
+		vTaskDelay(10000);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_0);	/* OFF */
+		vTaskDelay(10000);
 	}
 }
 
