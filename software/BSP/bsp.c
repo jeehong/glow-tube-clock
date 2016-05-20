@@ -1,5 +1,6 @@
 #include "misc.h"
 #include "bsp.h"
+#include "i2c_bus.h"
 
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -8,14 +9,23 @@
 #include "app_serial.h"
 #include "app_led.h"
 
+		
+#define	HV_RCC_APB			RCC_APB2Periph_GPIOC
+#define	HV_PIN_GROUP		GPIOC
+#define	HV_PIN				GPIO_Pin_8
+
+
 static void prvSetupHardware(void);
+static void bsp_hv_init(void);
 
 
 void bsp_init(void)
 {
 	prvSetupHardware();
 	serial_init(mainCOM_BAUD_RATE);
+	i2c_bus_init();
 	app_led_init();
+	bsp_hv_init();
 }
 
 static void prvSetupHardware(void)
@@ -79,7 +89,30 @@ static void prvSetupHardware(void)
 	SysTick_CLKSourceConfig( SysTick_CLKSource_HCLK );
 }
 
+static void bsp_hv_init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
 
+	RCC_APB2PeriphClockCmd(HV_RCC_APB, ENABLE); 													   
+	GPIO_InitStructure.GPIO_Pin = HV_PIN;	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;     
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+	GPIO_Init(HV_PIN_GROUP, &GPIO_InitStructure);			  
+	GPIO_ResetBits(HV_PIN_GROUP, HV_PIN);
+}
+
+void bsp_set_power_hv(SWITCH_STATE_e state)
+{
+	if(state == ON)
+		HV_PIN_GROUP->BSRR = HV_PIN;
+	else
+		HV_PIN_GROUP->BRR = HV_PIN;
+}
+
+BitAction bsp_get_power_hv(void)
+{
+	return ((HV_PIN_GROUP->ODR & HV_PIN != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
+}
 
 
 

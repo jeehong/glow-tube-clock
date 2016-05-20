@@ -17,7 +17,7 @@ void app_led_init(void)
 	GPIO_InitStructure.GPIO_Pin = LED_PIN_R | LED_PIN_G | LED_PIN_B;	
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;     
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-	GPIO_Init(GPIOC, &GPIO_InitStructure);			  
+	GPIO_Init(LED_PIN_GROUP, &GPIO_InitStructure);			  
 	GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
 }
 
