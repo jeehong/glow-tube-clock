@@ -74,10 +74,9 @@ void i2c_bus_init(void)
 
 	for(index = ds; index < chip_all; index++)
 	{
-		RCC_APB2PeriphClockCmd(i2c_bus[index].rcc_scl, ENABLE); 
-		RCC_APB2PeriphClockCmd(i2c_bus[index].rcc_sda, ENABLE); 
+		RCC_APB2PeriphClockCmd(i2c_bus[index].rcc_scl | i2c_bus[index].rcc_sda, ENABLE); 
 		
-		GPIO_InitStructure.GPIO_Pin = i2c_bus[index].pin_scl;	
+		GPIO_InitStructure.GPIO_Pin = i2c_bus[index].pin_scl | i2c_bus[index].rcc_sda;	
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;     
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
 		GPIO_Init(i2c_bus[index].group_scl, &GPIO_InitStructure);			  
@@ -87,9 +86,14 @@ void i2c_bus_init(void)
 	i2c_bus_chip_reset(sht);
 }
 
-static void delayus(u16 us)
+/*
+ * 1us/72000000=1.38e-8;
+ * 计算得出大概75个时钟周期
+ */
+static void delayus(u16 us) 
 {
-	
+	us *= 20;
+	while(us--) ;
 }
 
 static void i2c_bus_sda_dir(I2C_RESOURCE_t *chip, GPIO_DIR_e dir)
@@ -134,14 +138,14 @@ static void i2c_bus_sda_dir(I2C_RESOURCE_t *chip, GPIO_DIR_e dir)
 	chip->group_sda->ODR |= chip->pin_sda;	/* IPU */
 }
 
-/* 
+/*
  * 启动传输
  *       _____         _____
  * DATA:      |_______|
  *           ___     ___
  * SCK : ___|   |___|   |___
  */
-static void i2c_bus_start(CHIP_LIST_e chip)
+static __inline void i2c_bus_start(CHIP_LIST_e chip)
 {
 	I2C_BUS_SDA_HIGH(i2c_bus[chip]);		
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
@@ -159,12 +163,14 @@ static void i2c_bus_start(CHIP_LIST_e chip)
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
 }
 
-// 连接复位;
-//       _____________________________________________________         ________
-// DATA:                                                      |_______|
-//          _    _    _    _    _    _    _    _    _        ___     ___
-// SCK : __| |__| |__| |__| |__| |__| |__| |__| |__| |______|   |___|   |______
-static void i2c_bus_chip_reset(CHIP_LIST_e chip)
+/*
+ * 连接复位;
+ *       _____________________________________________________         ________
+ * DATA:                                                      |_______|
+ *          _    _    _    _    _    _    _    _    _        ___     ___
+ * SCK : __| |__| |__| |__| |__| |__| |__| |__| |__| |______|   |___|   |______
+ */
+static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
 {
 	u8 index;
 	
@@ -180,7 +186,7 @@ static void i2c_bus_chip_reset(CHIP_LIST_e chip)
 }
 
 //----------------------------------------------------------------------------------
-u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 addr, u8 value)
+__inline u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 addr, u8 value)
 {
 	u8 index;
 	u8 error = 0;
@@ -210,11 +216,10 @@ u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 addr, u8 value)
 	delayus(1);
 	I2C_BUS_SDA_HIGH(i2c_bus[chip]);						
 	
-	return error;				//error=1 通讯错误
+	return error;				
 }
 
-//----------------------------------------------------------------------------------
-u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 addr, u8 ack)
+__inline u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 addr, u8 ack)
 {
 	u8 index;
 	u8 val = 0;

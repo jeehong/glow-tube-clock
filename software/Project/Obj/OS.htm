@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Fri May 20 14:15:02 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Fri May 20 15:12:51 2016
 <BR><P>
 <H3>Maximum Stack Usage =        648 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2393,10 +2393,10 @@ Global Symbols
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pbuf_alloc
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[163]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_listen_input
+<BR>[Called By]<UL><LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_write
+<LI><a href="#[163]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_listen_input
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_send_ctrl
 <LI><a href="#[154]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_connect
-<LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_write
 </UL>
 
 <P><STRONG><a name="[149]"></a>tcp_send_ctrl</STRONG> (Thumb, 22 bytes, Stack size 16 bytes, tcp_out.o(.text))
@@ -4067,9 +4067,9 @@ Local Symbols
 <P><STRONG><a name="[195]"></a>do_writemore</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, api_msg.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 448<LI>Call Chain = do_writemore &rArr; tcp_output &rArr; tcp_output_segment &rArr; ip_output &rArr; ip_output_if &rArr; ip_frag &rArr; pbuf_alloc &rArr; pbuf_pool_is_empty &rArr; tcpip_callback_with_block &rArr; sys_mbox_post &rArr; xQueueGenericSend &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[146]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_output
+<BR>[Calls]<UL><LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_write
+<LI><a href="#[146]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_output
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_sem_signal
-<LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;poll_tcp
 <LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sent_tcp
