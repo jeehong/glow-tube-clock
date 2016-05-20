@@ -423,11 +423,6 @@
               <FilePath>..\APP\netconfig.c</FilePath>
             </File>
             <File>
-              <FileName>clock-arch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\clock-arch.c</FilePath>
-            </File>
-            <File>
               <FileName>app_serial.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\app_serial.c</FilePath>
@@ -446,6 +441,11 @@
               <FileName>dm9000x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\dm9000x.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_bus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\i2c_bus.c</FilePath>
             </File>
           </Files>
         </Group>
