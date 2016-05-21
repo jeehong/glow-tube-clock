@@ -26,18 +26,20 @@ void app_led_task_blink(void *pvParameters)
 {
 	portTickType xLastWakeTime;
 	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
-	unsigned char index = 0;
+	unsigned char index = 0; 
 	
 	xLastWakeTime = xTaskGetTickCount();
 	
 	while(1)
 	{
-		/* GPIO_ResetBits(LED_PIN_GROUP, port_list[index % 3]); */
-		LED_PIN_GROUP->BRR = port_list[index % 3];
-		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(80));
+
 		/* GPIO_SetBits(LED_PIN_GROUP, port_list[index % 3]); */
-		LED_PIN_GROUP->BSRR = port_list[index % 3];
+		LED_PIN_GROUP->BSRR = port_list[/*index % 3*/2];
+		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(80));
+		/* GPIO_ResetBits(LED_PIN_GROUP, port_list[index % 3]); */
+		LED_PIN_GROUP->BRR = port_list[/*index % 3*/2];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
+
 		index++;
 		dbg_string("[%d]\r\n", index);	
 	}
