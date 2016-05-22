@@ -3,6 +3,8 @@
 
 #include "stm32f10x.h"
 
+#include "main.h"
+
 #define mainDELAY_MS(ms)			( ( TickType_t ) ms / portTICK_PERIOD_MS )
 
 
@@ -14,7 +16,7 @@
 
 
 void app_led_init(void);	 
-void app_led_task_blink( void *pvParameters );
+void app_led_task_blink(DISPLAY_RESOURCE_t *display);
 	 
 
 #endif

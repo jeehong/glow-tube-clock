@@ -1,14 +1,22 @@
-#include "app_display.h"
-#include "bsp.h"
-
 #include "string.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+
+
+
+#include "app_display.h"
+#include "app_led.h"
+
+#include "bsp.h"
+#include "main.h"
 
 static void app_display_set_byte(unsigned char data);
 static void app_display_show_data(void);
 static void app_display_set_show(BitAction act);
 static void app_display_set_data(char *pdata);
 static void app_display_set_map(char *desc, char *src);
-
 
 static void delay50ns(void)
 {
@@ -70,7 +78,7 @@ static void app_display_set_map(char *desc, char *src)
 	unsigned char tube;		/* 当前操作的管子序号 */
 	const unsigned char tube_num = 5;	/* 管子总数 */
 	unsigned char calc;
-	
+
 	memset(desc, 0, sizeof(char) * 8);
 	for(tube = 0; tube <= tube_num; tube++)
 	{
@@ -81,6 +89,27 @@ static void app_display_set_map(char *desc, char *src)
 		}
 		else		/* 当满足这个条件时，则默认为不显示任何内容 */
 		{}
+	}
+}
+
+void app_dispaly_task(DISPLAY_RESOURCE_t *display)
+{
+	char map[8] = {0};
+	char *src;
+	
+	bsp_set_hv_state(ON);
+	app_display_set_show(Bit_RESET);
+	while(1)
+	{
+		while(xQueueReceive( display->xQueue, src, portMAX_DELAY) != pdPASS) 
+			;
+		
+		app_display_set_map(map, src);
+		app_display_set_data(map);
+		portENTER_CRITICAL();
+		app_display_show_data();
+		portEXIT_CRITICAL();
+		app_display_set_show(Bit_SET);
 	}	
 }
 

@@ -111,8 +111,11 @@
 #include "netconfig.h"
 
 #include "bsp.h"
+#include "main.h"
+
 #include "app_led.h"
 #include "app_serial.h"
+#include "app_display.h"
 
 #include "LwIPEntry.h"
 
@@ -122,9 +125,7 @@
 /* The time between cycles of the 'check' task. */
 int main( void )
 {
-#ifdef DEBUG
-	debug();
-#endif
+	DISPLAY_RESOURCE_t display_source;
 	
 	bsp_init();
 	
@@ -132,13 +133,12 @@ int main( void )
 	vlwIPInit();
 	LwIP_Init();
 
+	display_source.xQueue = xQueueCreate(1, sizeof(char *));
+
 	/* Start the tasks defined within this file/specific to this demo. */
-	sys_thread_new("network", LwIPEntry, ( void * )NULL, 500, 5); 
-	xTaskCreate( app_led_task_blink, "Led", mainLED_TASK_STACK_SIZE, NULL, 8, NULL );
-	/* xTaskCreate( vRelay1Task, "Relay1", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
-	/* xTaskCreate( LwIP_Periodic_Handle, "network", 512, NULL, 6, NULL ); */
-	/* xTaskCreate( vRelay2Task, "Relay2", mainLED_TASK_STACK_SIZE, NULL, 6, NULL ); */
-	/* xTaskCreate( vRelay3Task, "Relay3", mainLED_TASK_STACK_SIZE, NULL, 5, NULL ); */
+	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
+	xTaskCreate((pdTASK_CODE)app_dispaly_task, "app_display", mainLED_TASK_STACK_SIZE, &display_source, 6, NULL);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", mainLED_TASK_STACK_SIZE, &display_source, 3, NULL);
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
