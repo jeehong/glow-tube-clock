@@ -3,6 +3,7 @@
 ".\obj\app_led.o"
 ".\obj\netconfig.o"
 ".\obj\app_serial.o"
+".\obj\app_display.o"
 ".\obj\bsp.o"
 ".\obj\dm9000x.o"
 ".\obj\i2c_bus.o"
