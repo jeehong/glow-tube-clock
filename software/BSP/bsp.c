@@ -149,7 +149,7 @@ static void bsp_74hc595_io_init(void)
 	GPIO_SetBits(HC595_OE_PIN_GROUP, HC595_OE_PIN);	 /* 初始化阶段，74HC595输出失能 */
 }
 
-__inline void bsp_hc595_set_OE(BitAction act)
+__inline void bsp_74hc595_set_OE(BitAction act)
 {
 	if(act == Bit_SET)
 		HC595_OE_PIN_GROUP->BSRR = HC595_OE_PIN;
