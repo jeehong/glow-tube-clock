@@ -10,9 +10,7 @@
 
 
 #include "app_led.h"
-#include "app_serial.h"
-
-
+//#include "app_serial.h"
 
 void app_led_init(void)
 {
@@ -32,9 +30,8 @@ void app_led_task_blink(DISPLAY_RESOURCE_t *display)
 	portTickType xLastWakeTime;
 	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
 	unsigned char index = 0; 
-	char *pdata;
-	xLastWakeTime = xTaskGetTickCount();
 	
+	xLastWakeTime = xTaskGetTickCount();
 	while(1)
 	{
 		/* GPIO_SetBits(LED_PIN_GROUP, port_list[index % 3]); */
@@ -43,12 +40,11 @@ void app_led_task_blink(DISPLAY_RESOURCE_t *display)
 		/* GPIO_ResetBits(LED_PIN_GROUP, port_list[index % 3]); */
 		LED_PIN_GROUP->BRR = port_list[/*index % 3*/2];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
-		pdata = &display->map[0];
 		if(index > 9)
 			index = 0;
-		memset(pdata, index++, sizeof(char) * 6);
+		memset(&display->map[0], index++, sizeof(char) * 6);
 		
-		xQueueSend( display->xQueue, ( void * )pdata, portMAX_DELAY);
+		xQueueSend( display->xQueue, ( void * )&display->map[0], portMAX_DELAY);
 		/* index++;
 		dbg_string("[%d]\r\n", index);	*/
 	}

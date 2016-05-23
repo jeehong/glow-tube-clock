@@ -93,23 +93,16 @@ void LwIP_Init( void )
 
 
 
-void app_init(void) 
+/*void app_init(void) 
 {
-//	struct tcp_pcb *tcppcb;
-//	
-//	/* Create a new TCP control block  */
-//	tcppcb = tcp_new();
-//	
-//	/* Assign to the new pcb a local IP address and a port number */
-//	/* Using IP_ADDR_ANY allow the pcb to be used by any local interface */
-//	tcp_bind(tcppcb, IP_ADDR_ANY, serverPORT);
-//	
-//	/* Set the connection to the LISTEN state */
-//	tcppcb = tcp_listen(tcppcb);
-//	
-//	/* Specify the function to be called when a connection is established */	
-//	tcp_accept(tcppcb, tcp_appcall);	
+	struct tcp_pcb *tcppcb;
+	
+	tcppcb = tcp_new();
+	
+
+	tcp_bind(tcppcb, IP_ADDR_ANY, serverPORT);
+	
+	tcppcb = tcp_listen(tcppcb);
 		
-	                			 	
- 	
-}
+	tcp_accept(tcppcb, tcp_appcall);				                			
+}*/

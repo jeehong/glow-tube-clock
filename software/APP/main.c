@@ -137,7 +137,7 @@ int main( void )
 
 	/* Start the tasks defined within this file/specific to this demo. */
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
-	xTaskCreate((pdTASK_CODE)app_dispaly_task, "app_display", mainLED_TASK_STACK_SIZE, &display_source, 6, NULL);
+	xTaskCreate((pdTASK_CODE)app_dispaly_show_task, "app_display", mainLED_TASK_STACK_SIZE, &display_source, 6, NULL);
 	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", mainLED_TASK_STACK_SIZE, &display_source, 3, NULL);
 	
 	/* Start the scheduler. */

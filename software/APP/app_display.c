@@ -17,6 +17,7 @@ static void app_display_show_data(void);
 static void app_display_set_show(BitAction act);
 static void app_display_set_data(char *pdata);
 static void app_display_set_map(char *desc, char *src);
+static void app_display_set_point(char src);
 
 static void delay50ns(void)
 {
@@ -92,7 +93,62 @@ static void app_display_set_map(char *desc, char *src)
 	}
 }
 
-void app_dispaly_task(DISPLAY_RESOURCE_t *display)
+/*
+ * src:指向待显示的亮点类型
+ * 高四位    *    *    ·  ·  高位冒号
+ *         0 *  1 · 2 * 3 · 
+ *
+ * 低四位    *    *    ·  ·  低位冒号
+ *         0 *  1 · 2 * 3 · 
+ * ※表示不显示
+ */
+static void app_display_set_point(char src)
+{
+	switch(src >> 4)
+	{
+		case 0:
+			GPIOD->BRR = GPIO_Pin_2;
+			GPIOA->BRR = GPIO_Pin_8;
+			break;
+		case 1:
+			GPIOD->BSRR = GPIO_Pin_2;
+			GPIOA->BRR = GPIO_Pin_8;
+			break;
+		case 2:
+			GPIOA->BSRR = GPIO_Pin_8;
+			GPIOD->BRR = GPIO_Pin_2;
+			break;
+		case 3:
+			GPIOD->BSRR = GPIO_Pin_2;
+			GPIOA->BSRR = GPIO_Pin_8;	
+			break;
+		default: 
+			break;
+	}	
+	switch(src & 0x0f)
+	{
+		case 0:
+			GPIOA->BRR = GPIO_Pin_7;
+			GPIOA->BRR = GPIO_Pin_1;
+			break;
+		case 1:
+			GPIOA->BSRR = GPIO_Pin_7;
+			GPIOA->BRR = GPIO_Pin_1;
+			break;
+		case 2:
+			GPIOA->BSRR = GPIO_Pin_1;
+			GPIOA->BRR = GPIO_Pin_7;
+			break;
+		case 3:
+			GPIOA->BSRR = GPIO_Pin_1;
+			GPIOA->BSRR = GPIO_Pin_7;	
+			break;
+		default: 
+			break;
+	}	
+}
+
+void app_dispaly_show_task(DISPLAY_RESOURCE_t *display)
 {
 	char map[8] = {0};
 	char *src;
@@ -103,13 +159,14 @@ void app_dispaly_task(DISPLAY_RESOURCE_t *display)
 	{
 		while(xQueueReceive( display->xQueue, src, portMAX_DELAY) != pdPASS) 
 			;
-		
+		app_display_set_point(src[6]);
 		app_display_set_map(map, src);
 		app_display_set_data(map);
 		portENTER_CRITICAL();
 		app_display_show_data();
 		portEXIT_CRITICAL();
 		app_display_set_show(Bit_SET);
+		vTaskDelay(mainDELAY_MS(10));
 	}	
 }
 

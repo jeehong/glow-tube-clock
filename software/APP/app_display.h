@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-void app_dispaly_task(DISPLAY_RESOURCE_t *display);
+void app_dispaly_show_task(DISPLAY_RESOURCE_t *display);
 
 
 #endif 
