@@ -2,9 +2,7 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
-#include "queue.h"
-
-
+#include "semphr.h"
 
 #include "app_display.h"
 #include "app_led.h"
@@ -157,8 +155,8 @@ void app_dispaly_show_task(DISPLAY_RESOURCE_t *display)
 	app_display_set_show(Bit_RESET);
 	while(1)
 	{
-		while(xQueueReceive( display->xQueue, src, portMAX_DELAY) != pdPASS) 
-			;
+		xSemaphoreTake(display->xMutex, portMAX_DELAY);
+		
 		app_display_set_point(src[6]);
 		app_display_set_map(map, src);
 		app_display_set_data(map);

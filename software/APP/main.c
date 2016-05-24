@@ -105,6 +105,8 @@
 /* Scheduler includes. */
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
+
 /* Library includes. */
 #include "stm32f10x.h"
 
@@ -125,7 +127,10 @@
 /* The time between cycles of the 'check' task. */
 int main( void )
 {
-	DISPLAY_RESOURCE_t display_source;
+	/* 这个结构体中的互斥量用来描述硬件显示资源是否可用 
+	 * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
+	 */
+	DISPLAY_RESOURCE_t display_source;	
 	
 	bsp_init();
 	
@@ -133,7 +138,7 @@ int main( void )
 	vlwIPInit();
 	LwIP_Init();
 
-	display_source.xQueue = xQueueCreate(1, sizeof(char *));
+	display_source.xMutex = xSemaphoreCreateMutex();
 
 	/* Start the tasks defined within this file/specific to this demo. */
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 

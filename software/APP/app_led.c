@@ -2,12 +2,13 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
+
 
 /* Library includes. */
 #include "stm32f10x.h"
 
 #include "main.h"
-
 
 #include "app_led.h"
 //#include "app_serial.h"
@@ -42,9 +43,11 @@ void app_led_task_blink(DISPLAY_RESOURCE_t *display)
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
 		if(index > 9)
 			index = 0;
-		memset(&display->map[0], index++, sizeof(char) * 6);
+		xSemaphoreTake(display->xMutex, portMAX_DELAY);
+		memset(&display->map[0], index++, sizeof(char) * 6);	/* 6个辉光管 */
+		display->map[6] = ((index % 3) << 4) | (index % 3);		/* 两个冒号 */
+		xSemaphoreGive(display->xMutex);
 		
-		xQueueSend( display->xQueue, ( void * )&display->map[0], portMAX_DELAY);
 		/* index++;
 		dbg_string("[%d]\r\n", index);	*/
 	}
