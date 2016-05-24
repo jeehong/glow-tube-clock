@@ -105,20 +105,20 @@ static void app_display_set_point(char src)
 	switch(src >> 4)
 	{
 		case 0:
-			GPIOD->BRR = GPIO_Pin_2;
-			GPIOA->BRR = GPIO_Pin_8;
+			POINT_LBOT_PIN_GROUP->BRR = POINT_LBOT_PIN;
+			POINT_LTOP_PIN_GROUP->BRR = POINT_LTOP_PIN;
 			break;
 		case 1:
-			GPIOD->BSRR = GPIO_Pin_2;
-			GPIOA->BRR = GPIO_Pin_8;
+			POINT_LBOT_PIN_GROUP->BSRR = POINT_LBOT_PIN;
+			POINT_LTOP_PIN_GROUP->BRR = POINT_LTOP_PIN;
 			break;
 		case 2:
-			GPIOA->BSRR = GPIO_Pin_8;
-			GPIOD->BRR = GPIO_Pin_2;
+			POINT_LTOP_PIN_GROUP->BSRR = POINT_LTOP_PIN;
+			POINT_LBOT_PIN_GROUP->BRR = POINT_LBOT_PIN;
 			break;
 		case 3:
-			GPIOD->BSRR = GPIO_Pin_2;
-			GPIOA->BSRR = GPIO_Pin_8;	
+			POINT_LBOT_PIN_GROUP->BSRR = POINT_LBOT_PIN;
+			POINT_LTOP_PIN_GROUP->BSRR = POINT_LTOP_PIN;	
 			break;
 		default: 
 			break;
@@ -126,25 +126,25 @@ static void app_display_set_point(char src)
 	switch(src & 0x0f)
 	{
 		case 0:
-			GPIOA->BRR = GPIO_Pin_7;
-			GPIOA->BRR = GPIO_Pin_1;
+			POINT_RBOT_PIN_GROUP->BRR = POINT_RBOT_PIN;
+			POINT_RTOP_PIN_GROUP->BRR = POINT_RTOP_PIN;
 			break;
 		case 1:
-			GPIOA->BSRR = GPIO_Pin_7;
-			GPIOA->BRR = GPIO_Pin_1;
+			POINT_RBOT_PIN_GROUP->BSRR = POINT_RBOT_PIN;
+			POINT_RTOP_PIN_GROUP->BRR = POINT_RTOP_PIN;
 			break;
 		case 2:
-			GPIOA->BSRR = GPIO_Pin_1;
-			GPIOA->BRR = GPIO_Pin_7;
+			POINT_RTOP_PIN_GROUP->BSRR = POINT_RTOP_PIN;
+			POINT_RBOT_PIN_GROUP->BRR = POINT_RBOT_PIN;
 			break;
 		case 3:
-			GPIOA->BSRR = GPIO_Pin_1;
-			GPIOA->BSRR = GPIO_Pin_7;	
+			POINT_RTOP_PIN_GROUP->BSRR = POINT_RTOP_PIN;
+			POINT_RBOT_PIN_GROUP->BSRR = POINT_RBOT_PIN;	
 			break;
 		default: 
 			break;
 	}	
-}
+}	
 
 void app_dispaly_show_task(DISPLAY_RESOURCE_t *display)
 {
