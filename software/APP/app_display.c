@@ -6,6 +6,8 @@
 
 #include "app_display.h"
 #include "app_led.h"
+#include "app_serial.h"
+
 
 #include "bsp.h"
 #include "main.h"
@@ -75,16 +77,16 @@ static void app_display_set_data(char *pdata)
 static void app_display_set_map(char *desc, char *src)
 {
 	unsigned char tube;		/* 当前操作的管子序号 */
-	const unsigned char tube_num = 5;	/* 管子总数 */
+	const unsigned char tube_num = TUBE_NUM - 1;	/* 管子总数 */
 	unsigned char calc;
 
-	memset(desc, 0, sizeof(char) * 8);
+	memset(desc, 0, sizeof(char) << 3);
 	for(tube = 0; tube <= tube_num; tube++)
 	{
 		if((unsigned char)src[tube] <= 9)
 		{
 			calc = tube * 10 + src[tube_num - tube];
-			desc[calc / 8] = 0x01 << (calc % 8);
+			desc[calc >> 3] = 0x01 << (calc % 8);
 		}
 		else		/* 当满足这个条件时，则默认为不显示任何内容 */
 		{}
@@ -153,18 +155,19 @@ void app_dispaly_show_task(DISPLAY_RESOURCE_t *display)
 	
 	bsp_set_hv_state(ON);
 	app_display_set_show(Bit_RESET);
+	src = &display->map[0];
 	while(1)
 	{
 		xSemaphoreTake(display->xMutex, portMAX_DELAY);
-		
-		app_display_set_point(src[6]);
+		app_display_set_point(src[TUBE_NUM]);
 		app_display_set_map(map, src);
+		xSemaphoreGive(display->xMutex);
 		app_display_set_data(map);
 		portENTER_CRITICAL();
 		app_display_show_data();
 		portEXIT_CRITICAL();
 		app_display_set_show(Bit_SET);
-		vTaskDelay(mainDELAY_MS(10));
+		vTaskDelay(mainDELAY_MS(100));
 	}	
 }
 

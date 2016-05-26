@@ -3,6 +3,9 @@
 
 #include "main.h"
 
+#define	 	TUBE_NUM	6
+
+
 void app_dispaly_show_task(DISPLAY_RESOURCE_t *display);
 
 

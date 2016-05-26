@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 #include "DM9000x.h"
+#include "app_serial.h"
+
 
 #define  EXINIT                   	GPIO_Pin_9   
 #define  CMD                      	GPIO_Pin_3 	 
@@ -149,7 +151,7 @@ unsigned int dm9000x_read_id(void)
 	id |= (ior( DM9000_PIDL )&0x00ff) << 16;
 	id |= (ior( DM9000_PIDH )&0x00ff) << 24;
 	
-	/* printf("DM9000x ID:0x%x \n",id); */
+	dbg_string("DM9000x ID:0x%08x \r\n",id);
 
 	if(DM9000_ID == id)
 	  return  id;
@@ -159,7 +161,7 @@ unsigned int dm9000x_read_id(void)
 
 void dm9000x_inital(uint8_t *macaddr)
 {
-	unsigned char i = 0x00;
+	unsigned char index = 0x00;
 
 	dm9000x_gpio_inital();
 	dm9000_delay (5000);
@@ -215,15 +217,15 @@ void dm9000x_inital(uint8_t *macaddr)
 	
 	iow(DM9000_SMCR, 0x00);
 	
-	for(i = 0; i < 6; i++)
+	for(index = 0; index < 6; index++)
 	{
-		iow(DM9000_PAR + i, macaddr[i]);
+		iow(DM9000_PAR + index, macaddr[index]);
 	}
 	
-	/*  printf("Mac: ");
-	for(i=0; i<6; i++)
-        printf("%x:",ior(DM9000_PAR+i) & 0x00ff);
-	printf("\n"); */
+	dbg_string("Mac: ");
+	for(index = 0; index < 6; index++)
+        dbg_string("%x:", ior(DM9000_PAR + index) & 0x00ff);
+	dbg_string("\r\n");
 
 
 	iow(DM9000_NSR, 0x2c);

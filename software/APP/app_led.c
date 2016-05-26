@@ -11,7 +11,8 @@
 #include "main.h"
 
 #include "app_led.h"
-//#include "app_serial.h"
+#include "app_serial.h"
+#include "app_display.h"
 
 void app_led_init(void)
 {
@@ -35,21 +36,17 @@ void app_led_task_blink(DISPLAY_RESOURCE_t *display)
 	xLastWakeTime = xTaskGetTickCount();
 	while(1)
 	{
-		/* GPIO_SetBits(LED_PIN_GROUP, port_list[index % 3]); */
-		LED_PIN_GROUP->BSRR = port_list[/*index % 3*/2];
+		LED_PIN_GROUP->BSRR = port_list[index % 3];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(80));
-		/* GPIO_ResetBits(LED_PIN_GROUP, port_list[index % 3]); */
-		LED_PIN_GROUP->BRR = port_list[/*index % 3*/2];
+		LED_PIN_GROUP->BRR = port_list[index % 3];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
 		if(index > 9)
 			index = 0;
 		xSemaphoreTake(display->xMutex, portMAX_DELAY);
-		memset(&display->map[0], index++, sizeof(char) * 6);	/* 6个辉光管 */
+		memset(&display->map[0], index++, sizeof(char) * TUBE_NUM);	/* 6个辉光管 */
 		display->map[6] = ((index % 3) << 4) | (index % 3);		/* 两个冒号 */
 		xSemaphoreGive(display->xMutex);
-		
-		/* index++;
-		dbg_string("[%d]\r\n", index);	*/
+		dbg_string("[%d]\r\n", index);	
 	}
 }
 

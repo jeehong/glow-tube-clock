@@ -61,9 +61,7 @@ void LwIP_Init( void )
 	m_mac[2] = 0x58;
 	m_mac[3] = 0x10;
 	m_mac[4] = 0x00;
-	m_mac[5] = 0x88;
-	
-	//lwip_init();								    
+	m_mac[5] = 0x88;							    
 												    
 	#if LWIP_DHCP			   					   
 		ipaddr.addr = 0;

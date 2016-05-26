@@ -124,14 +124,14 @@
 /* The check task uses the sprintf function so requires a little more stack. */
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
 
+/* 这个结构体中的互斥量用来描述硬件显示资源是否可用 
+ * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
+ */
+static DISPLAY_RESOURCE_t display_source;	
+
 /* The time between cycles of the 'check' task. */
 int main( void )
 {
-	/* 这个结构体中的互斥量用来描述硬件显示资源是否可用 
-	 * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
-	 */
-	DISPLAY_RESOURCE_t display_source;	
-	
 	bsp_init();
 	
 	/* 初始化LwIP */
@@ -139,11 +139,11 @@ int main( void )
 	LwIP_Init();
 
 	display_source.xMutex = xSemaphoreCreateMutex();
-
+	dbg_string("Glow tube clock!\r\n");
 	/* Start the tasks defined within this file/specific to this demo. */
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
-	xTaskCreate((pdTASK_CODE)app_dispaly_show_task, "app_display", mainLED_TASK_STACK_SIZE, &display_source, 6, NULL);
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", mainLED_TASK_STACK_SIZE, &display_source, 3, NULL);
+	xTaskCreate((pdTASK_CODE)app_dispaly_show_task, "app_display", 300, &display_source, 6, NULL);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, &display_source, 3, NULL);
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
