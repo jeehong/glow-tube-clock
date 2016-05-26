@@ -3,17 +3,18 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\Administrator\projects\glow-tube-clock\software\Project\OS.uvproj
+C:\Users\Jeehong\projects\glow-tube-clock\software\Project\OS.uvproj
 Project File Date:  05/26/2016
 
 <h2>Output:</h2>
 Build target 'FreeRTOS'
+compiling app_display.c...
 linking...
-Program Size: Code=50456 RO-data=612 RW-data=360 ZI-data=40536  
+Program Size: Code=50424 RO-data=612 RW-data=360 ZI-data=40536  
 FromELF: creating hex file...
 ".\Obj\OS.axf" - 0 Error(s), 0 Warning(s).
-Load "C:\\Users\\Administrator\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
-Set JLink Project File to "C:\Users\Administrator\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
+Load "C:\\Users\\Jeehong\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
+Set JLink Project File to "C:\Users\Jeehong\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
 * JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
  
 JLink info:
@@ -50,3 +51,51 @@ Application running ...
 </pre>
 </body>
 </html>
+PEntry.c...
+compiling api_lib.c...
+compiling api_msg.c...
+compiling err.c...
+compiling netbuf.c...
+compiling netdb.c...
+compiling netifapi.c...
+compiling sockets.c...
+compiling tcpip.c...
+linking...
+Program Size: Code=50456 RO-data=612 RW-data=360 ZI-data=40536  
+FromELF: creating hex file...
+".\Obj\OS.axf" - 0 Error(s), 1 Warning(s).
+Load "C:\\Users\\Jeehong\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
+Set JLink Project File to "C:\Users\Jeehong\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
+* JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
+ 
+JLink info:
+------------
+DLL: V4.80g, compiled Feb 13 2014 20:50:02
+Firmware: J-Link ARM V8 compiled Jan 31 2018 18:34:52
+Hardware: V8.00
+S/N : 20080643 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x1BA01477
+* JLink Info: Found SWD-DP with ID 0x1BA01477
+* JLink Info: Found Cortex-M3 r1p1, Little endian.
+* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
+* JLink Info: TPIU fitted.
+* JLink Info: ETM fitted.
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: STM32F103RC
+VTarget = 3.325V
+State of Pins: 
+TCK: 0, TDI: 1, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 6
+Software-Breakpoints: 8192
+Watchpoints:          4
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...

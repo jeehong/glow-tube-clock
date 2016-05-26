@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu May 26 19:41:51 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu May 26 23:29:13 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -202,7 +202,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[67]"></a>LwIP_Init</STRONG> (Thumb, 256 bytes, Stack size 32 bytes, netconfig.o(.text))
+<P><STRONG><a name="[67]"></a>LwIP_Init</STRONG> (Thumb, 254 bytes, Stack size 32 bytes, netconfig.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 624<LI>Call Chain = LwIP_Init &rArr; netif_add &rArr; netif_set_addr &rArr; netif_set_ipaddr &rArr; tcp_abandon &rArr; tcp_pcb_remove &rArr; tcp_output &rArr; tcp_output_segment &rArr; ip_output &rArr; ip_output_if &rArr; ip_frag &rArr; pbuf_alloc &rArr; pbuf_free &rArr; mem_free &rArr; sys_arch_sem_wait &rArr; xQueueGenericReceive &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;netif_set_up
@@ -254,7 +254,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[37]"></a>app_dispaly_show_task</STRONG> (Thumb, 114 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[37]"></a>app_dispaly_show_task</STRONG> (Thumb, 88 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_dispaly_show_task &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical

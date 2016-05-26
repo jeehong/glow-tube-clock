@@ -41,9 +41,9 @@ void LwIP_Init( void )
 	struct ip_addr netmask;
 	struct ip_addr gw;
 	
-	serverIP[0] = 172;
-	serverIP[1] = 10;
-	serverIP[2] = 11;
+	serverIP[0] = 192;
+	serverIP[1] = 168;
+	serverIP[2] = 1;
 	serverIP[3] = 156;
 	
 	maskIP[0] = 255;
@@ -51,9 +51,9 @@ void LwIP_Init( void )
 	maskIP[2] = 0;
 	maskIP[3] = 0;
 
-	gateIP[0] = 172;
-	gateIP[1] = 10;
-	gateIP[2] = 11;
+	gateIP[0] = 192;
+	gateIP[1] = 168;
+	gateIP[2] = 1;
 	gateIP[3] = 1;
 	
 	m_mac[0] = 0x54;	
