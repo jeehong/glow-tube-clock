@@ -33,7 +33,6 @@
 
 static void delayus(u16 us);
 
-static void i2c_bus_start(CHIP_LIST_e chip);
 static void i2c_bus_stop(CHIP_LIST_e chip);
 static __inline void i2c_bus_send_ack(CHIP_LIST_e chip, u8 ack);
 static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip);
@@ -53,6 +52,7 @@ void i2c_bus_init(void)
 	i2c_bus[ds].group_sda = I2C_DS_GROUP;
 	i2c_bus[ds].pin_scl = I2C_DS_SCL;
 	i2c_bus[ds].pin_sda = I2C_DS_SDA;
+	i2c_bus[ds].speed = GPIO_Speed_50MHz;
 
 	i2c_bus[sht].rcc_scl = I2C_SHT_RCC_SCL;
 	i2c_bus[sht].rcc_sda = I2C_SHT_RCC_SDA;
@@ -60,6 +60,7 @@ void i2c_bus_init(void)
 	i2c_bus[sht].group_sda = I2C_SHT_GROUP_SDA;
 	i2c_bus[sht].pin_scl = I2C_SHT_SCL;
 	i2c_bus[sht].pin_sda = I2C_SHT_SDA;
+	i2c_bus[sht].speed = GPIO_Speed_50MHz;
 
 	for(index = ds; index < chip_all; index++)
 	{
@@ -67,7 +68,7 @@ void i2c_bus_init(void)
 		
 		GPIO_InitStructure.GPIO_Pin = i2c_bus[index].pin_scl | i2c_bus[index].rcc_sda;	
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;     
-		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+		GPIO_InitStructure.GPIO_Speed = i2c_bus[index].speed; 
 		GPIO_Init(i2c_bus[index].group_scl, &GPIO_InitStructure);			  
 		GPIO_ResetBits(i2c_bus[index].group_scl, i2c_bus[index].pin_scl);
 	}	
@@ -78,63 +79,26 @@ void i2c_bus_init(void)
 /*
  * 1us/72000000=1.38e-8;
  * 计算得出大概75个时钟周期
+ * 实际测试 us = 1,实际时间:1.875us
  */
 static void delayus(u16 us) 
 {
-	us *= 20;
+	us *= 1;
 	while(us--) ;
 }
 
 void i2c_bus_sda_dir(CHIP_LIST_e chip, GPIO_DIR_e dir)
 {
-/*	u16 index;
+	GPIO_InitTypeDef GPIO_InitType;
 
-	i2c_bus[chip].mask = 0x000F;
-	if(dir == input)
-		i2c_bus[chip].nudity = 0x0008;
-	else
-		i2c_bus[chip].nudity = 0x0003;
-	if(i2c_bus[chip].pin_sda <= 0x0080) 
-	{							
-		for(index = 1; index <= 0x80; index <<= 1) 
-		{ 
-			if(index != i2c_bus[chip].pin_sda) 	
-			{
-				i2c_bus[chip].mask <<= 1;
-				i2c_bus[chip].nudity <<= 1;
-			}
-			else
-				break;
-		}
-		i2c_bus[chip].group_sda->CRL &= ~i2c_bus[chip].mask;
-		i2c_bus[chip].group_sda->CRL |= i2c_bus[chip].nudity;
-	}
-	else
-	{
-		for(index = 0x100; index <= 0x8000; index <<= 1) 
-		{ 
-			if(index != i2c_bus[chip].pin_sda) 	
-			{
-				i2c_bus[chip].mask <<= 1;
-				i2c_bus[chip].nudity <<= 1;
-			}
-			else
-				break;
-		}
-		i2c_bus[chip].group_sda->CRH &= ~i2c_bus[chip].mask;
-		i2c_bus[chip].group_sda->CRH |= i2c_bus[chip].nudity;	
-	}
-	i2c_bus[chip].group_sda->ODR |= i2c_bus[chip].pin_sda;*/
-	GPIO_InitTypeDef GPIO_SDA;
-
-	GPIO_SDA.GPIO_Pin = GPIO_Pin_2;
-	GPIO_SDA.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitType.GPIO_Pin = i2c_bus[chip].pin_sda;
+	GPIO_InitType.GPIO_Speed = i2c_bus[chip].speed;
 
 	if(dir ==input)
-		GPIO_SDA.GPIO_Mode = GPIO_Mode_IPU;
+		GPIO_InitType.GPIO_Mode = GPIO_Mode_IPU;
 	else
-		GPIO_SDA.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOA, &GPIO_SDA);/* IPU */
+		GPIO_InitType.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(i2c_bus[chip].group_sda, &GPIO_InitType); 	
 }
 
 /*
@@ -144,8 +108,10 @@ void i2c_bus_sda_dir(CHIP_LIST_e chip, GPIO_DIR_e dir)
  *           ___     ___
  * SCK : ___|   |___|   |___
  */
-static __inline void i2c_bus_start(CHIP_LIST_e chip)
+void i2c_bus_start(CHIP_LIST_e chip)
 {
+	i2c_bus_sda_dir(chip, output);
+	
 	I2C_BUS_SDA_HIGH(i2c_bus[chip]);		
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
 	delayus(1);
@@ -164,6 +130,8 @@ static __inline void i2c_bus_start(CHIP_LIST_e chip)
 
 static __inline void i2c_bus_stop(CHIP_LIST_e chip)
 {
+	i2c_bus_sda_dir(chip, output);
+	
 	I2C_BUS_SDA_LOW(i2c_bus[chip]);		
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
 	delayus(1);
@@ -182,7 +150,8 @@ static __inline void i2c_bus_stop(CHIP_LIST_e chip)
 static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
 {
 	u8 index;
-	
+
+	i2c_bus_sda_dir(chip, output);
 	I2C_BUS_SDA_HIGH(i2c_bus[chip]);							
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);							
 	delayus(1);
@@ -276,7 +245,6 @@ u8 i2c_bus_read_byte(CHIP_LIST_e chip)
 		delayus(1);
 		I2C_BUS_SCL_LOW(i2c_bus[chip]);					
 	}
-	//i2c_bus_sda_dir(chip, output);
 	i2c_bus_sda_dir(chip, output);
 	delayus(1);
 							
@@ -319,6 +287,6 @@ u8 i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, u8 reg)
 
 BitAction I2C_BUS_SDA_STATE(CHIP_LIST_e chip)
 {
-	return (((i2c_bus[chip].group_sda->ODR & i2c_bus[chip].pin_sda) != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
+	return (((i2c_bus[chip].group_sda->IDR & i2c_bus[chip].pin_sda) != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
 }
 

@@ -10,8 +10,7 @@ typedef struct {
 	GPIO_TypeDef* group_sda;
 	u16 pin_scl;
 	u16 pin_sda;
-	u32 mask;
-	u32 nudity;
+	GPIOSpeed_TypeDef speed;
 } I2C_RESOURCE_t;
 
 typedef enum  {
@@ -26,6 +25,7 @@ typedef enum {
 } CHIP_LIST_e;
 
 
+void i2c_bus_start(CHIP_LIST_e chip);
 void i2c_bus_sda_dir(CHIP_LIST_e chip, GPIO_DIR_e dir);
 BitAction I2C_BUS_SDA_STATE(CHIP_LIST_e chip);
 void i2c_bus_init(void);

@@ -3,59 +3,24 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\Jeehong\projects\glow-tube-clock\software\Project\OS.uvproj
-Project File Date:  05/28/2016
+C:\Users\Administrator\projects\glow-tube-clock\software\Project\OS.uvproj
+Project File Date:  05/29/2016
 
 <h2>Output:</h2>
 Build target 'FreeRTOS'
+compiling app_sht10.c...
+compiling bsp.c...
 compiling i2c_bus.c...
-..\BSP\i2c_bus.c(210): warning:  #177-D: function "i2c_bus_get_ack" was declared but never referenced
+..\BSP\i2c_bus.c(218): warning:  #177-D: function "i2c_bus_get_ack" was declared but never referenced
   static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip)
 ..\BSP\i2c_bus.c: 1 warning, 0 errors
 linking...
-Program Size: Code=52372 RO-data=612 RW-data=368 ZI-data=40536  
+Program Size: Code=52316 RO-data=612 RW-data=368 ZI-data=40528  
 FromELF: creating hex file...
 ".\Obj\OS.axf" - 0 Error(s), 1 Warning(s).
-Load "C:\\Users\\Jeehong\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
-Set JLink Project File to "C:\Users\Jeehong\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
+Load "C:\\Users\\Administrator\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
+Set JLink Project File to "C:\Users\Administrator\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
 * JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM V8 compiled Jan 31 2018 18:34:52
-Hardware: V8.00
-S/N : 20080643 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: Found Cortex-M3 r1p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F103RC
-VTarget = 3.338V
-State of Pins: 
-TCK: 0, TDI: 1, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-</pre>
-</body>
-</html>
- 1 Error(s), 0 Warning(s).
-
  
 JLink info:
 ------------
@@ -88,3 +53,107 @@ Erase Done.
 Programming Done.
 Verify OK.
 Application running ...
+</pre>
+</body>
+</html>
+portable/RVDS/ARM_CM3/portmacro.h(278): error:  #20: identifier "BaseType_t" is undefined
+                xReturn = pdFALSE;
+..\APP\../FreeRTOS/portable/RVDS/ARM_CM3/portmacro.h(278): error:  #18: expected a ")"
+                xReturn = pdFALSE;
+..\APP\../FreeRTOS/portable/RVDS/ARM_CM3/portmacro.h(282): error:  #20: identifier "BaseType_t" is undefined
+                xReturn = pdTRUE;
+..\APP\../FreeRTOS/portable/RVDS/ARM_CM3/portmacro.h(282): error:  #18: expected a ")"
+                xReturn = pdTRUE;
+..\FreeRTOS\include\portable.h(144): error:  #20: identifier "StackType_t" is undefined
+        StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters ) PRIVILEGED_FUNCTION;
+..\FreeRTOS\include\portable.h(144): error:  #20: identifier "StackType_t" is undefined
+        StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters ) PRIVILEGED_FUNCTION;
+..\FreeRTOS\include\portable.h(144): error:  #20: identifier "TaskFunction_t" is undefined
+        StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters ) PRIVILEGED_FUNCTION;
+..\FreeRTOS\include\portable.h(151): error:  #20: identifier "size_t" is undefined
+        size_t xSizeInBytes;
+..\FreeRTOS\include\portable.h(171): error:  #20: identifier "size_t" is undefined
+  void *pvPortMalloc( size_t xSize ) PRIVILEGED_FUNCTION;
+..\FreeRTOS\include\portable.h(174): error:  #20: identifier "size_t" is undefined
+  size_t xPortGetFreeHeapSize( void ) PRIVILEGED_FUNCTION;
+..\FreeRTOS\include\portable.h(175): error:  #20: identifier "size_t" is undefined
+  size_t xPortGetMinimumEverFreeHeapSize( void ) PRIVILEGED_FUNCTION;
+..\FreeRTOS\include\portable.h(181): error:  #20: identifier "BaseType_t" is undefined
+  BaseType_t xPortStartScheduler( void ) PRIVILEGED_FUNCTION;
+..\FreeRTOS\include\FreeRTOS.h(873): error:  #20: identifier "TickType_t" is undefined
+        TickType_t xDummy1;
+..\FreeRTOS\include\FreeRTOS.h(881): error:  #20: identifier "TickType_t" is undefined
+        TickType_t xDummy1;
+..\FreeRTOS\include\FreeRTOS.h(889): error:  #20: identifier "UBaseType_t" is undefined
+        UBaseType_t uxDummy1;
+..\FreeRTOS\include\FreeRTOS.h(914): error:  #20: identifier "UBaseType_t" is undefined
+        UBaseType_t                     uxDummy5;
+..\FreeRTOS\include\FreeRTOS.h(924): error:  #20: identifier "UBaseType_t" is undefined
+                UBaseType_t             uxDummy10[ 2 ];
+..\FreeRTOS\include\FreeRTOS.h(927): error:  #20: identifier "UBaseType_t" is undefined
+                UBaseType_t             uxDummy12[ 2 ];
+..\FreeRTOS\include\FreeRTOS.h(972): error:  #20: identifier "UBaseType_t" is undefined
+                UBaseType_t uxDummy2;
+..\FreeRTOS\include\FreeRTOS.h(976): error:  #20: identifier "UBaseType_t" is undefined
+        UBaseType_t uxDummy4[ 3 ];
+..\FreeRTOS\include\FreeRTOS.h(988): error:  #20: identifier "UBaseType_t" is undefined
+                UBaseType_t uxDummy8;
+..\FreeRTOS\include\FreeRTOS.h(1011): error:  #20: identifier "TickType_t" is undefined
+        TickType_t xDummy1;
+..\FreeRTOS\include\FreeRTOS.h(1015): error:  #20: identifier "UBaseType_t" is undefined
+                UBaseType_t uxDummy3;
+..\FreeRTOS\include\FreeRTOS.h(1042): error:  #20: identifier "TickType_t" is undefined
+        TickType_t                      xDummy3;
+..\FreeRTOS\include\FreeRTOS.h(1043): error:  #20: identifier "UBaseType_t" is undefined
+        UBaseType_t                     uxDummy4;
+..\FreeRTOS\include\FreeRTOS.h(1046): error:  #20: identifier "UBaseType_t" is undefined
+                UBaseType_t             uxDummy6;
+..\BSP\bsp.c: 1 warning, 30 errors
+compiling i2c_bus.c...
+..\BSP\i2c_bus.h(30): error:  #130: expected a "{"
+  void i2c_bus_sda_dir(CHIP_LIST_e chip, GPIO_DIR_e dir);
+..\BSP\i2c_bus.c(45): warning:  #12-D: parsing restarts here after previous syntax error
+  {
+..\BSP\i2c_bus.c(49): error:  #20: identifier "i2c_bus" is undefined
+        i2c_bus[ds].rcc_scl = I2C_DS_RCC;
+..\BSP\i2c_bus.c(73): warning:  #223-D: function "i2c_bus_chip_reset" declared implicitly
+        i2c_bus_chip_reset(ds);
+..\BSP\i2c_bus.c(146): error:  #247: function "i2c_bus_start" has already been defined
+  void i2c_bus_start(CHIP_LIST_e chip)
+..\BSP\i2c_bus.c(148): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SDA_HIGH(i2c_bus[chip]);                
+..\BSP\i2c_bus.c(166): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SDA_LOW(i2c_bus[chip]);         
+..\BSP\i2c_bus.c(181): error:  #159: declaration is incompatible with previous "i2c_bus_chip_reset" (declared at line 73)
+  static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
+..\BSP\i2c_bus.c(185): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SDA_HIGH(i2c_bus[chip]);                                                        
+..\BSP\i2c_bus.c(199): error:  #20: identifier "i2c_bus" is undefined
+                I2C_BUS_SDA_HIGH(i2c_bus[chip]);        
+..\BSP\i2c_bus.c(213): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SCL_HIGH(i2c_bus[chip]);        
+..\BSP\i2c_bus.c(219): warning:  #223-D: function "I2C_BUS_SDA_STATE" declared implicitly
+        ack = I2C_BUS_SDA_STATE(chip); 
+..\BSP\i2c_bus.c(235): error:  #20: identifier "i2c_bus" is undefined
+                        I2C_BUS_SDA_HIGH(i2c_bus[chip]);                
+..\BSP\i2c_bus.c(248): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SCL_HIGH(i2c_bus[chip]);                                
+..\BSP\i2c_bus.c(250): warning:  #223-D: function "I2C_BUS_SDA_STATE" declared implicitly
+        error = I2C_BUS_SDA_STATE(chip);              
+..\BSP\i2c_bus.c(270): error:  #20: identifier "i2c_bus" is undefined
+                I2C_BUS_SCL_HIGH(i2c_bus[chip]);                
+..\BSP\i2c_bus.c(273): warning:  #223-D: function "I2C_BUS_SDA_STATE" declared implicitly
+                if(I2C_BUS_SDA_STATE(chip))                                     
+..\BSP\i2c_bus.c(282): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SDA_LOW(i2c_bus[chip]);
+..\BSP\i2c_bus.c(319): error:  #159: declaration is incompatible with previous "I2C_BUS_SDA_STATE" (declared at line 219)
+  BitAction I2C_BUS_SDA_STATE(CHIP_LIST_e chip)
+..\BSP\i2c_bus.c(321): error:  #20: identifier "i2c_bus" is undefined
+        return (((i2c_bus[chip].group_sda->ODR & i2c_bus[chip].pin_sda) != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
+..\BSP\i2c_bus.c(181): warning:  #177-D: function "i2c_bus_chip_reset" was declared but never referenced
+  static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
+..\BSP\i2c_bus.c(209): warning:  #177-D: function "i2c_bus_get_ack" was declared but never referenced
+  static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip)
+..\BSP\i2c_bus.c: 7 warnings, 15 errors
+".\Obj\OS.axf" - 47 Error(s), 12 Warning(s).
+Target not created
