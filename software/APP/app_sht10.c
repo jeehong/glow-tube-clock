@@ -51,9 +51,9 @@ u8 app_sht10_get_res(u16 *p_value, u8 *p_checksum, u8 mode)
 	
 	i2c_bus_sda_dir(sht, output);			/* 恢复 AVR IO 为输出模式 */
 	
-	*p_value = i2c_bus_read_byte(sht) << 8;	/* 读第一个字节，高字节 (MSB) */
-	*p_value |= i2c_bus_read_byte(sht);		/* 读第二个字节，低字节 (LSB) */
-	*p_checksum  = i2c_bus_read_byte(sht);	/* read CRC校验码*/
+	*p_value = i2c_bus_read_byte(sht, 0) << 8;	/* 读第一个字节，高字节 (MSB) */
+	*p_value |= i2c_bus_read_byte(sht, 0);		/* 读第二个字节，低字节 (LSB) */
+	*p_checksum  = i2c_bus_read_byte(sht, 1);	/* read CRC校验码*/
 	
 	return error;
 }

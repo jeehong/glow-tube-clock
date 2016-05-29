@@ -66,40 +66,40 @@ static int rtc_valid_tm(struct rtc_time *tm)
 
 static int app_ds3231_read_time(struct rtc_time *ptime)
 {
-	struct rtc_time data;
+	u8 data[7];
 	unsigned int century;
 
 	
-	i2c_bus_read_data(ds, DS1231_SLAVE_ADDR, &data);
+	i2c_bus_read_data(ds, DS1231_SLAVE_ADDR, data, 7);
 
 	/* Extract additional information for AM/PM and century */
-	ptime->h12 = (data.hour & 0x40) ? 1 : 0;
-	ptime->am_pm = (data.hour & 0x20) ? 1 : 0;
-	century = (data.mon & 0x80) ? 1 : 0;
+	ptime->h12 = (data[2] & 0x40) ? 1 : 0;
+	ptime->am_pm = (data[2] & 0x20) ? 1 : 0;
+	century = (data[5] & 0x80) ? 1 : 0;
 
 	/* Write to rtc_time structure */
 
-	ptime->sec = bcd2bin(data.sec);
-	ptime->min = bcd2bin(data.min); 
+	ptime->sec = bcd2bin(data[0]);
+	ptime->min = bcd2bin(data[1]); 
 	if (!ptime->h12) 
 	{
 		/* Convert to 24 hr */
 		if (ptime->am_pm)
-			ptime->hour = bcd2bin((data.hour & 0x1F)) + 12;
+			ptime->hour = bcd2bin((data[2] & 0x1F)) + 12;
 		else
-			ptime->hour = bcd2bin((data.hour & 0x1F));
+			ptime->hour = bcd2bin((data[2] & 0x1F));
 	} 
 	else 
 	{
-		ptime->hour = bcd2bin(data.hour);
+		ptime->hour = bcd2bin(data[2]);
 	}
 
 	/* Day of the week in linux range is 0~6 while 1~7 in RTC chip */
-	ptime->wday = bcd2bin(data.wday);
-	ptime->mday = bcd2bin(data.mday);
+	ptime->wday = bcd2bin(data[3]);
+	ptime->mday = bcd2bin(data[4]);
 	/* linux tm_mon range:0~11, while month range is 1~12 in RTC chip */
-	ptime->mon = bcd2bin((data.mon & 0x7F));
-	ptime->year = bcd2bin(data.year) + century * 100;
+	ptime->mon = bcd2bin((data[5] & 0x7F));
+	ptime->year = bcd2bin(data[6]) + century * 100;
 
 	return rtc_valid_tm(ptime);
 }
@@ -107,25 +107,25 @@ static int app_ds3231_read_time(struct rtc_time *ptime)
 static void app_ds3231_set_time(struct rtc_time *ptime)
 {
 	/* Extract time from rtc_time and load into ds3231*/
-	struct rtc_time data;
+	u8 data[7];
 	
-	data.sec = bin2bcd(ptime->sec);
-	data.min = bin2bcd(ptime->min);
-	data.hour = bin2bcd(ptime->hour);
-	data.wday = bin2bcd(ptime->wday);
-	data.mday = bin2bcd(ptime->mday); /* Date */
+	data[0] = bin2bcd(ptime->sec);
+	data[1] = bin2bcd(ptime->min);
+	data[2] = bin2bcd(ptime->hour);
+	data[3] = bin2bcd(ptime->wday);
+	data[4] = bin2bcd(ptime->mday); /* Date */
 	/* linux tm_mon range:0~11, while month range is 1~12 in RTC chip */
-	data.mon = bin2bcd(ptime->mon);
+	data[5] = bin2bcd(ptime->mon);
 	if (ptime->year >= 100) 
 	{
-		data.year |= 0x80;
-		data.year |= bin2bcd((ptime->year - 100));
+		data[6] |= 0x80;
+		data[6] |= bin2bcd((ptime->year - 100));
 	} 
 	else 
 	{
-		data.year = bin2bcd(ptime->year);
+		data[6] = bin2bcd(ptime->year);
 	}
-	i2c_bus_write_data(ds, DS1231_SLAVE_ADDR, DS3231_REG_SECONDS, &data);
+	i2c_bus_write_data(ds, DS1231_SLAVE_ADDR, DS3231_REG_SECONDS, data, 7);
 }
 
 void app_ds3231_task(void *parame)

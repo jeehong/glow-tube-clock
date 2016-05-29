@@ -130,6 +130,20 @@ void i2c_bus_start(CHIP_LIST_e chip)
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
 }
 
+static void i2c_bus_start_ds3231(CHIP_LIST_e chip)
+{
+	i2c_bus_sda_dir(chip, output);
+	
+	I2C_BUS_SCL_HIGH(i2c_bus[chip]);
+	I2C_BUS_SDA_HIGH(i2c_bus[chip]);
+	delayus(1);
+	I2C_BUS_SDA_LOW(i2c_bus[chip]);
+	delayus(1);
+	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
+}
+
+
+
 static __inline void i2c_bus_stop(CHIP_LIST_e chip)
 {
 	i2c_bus_sda_dir(chip, output);
@@ -170,7 +184,7 @@ static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
 static __inline void i2c_bus_send_ack(CHIP_LIST_e chip, u8 ack)
 {
 	i2c_bus_sda_dir(chip, output);
-	if(ack == 1)
+	if(ack)
 		I2C_BUS_SDA_HIGH(i2c_bus[chip]);	
 	else
 		I2C_BUS_SDA_LOW(i2c_bus[chip]);	
@@ -198,7 +212,7 @@ static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip)
 u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 value)
 {
 	u8 index;
-	u8 error = 0;
+	u8 ack = 0;
 	
 	i2c_bus_sda_dir(chip, output);
 	for(index = 0x80; index > 0; index >>= 1)			
@@ -215,12 +229,12 @@ u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 value)
 		delayus(2);
 	}					
 	
-	error = i2c_bus_get_ack(chip);			
+	ack = i2c_bus_get_ack(chip);			
 	
-	return error;				
+	return ack;				
 }
 
-u8 i2c_bus_read_byte(CHIP_LIST_e chip)
+u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 ack)
 {
 	u8 index;
 	u8 val = 0;
@@ -238,57 +252,42 @@ u8 i2c_bus_read_byte(CHIP_LIST_e chip)
 		delayus(2);
 	}
 	
-	//i2c_bus_send_ack(chip, 0);
+	i2c_bus_send_ack(chip, ack);
 	
 	return val;
 }
 
-void i2c_bus_write_data(CHIP_LIST_e chip, u8 addr, u8 reg, struct rtc_time *time)
+void i2c_bus_write_data(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 {
-	I2C_BUS_SCL_HIGH(i2c_bus[chip]);
-	I2C_BUS_SDA_HIGH(i2c_bus[chip]);
-	delayus(1);
-	I2C_BUS_SDA_LOW(i2c_bus[chip]);
-	delayus(1);
-	I2C_BUS_SCL_LOW(i2c_bus[chip]);
+	u8 index;
 
+	if(len == 0)
+		return;
+
+	i2c_bus_start_ds3231(chip);
+	
 	i2c_bus_write_byte(chip, addr);	
 	i2c_bus_write_byte(chip, reg);	
-	i2c_bus_write_byte(chip, time->sec);
-	i2c_bus_write_byte(chip, time->min);		
-	i2c_bus_write_byte(chip, time->hour);
-	i2c_bus_write_byte(chip, time->wday);	
-	i2c_bus_write_byte(chip, time->mday);
-	i2c_bus_write_byte(chip, time->mon);
-	i2c_bus_write_byte(chip, time->year);
+	for(index = 0; index < len; index++)
+	{
+		i2c_bus_write_byte(chip, pdata[index]);
+	}
 	i2c_bus_stop(chip);
 }
 
-void i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, struct rtc_time *time)
+void i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, u8 *pdata, u8 len)
 {
+	u8 index;
+	
 	/* i2c_bus_start(chip); */
-	I2C_BUS_SCL_HIGH(i2c_bus[chip]);
-	I2C_BUS_SDA_HIGH(i2c_bus[chip]);
-	delayus(1);
-	I2C_BUS_SDA_LOW(i2c_bus[chip]);
-	delayus(1);
-	I2C_BUS_SCL_LOW(i2c_bus[chip]);
+	i2c_bus_start_ds3231(chip);
 	
 	i2c_bus_write_byte(chip, addr + 1);
-	time->sec = i2c_bus_read_byte(chip);
-	i2c_bus_send_ack(chip, 0);
-	time->min = i2c_bus_read_byte(chip);
-	i2c_bus_send_ack(chip, 0);
-	time->hour = i2c_bus_read_byte(chip);
-	i2c_bus_send_ack(chip, 0);
-	time->wday = i2c_bus_read_byte(chip);
-	i2c_bus_send_ack(chip, 0);
-	time->mday = i2c_bus_read_byte(chip);
-	i2c_bus_send_ack(chip, 0);
-	time->mon = i2c_bus_read_byte(chip);
-	i2c_bus_send_ack(chip, 0);
-	time->year = i2c_bus_read_byte(chip);
-	i2c_bus_send_ack(chip, 1);
+
+	for(index = 0; index < len; index++)
+	{
+		pdata[index] = i2c_bus_read_byte(chip, (index + 1) == len ? 1 : 0);
+	}
 	i2c_bus_stop(chip);	
 }
 

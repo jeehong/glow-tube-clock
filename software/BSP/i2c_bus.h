@@ -3,8 +3,6 @@
 
 #include "stm32f10x.h"
 
-#include "app_ds3231.h"
-
 
 typedef struct {
 	u32 rcc_scl;
@@ -33,9 +31,9 @@ void i2c_bus_sda_dir(CHIP_LIST_e chip, GPIO_DIR_e dir);
 BitAction I2C_BUS_SDA_STATE(CHIP_LIST_e chip);
 void i2c_bus_init(void);
 u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 value);
-u8 i2c_bus_read_byte(CHIP_LIST_e chip);
-void i2c_bus_write_data(CHIP_LIST_e chip, u8 addr, u8 reg, struct rtc_time *time);
-void i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, struct rtc_time *time);
+u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 ack);
+void i2c_bus_write_data(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len);
+void i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, u8 *pdata, u8 len);
 
 
 
