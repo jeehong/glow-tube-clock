@@ -429,6 +429,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\app_display.c</FilePath>
             </File>
+            <File>
+              <FileName>app_sht10.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\app_sht10.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

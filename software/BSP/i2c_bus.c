@@ -1,10 +1,7 @@
 #include "i2c_bus.h"
 #include "stm32f10x.h"
 
-typedef enum  {
-	input = 0,
-	output = 1,
-} GPIO_DIR_e;
+
 
 /*
  * DS1231 hardware resource
@@ -28,29 +25,21 @@ typedef enum  {
 #define	I2C_SHT_SCL			GPIO_Pin_10
 #define	I2C_SHT_SDA			GPIO_Pin_2
 
-typedef struct {
-	u32 rcc_scl;
-	u32 rcc_sda;
-	GPIO_TypeDef* group_scl;
-	GPIO_TypeDef* group_sda;
-	u16 pin_scl;
-	u16 pin_sda;
-	u32 mask;
-	u32 nudity;
-} I2C_RESOURCE_t;
-
 #define	I2C_BUS_SDA_HIGH(chip)		(chip.group_sda->BSRR = chip.pin_sda)
 #define	I2C_BUS_SDA_LOW(chip)		(chip.group_sda->BRR = chip.pin_sda)
 #define	I2C_BUS_SCL_HIGH(chip)		(chip.group_scl->BSRR = chip.pin_scl)
 #define	I2C_BUS_SCL_LOW(chip)		(chip.group_scl->BRR = chip.pin_scl)
-#define	I2C_BUS_SDA_STATE(chip)		((chip.group_sda->ODR & chip.pin_sda != (u32)Bit_RESET) ? (u8)Bit_SET : (u8)Bit_RESET)
+
 
 static void delayus(u16 us);
-static void i2c_bus_sda_dir(I2C_RESOURCE_t *chip, GPIO_DIR_e dir);
+
 static void i2c_bus_start(CHIP_LIST_e chip);
+static void i2c_bus_stop(CHIP_LIST_e chip);
+static __inline void i2c_bus_send_ack(CHIP_LIST_e chip, u8 ack);
+static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip);
 static void i2c_bus_chip_reset(CHIP_LIST_e chip);
 
-static I2C_RESOURCE_t i2c_bus[2];
+static I2C_RESOURCE_t i2c_bus[chip_all];
 
 
 void i2c_bus_init(void)
@@ -96,46 +85,56 @@ static void delayus(u16 us)
 	while(us--) ;
 }
 
-static void i2c_bus_sda_dir(I2C_RESOURCE_t *chip, GPIO_DIR_e dir)
+void i2c_bus_sda_dir(CHIP_LIST_e chip, GPIO_DIR_e dir)
 {
-	u16 index;
+/*	u16 index;
 
-	chip->mask = 0x000F;
+	i2c_bus[chip].mask = 0x000F;
 	if(dir == input)
-		chip->nudity = 0x0008;
+		i2c_bus[chip].nudity = 0x0008;
 	else
-		chip->nudity = 0x0003;
-	if(chip->pin_sda <= 0x0080) 
+		i2c_bus[chip].nudity = 0x0003;
+	if(i2c_bus[chip].pin_sda <= 0x0080) 
 	{							
 		for(index = 1; index <= 0x80; index <<= 1) 
 		{ 
-			if(index != chip->pin_sda) 	
+			if(index != i2c_bus[chip].pin_sda) 	
 			{
-				chip->mask <<= 1;
-				chip->nudity <<= 1;
+				i2c_bus[chip].mask <<= 1;
+				i2c_bus[chip].nudity <<= 1;
 			}
 			else
 				break;
 		}
-		chip->group_sda->CRL &= ~chip->mask;
-		chip->group_sda->CRL |= chip->nudity;
+		i2c_bus[chip].group_sda->CRL &= ~i2c_bus[chip].mask;
+		i2c_bus[chip].group_sda->CRL |= i2c_bus[chip].nudity;
 	}
 	else
 	{
 		for(index = 0x100; index <= 0x8000; index <<= 1) 
 		{ 
-			if(index != chip->pin_sda) 	
+			if(index != i2c_bus[chip].pin_sda) 	
 			{
-				chip->mask <<= 1;
-				chip->nudity <<= 1;
+				i2c_bus[chip].mask <<= 1;
+				i2c_bus[chip].nudity <<= 1;
 			}
 			else
 				break;
 		}
-		chip->group_sda->CRH &= ~chip->mask;
-		chip->group_sda->CRH |= chip->nudity;	
+		i2c_bus[chip].group_sda->CRH &= ~i2c_bus[chip].mask;
+		i2c_bus[chip].group_sda->CRH |= i2c_bus[chip].nudity;	
 	}
-	chip->group_sda->ODR |= chip->pin_sda;	/* IPU */
+	i2c_bus[chip].group_sda->ODR |= i2c_bus[chip].pin_sda;*/
+	GPIO_InitTypeDef GPIO_SDA;
+
+	GPIO_SDA.GPIO_Pin = GPIO_Pin_2;
+	GPIO_SDA.GPIO_Speed = GPIO_Speed_50MHz;
+
+	if(dir ==input)
+		GPIO_SDA.GPIO_Mode = GPIO_Mode_IPU;
+	else
+		GPIO_SDA.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOA, &GPIO_SDA);/* IPU */
 }
 
 /*
@@ -163,6 +162,16 @@ static __inline void i2c_bus_start(CHIP_LIST_e chip)
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
 }
 
+static __inline void i2c_bus_stop(CHIP_LIST_e chip)
+{
+	I2C_BUS_SDA_LOW(i2c_bus[chip]);		
+	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
+	delayus(1);
+	I2C_BUS_SCL_HIGH(i2c_bus[chip]);		
+	delayus(1);	
+}
+
+
 /*
  * Á¬½Ó¸´Î»;
  *       _____________________________________________________         ________
@@ -185,13 +194,42 @@ static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
 	i2c_bus_start(chip);					
 }
 
+static __inline void i2c_bus_send_ack(CHIP_LIST_e chip, u8 ack)
+{
+	if(ack == 1)
+		I2C_BUS_SDA_HIGH(i2c_bus[chip]);	
+	else
+		I2C_BUS_SDA_LOW(i2c_bus[chip]);	
+	I2C_BUS_SCL_HIGH(i2c_bus[chip]);	
+	delayus(5);	
+	I2C_BUS_SCL_LOW(i2c_bus[chip]);
+	delayus(1);
+}
+
+
+static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip)
+{
+	u8 ack;
+	
+	I2C_BUS_SCL_HIGH(i2c_bus[chip]);	
+	delayus(5);
+	i2c_bus_sda_dir(chip, input);	
+	I2C_BUS_SCL_LOW(i2c_bus[chip]);
+	delayus(1);
+
+	ack = I2C_BUS_SDA_STATE(chip); 
+	i2c_bus_sda_dir(chip, output);	
+
+	return ack;
+}
+
 //----------------------------------------------------------------------------------
-__inline u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 addr, u8 value)
+u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 value)
 {
 	u8 index;
 	u8 error = 0;
 	
-	i2c_bus_sda_dir( &i2c_bus[chip], output);
+	i2c_bus_sda_dir(chip, output);
 	for(index = 0x80; index > 0; index >>= 1)			
 	{ 
 		if (index & value) 
@@ -206,25 +244,26 @@ __inline u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 addr, u8 value)
 		delayus(1);
 	}					
 	
-	i2c_bus_sda_dir( &i2c_bus[chip], input);	
+	//error = i2c_bus_get_ack(chip);					
+	i2c_bus_sda_dir(chip, input);	
 	I2C_BUS_SCL_HIGH(i2c_bus[chip]);				
 	delayus(3);
-	error = I2C_BUS_SDA_STATE(i2c_bus[chip]);              
+	error = I2C_BUS_SDA_STATE(chip);              
 	delayus(1);
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);				
-	i2c_bus_sda_dir( &i2c_bus[chip], output);
+	i2c_bus_sda_dir(chip, output);
 	delayus(1);
-	I2C_BUS_SDA_HIGH(i2c_bus[chip]);						
+	I2C_BUS_SDA_HIGH(i2c_bus[chip]);
 	
 	return error;				
 }
 
-__inline u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 addr, u8 ack)
+u8 i2c_bus_read_byte(CHIP_LIST_e chip)
 {
 	u8 index;
 	u8 val = 0;
 	
-	i2c_bus_sda_dir( &i2c_bus[chip], input);
+	i2c_bus_sda_dir(chip, input);
 	delayus(1);
 	
 	for(index = 0x80; index > 0; index >>= 1)		
@@ -232,19 +271,16 @@ __inline u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 addr, u8 ack)
 		I2C_BUS_SCL_HIGH(i2c_bus[chip]);		
 		delayus(3);
 		
-		if(I2C_BUS_SDA_STATE(i2c_bus[chip]))					
+		if(I2C_BUS_SDA_STATE(chip))					
 			val = (val | index);			
 		delayus(1);
 		I2C_BUS_SCL_LOW(i2c_bus[chip]);					
 	}
-	
-	i2c_bus_sda_dir( &i2c_bus[chip], output);
+	//i2c_bus_sda_dir(chip, output);
+	i2c_bus_sda_dir(chip, output);
 	delayus(1);
-	
-	if(ack)								
-		I2C_BUS_SDA_LOW(i2c_bus[chip]);
-	else
-		I2C_BUS_SDA_HIGH(i2c_bus[chip]);
+							
+	I2C_BUS_SDA_LOW(i2c_bus[chip]);
 	
 	I2C_BUS_SCL_HIGH(i2c_bus[chip]);				
 	delayus(3);
@@ -254,5 +290,35 @@ __inline u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 addr, u8 ack)
 	I2C_BUS_SDA_HIGH(i2c_bus[chip]);
 	
 	return val;
+}
+
+void i2c_bus_write_data(CHIP_LIST_e chip, u8 addr, u8 reg, u8 value)
+{
+	i2c_bus_start(chip);
+	i2c_bus_write_byte(chip, addr);
+	i2c_bus_write_byte(chip, reg);
+	i2c_bus_write_byte(chip, value);
+	i2c_bus_stop(chip);
+}
+
+u8 i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, u8 reg)
+{
+	u8 data;
+	
+	i2c_bus_start(chip);
+	i2c_bus_write_byte(chip, addr);
+	i2c_bus_write_byte(chip, reg);
+	i2c_bus_start(chip);
+	i2c_bus_write_byte(chip, addr + 1);
+	data = i2c_bus_read_byte(chip);
+	i2c_bus_send_ack(chip, 1);
+	i2c_bus_stop(chip);	
+
+	return data;
+}
+
+BitAction I2C_BUS_SDA_STATE(CHIP_LIST_e chip)
+{
+	return (((i2c_bus[chip].group_sda->ODR & i2c_bus[chip].pin_sda) != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
 }
 

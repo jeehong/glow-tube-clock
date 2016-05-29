@@ -118,6 +118,7 @@
 #include "app_led.h"
 #include "app_serial.h"
 #include "app_display.h"
+#include "app_sht10.h"
 
 #include "LwIPEntry.h"
 
@@ -144,7 +145,7 @@ int main( void )
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
 	xTaskCreate((pdTASK_CODE)app_dispaly_show_task, "app_display", 300, &display_source, 6, NULL);
 	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, &display_source, 3, NULL);
-	
+	xTaskCreate((pdTASK_CODE)app_sht10_task, "app_sht10", 300, NULL, 3, NULL);
 	/* Start the scheduler. */
 	vTaskStartScheduler();
 

@@ -13,6 +13,8 @@
 #include "app_led.h"
 #include "app_serial.h"
 #include "app_display.h"
+#include "app_sht10.h"
+
 
 void app_led_init(void)
 {
@@ -46,7 +48,6 @@ void app_led_task_blink(DISPLAY_RESOURCE_t *display)
 		memset(&display->map[0], index++, sizeof(char) * TUBE_NUM);	/* 6个辉光管 */
 		display->map[6] = ((index % 3) << 4) | (index % 3);		/* 两个冒号 */
 		xSemaphoreGive(display->xMutex);
-		dbg_string("[%d]\r\n", index);	
 	}
 }
 

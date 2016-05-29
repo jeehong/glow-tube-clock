@@ -4,6 +4,7 @@
 ".\obj\netconfig.o"
 ".\obj\app_serial.o"
 ".\obj\app_display.o"
+".\obj\app_sht10.o"
 ".\obj\bsp.o"
 ".\obj\dm9000x.o"
 ".\obj\i2c_bus.o"
