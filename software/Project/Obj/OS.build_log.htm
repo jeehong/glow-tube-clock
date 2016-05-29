@@ -8,16 +8,16 @@ Project File Date:  05/29/2016
 
 <h2>Output:</h2>
 Build target 'FreeRTOS'
-compiling app_sht10.c...
-compiling bsp.c...
-compiling i2c_bus.c...
-..\BSP\i2c_bus.c(218): warning:  #177-D: function "i2c_bus_get_ack" was declared but never referenced
-  static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip)
-..\BSP\i2c_bus.c: 1 warning, 0 errors
+compiling app_ds3231.c...
+..\APP\app_ds3231.c(133): warning:  #550-D: variable "time1" was set but never used
+        struct rtc_time time1, time2;
+..\APP\app_ds3231.c(107): warning:  #177-D: function "app_ds3231_set_time" was declared but never referenced
+  static void app_ds3231_set_time(struct rtc_time *ptime)
+..\APP\app_ds3231.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=52316 RO-data=612 RW-data=368 ZI-data=40528  
+Program Size: Code=52352 RO-data=624 RW-data=360 ZI-data=40528  
 FromELF: creating hex file...
-".\Obj\OS.axf" - 0 Error(s), 1 Warning(s).
+".\Obj\OS.axf" - 0 Error(s), 2 Warning(s).
 Load "C:\\Users\\Administrator\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
 Set JLink Project File to "C:\Users\Administrator\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
 * JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
@@ -56,11 +56,7 @@ Application running ...
 </pre>
 </body>
 </html>
-portable/RVDS/ARM_CM3/portmacro.h(278): error:  #20: identifier "BaseType_t" is undefined
-                xReturn = pdFALSE;
-..\APP\../FreeRTOS/portable/RVDS/ARM_CM3/portmacro.h(278): error:  #18: expected a ")"
-                xReturn = pdFALSE;
-..\APP\../FreeRTOS/portable/RVDS/ARM_CM3/portmacro.h(282): error:  #20: identifier "BaseType_t" is undefined
+is undefined
                 xReturn = pdTRUE;
 ..\APP\../FreeRTOS/portable/RVDS/ARM_CM3/portmacro.h(282): error:  #18: expected a ")"
                 xReturn = pdTRUE;
@@ -110,50 +106,55 @@ portable/RVDS/ARM_CM3/portmacro.h(278): error:  #20: identifier "BaseType_t" is 
                 UBaseType_t             uxDummy6;
 ..\BSP\bsp.c: 1 warning, 30 errors
 compiling i2c_bus.c...
-..\BSP\i2c_bus.h(30): error:  #130: expected a "{"
-  void i2c_bus_sda_dir(CHIP_LIST_e chip, GPIO_DIR_e dir);
-..\BSP\i2c_bus.c(45): warning:  #12-D: parsing restarts here after previous syntax error
+..\BSP\i2c_bus.c(35): error:  #130: expected a "{"
+  static void delayus(u16 us);
+..\BSP\i2c_bus.c(46): warning:  #12-D: parsing restarts here after previous syntax error
   {
-..\BSP\i2c_bus.c(49): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(50): error:  #20: identifier "i2c_bus" is undefined
         i2c_bus[ds].rcc_scl = I2C_DS_RCC;
-..\BSP\i2c_bus.c(73): warning:  #223-D: function "i2c_bus_chip_reset" declared implicitly
+..\BSP\i2c_bus.c(76): warning:  #223-D: function "i2c_bus_chip_reset" declared implicitly
         i2c_bus_chip_reset(ds);
-..\BSP\i2c_bus.c(146): error:  #247: function "i2c_bus_start" has already been defined
-  void i2c_bus_start(CHIP_LIST_e chip)
-..\BSP\i2c_bus.c(148): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(96): error:  #20: identifier "i2c_bus" is undefined
+        GPIO_InitType.GPIO_Pin = i2c_bus[chip].pin_sda;
+..\BSP\i2c_bus.c(117): error:  #20: identifier "i2c_bus" is undefined
         I2C_BUS_SDA_HIGH(i2c_bus[chip]);                
-..\BSP\i2c_bus.c(166): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(137): error:  #20: identifier "i2c_bus" is undefined
         I2C_BUS_SDA_LOW(i2c_bus[chip]);         
-..\BSP\i2c_bus.c(181): error:  #159: declaration is incompatible with previous "i2c_bus_chip_reset" (declared at line 73)
+..\BSP\i2c_bus.c(152): error:  #159: declaration is incompatible with previous "i2c_bus_chip_reset" (declared at line 76)
   static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
-..\BSP\i2c_bus.c(185): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(157): error:  #20: identifier "i2c_bus" is undefined
         I2C_BUS_SDA_HIGH(i2c_bus[chip]);                                                        
-..\BSP\i2c_bus.c(199): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(172): error:  #20: identifier "i2c_bus" is undefined
                 I2C_BUS_SDA_HIGH(i2c_bus[chip]);        
-..\BSP\i2c_bus.c(213): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(188): error:  #20: identifier "i2c_bus" is undefined
         I2C_BUS_SCL_HIGH(i2c_bus[chip]);        
-..\BSP\i2c_bus.c(219): warning:  #223-D: function "I2C_BUS_SDA_STATE" declared implicitly
-        ack = I2C_BUS_SDA_STATE(chip); 
-..\BSP\i2c_bus.c(235): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(206): error:  #20: identifier "i2c_bus" is undefined
                         I2C_BUS_SDA_HIGH(i2c_bus[chip]);                
-..\BSP\i2c_bus.c(248): error:  #20: identifier "i2c_bus" is undefined
-        I2C_BUS_SCL_HIGH(i2c_bus[chip]);                                
-..\BSP\i2c_bus.c(250): warning:  #223-D: function "I2C_BUS_SDA_STATE" declared implicitly
-        error = I2C_BUS_SDA_STATE(chip);              
-..\BSP\i2c_bus.c(270): error:  #20: identifier "i2c_bus" is undefined
+..\BSP\i2c_bus.c(231): error:  #20: identifier "i2c_bus" is undefined
                 I2C_BUS_SCL_HIGH(i2c_bus[chip]);                
-..\BSP\i2c_bus.c(273): warning:  #223-D: function "I2C_BUS_SDA_STATE" declared implicitly
-                if(I2C_BUS_SDA_STATE(chip))                                     
-..\BSP\i2c_bus.c(282): error:  #20: identifier "i2c_bus" is undefined
-        I2C_BUS_SDA_LOW(i2c_bus[chip]);
-..\BSP\i2c_bus.c(319): error:  #159: declaration is incompatible with previous "I2C_BUS_SDA_STATE" (declared at line 219)
-  BitAction I2C_BUS_SDA_STATE(CHIP_LIST_e chip)
-..\BSP\i2c_bus.c(321): error:  #20: identifier "i2c_bus" is undefined
-        return (((i2c_bus[chip].group_sda->ODR & i2c_bus[chip].pin_sda) != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
-..\BSP\i2c_bus.c(181): warning:  #177-D: function "i2c_bus_chip_reset" was declared but never referenced
+..\BSP\i2c_bus.c(254): error:  #247: function "i2c_bus_read_data" has already been defined
+  void i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, struct rtc_time *time)
+..\BSP\i2c_bus.c(259): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SCL_HIGH(i2c_bus[chip]);
+..\BSP\i2c_bus.c(256): warning:  #177-D: variable "data" was declared but never referenced
+        u8 data;
+..\BSP\i2c_bus.c(286): error:  #20: identifier "i2c_bus" is undefined
+        return (((i2c_bus[chip].group_sda->IDR & i2c_bus[chip].pin_sda) != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
+..\BSP\i2c_bus.c(152): warning:  #177-D: function "i2c_bus_chip_reset" was declared but never referenced
   static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
-..\BSP\i2c_bus.c(209): warning:  #177-D: function "i2c_bus_get_ack" was declared but never referenced
-  static __inline unsigned char i2c_bus_get_ack(CHIP_LIST_e chip)
-..\BSP\i2c_bus.c: 7 warnings, 15 errors
-".\Obj\OS.axf" - 47 Error(s), 12 Warning(s).
+..\BSP\i2c_bus.c: 4 warnings, 14 errors
+".\Obj\OS.axf" - 46 Error(s), 6 Warning(s).
+Target not created
+as already been defined
+  void i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, struct rtc_time *time)
+..\BSP\i2c_bus.c(259): error:  #20: identifier "i2c_bus" is undefined
+        I2C_BUS_SCL_HIGH(i2c_bus[chip]);
+..\BSP\i2c_bus.c(256): warning:  #177-D: variable "data" was declared but never referenced
+        u8 data;
+..\BSP\i2c_bus.c(286): error:  #20: identifier "i2c_bus" is undefined
+        return (((i2c_bus[chip].group_sda->IDR & i2c_bus[chip].pin_sda) != (u32)Bit_RESET) ? Bit_SET : Bit_RESET);
+..\BSP\i2c_bus.c(152): warning:  #177-D: function "i2c_bus_chip_reset" was declared but never referenced
+  static __inline void i2c_bus_chip_reset(CHIP_LIST_e chip)
+..\BSP\i2c_bus.c: 4 warnings, 14 errors
+".\Obj\OS.axf" - 53 Error(s), 6 Warning(s).
 Target not created

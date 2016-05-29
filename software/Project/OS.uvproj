@@ -437,6 +437,11 @@
               <FileType>1</FileType>
               <FilePath>..\APP\app_sht10.c</FilePath>
             </File>
+            <File>
+              <FileName>app_ds3231.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\app_ds3231.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
