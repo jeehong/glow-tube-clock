@@ -33,6 +33,7 @@
 
 #define bcd2bin(bcd) 	((bcd & 0x0f) + (bcd >> 4) * 10)
 #define bin2bcd(bin) 	(((bin / 10) << 4) | (bin % 10))
+
 static const unsigned char rtc_days_in_month[] = {
 	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
@@ -139,10 +140,9 @@ void app_ds3231_task(void *parame)
 	time1.mday = 29;
 	time1.mon = 5;
 	time1.year = 16;
+	app_ds3231_set_time(&time1);
 	while(1)
 	{
-		//app_ds3231_set_time(&time1);
-		
 		app_ds3231_read_time(&time2);
 		
 		dbg_string("Time:%d-%d-%d %d %d:%d:%d\r\n", 
