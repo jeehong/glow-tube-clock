@@ -71,7 +71,7 @@ static int app_ds3231_read_time(struct rtc_time *ptime)
 	unsigned int century;
 
 	
-	i2c_bus_read_data(ds, DS1231_SLAVE_ADDR, data, 7);
+	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_SECONDS, data, 7);
 
 	/* Extract additional information for AM/PM and century */
 	ptime->h12 = (data[2] & 0x40) ? 1 : 0;
@@ -126,7 +126,7 @@ static void app_ds3231_set_time(struct rtc_time *ptime)
 	{
 		data[6] = bin2bcd(ptime->year);
 	}
-	i2c_bus_write_data(ds, DS1231_SLAVE_ADDR, DS3231_REG_SECONDS, data, 7);
+	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_SECONDS, data, 7);
 }
 
 void app_ds3231_task(void *parame)

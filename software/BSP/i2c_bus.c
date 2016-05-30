@@ -150,11 +150,11 @@ static __inline void i2c_bus_stop(CHIP_LIST_e chip)
 	
 	I2C_BUS_SDA_LOW(i2c_bus[chip]);		
 	I2C_BUS_SCL_LOW(i2c_bus[chip]);		
-	delayus(1);
+	delayus(2);
 	I2C_BUS_SCL_HIGH(i2c_bus[chip]);		
-	delayus(1);	
+	delayus(2);	
 	I2C_BUS_SDA_HIGH(i2c_bus[chip]);
-	delayus(1);
+	delayus(2);
 }
 
 
@@ -257,7 +257,7 @@ u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 ack)
 	return val;
 }
 
-void i2c_bus_write_data(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
+void i2c_bus_write_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 {
 	u8 index;
 
@@ -275,13 +275,15 @@ void i2c_bus_write_data(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 	i2c_bus_stop(chip);
 }
 
-void i2c_bus_read_data(CHIP_LIST_e chip, u8 addr, u8 *pdata, u8 len)
+void i2c_bus_read_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 {
 	u8 index;
 	
-	/* i2c_bus_start(chip); */
 	i2c_bus_start_ds3231(chip);
 	
+	i2c_bus_write_byte(chip, addr);
+	i2c_bus_write_byte(chip, reg);
+	i2c_bus_start_ds3231(chip);		/* 这个地方待确认 */
 	i2c_bus_write_byte(chip, addr + 1);
 
 	for(index = 0; index < len; index++)
