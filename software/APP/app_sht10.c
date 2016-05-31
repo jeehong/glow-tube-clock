@@ -40,7 +40,7 @@ u8 app_sht10_get_res(u16 *p_value, u8 *p_checksum, u8 mode)
 	
 	while(I2C_BUS_SDA_STATE(sht) != 0)
 	{
-		vTaskDelay(10);
+		vTaskDelay(50);
 	}
 	
 	if(I2C_BUS_SDA_STATE(sht))								
@@ -81,7 +81,7 @@ void app_sht10_task(void *parame)
 		temp = app_sht10_get_info(TEMP);
 		hum = app_sht10_get_info(HUM);
 		dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum);
-		vTaskDelay(1000);
+		vTaskDelay(5000);
 	}
 }
 

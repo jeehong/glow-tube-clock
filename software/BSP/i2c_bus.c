@@ -1,3 +1,7 @@
+#include "FreeRTOS.h"
+#include "task.h"
+
+
 #include "i2c_bus.h"
 #include "stm32f10x.h"
 
@@ -215,6 +219,7 @@ u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 value)
 	u8 ack = 0;
 	
 	i2c_bus_sda_dir(chip, output);
+	taskENTER_CRITICAL();
 	for(index = 0x80; index > 0; index >>= 1)			
 	{ 
 		if (index & value) 
@@ -230,7 +235,7 @@ u8 i2c_bus_write_byte(CHIP_LIST_e chip, u8 value)
 	}					
 	
 	ack = i2c_bus_get_ack(chip);			
-	
+	taskEXIT_CRITICAL();
 	return ack;				
 }
 
@@ -240,7 +245,7 @@ u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 ack)
 	u8 val = 0;
 	
 	i2c_bus_sda_dir(chip, input);
-	
+	taskENTER_CRITICAL();
 	for(index = 0x80; index > 0; index >>= 1)		
 	{ 
 		I2C_BUS_SCL_HIGH(i2c_bus[chip]);		
@@ -253,7 +258,7 @@ u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 ack)
 	}
 	
 	i2c_bus_send_ack(chip, ack);
-	
+	taskEXIT_CRITICAL();
 	return val;
 }
 
@@ -263,7 +268,7 @@ void i2c_bus_write_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 
 	if(len == 0)
 		return;
-
+	taskENTER_CRITICAL();
 	i2c_bus_start_ds3231(chip);
 	
 	i2c_bus_write_byte(chip, addr);	
@@ -273,12 +278,14 @@ void i2c_bus_write_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 		i2c_bus_write_byte(chip, pdata[index]);
 	}
 	i2c_bus_stop(chip);
+	taskEXIT_CRITICAL();
 }
 
 void i2c_bus_read_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 {
 	u8 index;
 	
+	taskENTER_CRITICAL();
 	i2c_bus_start_ds3231(chip);
 	
 	i2c_bus_write_byte(chip, addr);
@@ -291,6 +298,7 @@ void i2c_bus_read_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
 		pdata[index] = i2c_bus_read_byte(chip, (index + 1) == len ? 1 : 0);
 	}
 	i2c_bus_stop(chip);	
+	taskEXIT_CRITICAL();
 }
 
 BitAction I2C_BUS_SDA_STATE(CHIP_LIST_e chip)

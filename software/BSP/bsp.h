@@ -6,9 +6,9 @@
 #define mainCOM_BAUD_RATE		( 115200 )
 
 /* HV */		
-#define	HV_RCC_APB			RCC_APB2Periph_GPIOC
-#define	HV_PIN_GROUP		GPIOC
-#define	HV_PIN				GPIO_Pin_8
+#define	HV_RCC_APB				RCC_APB2Periph_GPIOC
+#define	HV_PIN_GROUP			GPIOC
+#define	HV_PIN					GPIO_Pin_8
 
 /* 74HC595 */
 #define	HC595_OE_RCC_APB		RCC_APB2Periph_GPIOC	/* 输出使能 低电平有效 */
@@ -37,6 +37,16 @@
 #define	POINT_RBOT_RCC_APB		RCC_APB2Periph_GPIOA	
 #define	POINT_RBOT_PIN_GROUP	GPIOA
 #define	POINT_RBOT_PIN			GPIO_Pin_7
+
+/* DS3231 IRQ source define */
+#define DS3231_RCC_APB			RCC_APB2Periph_GPIOC
+#define DS3231_RCC_AFIO			RCC_APB2Periph_AFIO	
+#define DS3231_IRQN_CHN			EXTI0_IRQn
+#define DS3231_IRQ_SRC_PORT		GPIO_PortSourceGPIOC	
+#define DS3231_IRQ_SRC_PIN		GPIO_PinSource0	
+#define DS3231_IRQ_PORT			GPIOC
+#define DS3231_IRQ_PIN			GPIO_Pin_0	
+#define DS3231_IRQ_LINE			EXTI_Line0	
 
 
 typedef enum {

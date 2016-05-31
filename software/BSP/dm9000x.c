@@ -224,7 +224,7 @@ void dm9000x_inital(uint8_t *macaddr)
 	
 	dbg_string("Mac: ");
 	for(index = 0; index < 6; index++)
-        dbg_string("%x:", ior(DM9000_PAR + index) & 0x00ff);
+        dbg_string("%02x:", ior(DM9000_PAR + index) & 0x00ff);
 	dbg_string("\r\n");
 
 

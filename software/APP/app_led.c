@@ -38,9 +38,13 @@ void app_led_task_blink(DISPLAY_RESOURCE_t *display)
 	xLastWakeTime = xTaskGetTickCount();
 	while(1)
 	{
+		taskENTER_CRITICAL();
 		LED_PIN_GROUP->BSRR = port_list[index % 3];
+		taskEXIT_CRITICAL();
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(80));
+		taskENTER_CRITICAL();
 		LED_PIN_GROUP->BRR = port_list[index % 3];
+		taskEXIT_CRITICAL();
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
 		if(index > 9)
 			index = 0;

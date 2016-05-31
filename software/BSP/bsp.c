@@ -9,10 +9,16 @@
 #include "app_serial.h"
 #include "app_led.h"
 
+#include "stm32f10x.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_exti.h"
+#include "misc.h"
+
 static void prvSetupHardware(void);
 static void bsp_hv_io_init(void);
 static void bsp_74hc595_io_init(void);
 static void bsp_point_io_init(void);
+static void bsp_ds3231_irq_init(void);
 
 
 void bsp_init(void)
@@ -24,6 +30,7 @@ void bsp_init(void)
 	bsp_hv_io_init();
 	bsp_74hc595_io_init();
 	bsp_point_io_init();
+	bsp_ds3231_irq_init();
 }
 
 static void prvSetupHardware(void)
@@ -138,7 +145,37 @@ static void bsp_point_io_init(void)
 	GPIO_ResetBits(POINT_LBOT_PIN_GROUP, POINT_LBOT_PIN);  
 }
 
+static void bsp_ds3231_irq_init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure; 
+	EXTI_InitTypeDef EXTI_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
 
+	/* config the extiline clock and AFIO clock */
+	RCC_APB2PeriphClockCmd(DS3231_RCC_APB | DS3231_RCC_AFIO, ENABLE);
+												
+	/* config the NVIC */
+	/* Configure one bit for preemption priority */
+	NVIC_InitStructure.NVIC_IRQChannel = DS3231_IRQN_CHN;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_KERNEL_INTERRUPT_PRIORITY;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+
+
+	/* EXTI line gpio config*/	
+	GPIO_InitStructure.GPIO_Pin = DS3231_IRQ_PIN;       
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;	
+	GPIO_Init(DS3231_IRQ_PORT, &GPIO_InitStructure);
+
+	/* EXTI line mode config */
+	GPIO_EXTILineConfig(DS3231_IRQ_SRC_PORT, DS3231_IRQ_SRC_PIN); 
+	EXTI_InitStructure.EXTI_Line = DS3231_IRQ_LINE;
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_Init(&EXTI_InitStructure);	
+}
 
 
 

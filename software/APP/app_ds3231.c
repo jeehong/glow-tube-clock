@@ -1,5 +1,9 @@
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
+
+#include "misc.h"
+#include "stm32f10x_exti.h"
 
 #include "i2c_bus.h"
 
@@ -31,12 +35,20 @@
 #define DS3231_REG_SR_A2F   	0x02
 #define DS3231_REG_SR_A1F   	0x01
 
-#define bcd2bin(bcd) 	((bcd & 0x0f) + (bcd >> 4) * 10)
-#define bin2bcd(bin) 	(((bin / 10) << 4) | (bin % 10))
+/* interrupt flags */
+#define RTC_IRQF 0x80	/* Any of the following is active */
+#define RTC_PF 0x40	/* Periodic interrupt */
+#define RTC_AF 0x20	/* Alarm interrupt */
+#define RTC_UF 0x10	/* Update interrupt for 1Hz RTC */
+
+
+#define bcd2bin(bcd) 	(((bcd) & 0x0f) + ((bcd) >> 4) * 10)
+#define bin2bcd(bin) 	((((bin) / 10) << 4) | ((bin) % 10))
 
 static const unsigned char rtc_days_in_month[] = {
 	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
+static QueueHandle_t timeSync;
 
 static __inline unsigned char is_leap_year(unsigned int year)
 {
@@ -47,6 +59,13 @@ static int rtc_month_days(unsigned int month, unsigned int year)
 {
 	return rtc_days_in_month[month] + (is_leap_year(year) && month == 1);
 }
+
+static int app_ds3231_read_time(struct rtc_time *ptime);
+static void app_ds3231_set_time(struct rtc_time *ptime);
+static void app_ds3231_enable_irq(u8 flag);
+static void app_ds3231_read_alarm(struct rtc_wkalrm *alarm);
+static void app_ds3231_set_alarm(struct rtc_wkalrm *alarm);
+
 
 /*
  * Does the rtc_time represent a valid date/time?
@@ -82,9 +101,8 @@ static int app_ds3231_read_time(struct rtc_time *ptime)
 
 	ptime->sec = bcd2bin(data[0]);
 	ptime->min = bcd2bin(data[1]); 
-	if (!ptime->h12) 
+	if (ptime->h12) 	
 	{
-		/* Convert to 24 hr */
 		if (ptime->am_pm)
 			ptime->hour = bcd2bin((data[2] & 0x1F)) + 12;
 		else
@@ -115,7 +133,6 @@ static void app_ds3231_set_time(struct rtc_time *ptime)
 	data[2] = bin2bcd(ptime->hour);
 	data[3] = bin2bcd(ptime->wday);
 	data[4] = bin2bcd(ptime->mday); /* Date */
-	/* linux tm_mon range:0~11, while month range is 1~12 in RTC chip */
 	data[5] = bin2bcd(ptime->mon);
 	if (ptime->year >= 100) 
 	{
@@ -129,23 +146,141 @@ static void app_ds3231_set_time(struct rtc_time *ptime)
 	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_SECONDS, data, 7);
 }
 
+/*
+ * DS3232 has two alarm, we only use alarm1
+ * According to linux specification, only support one-shot alarm
+ * no periodic alarm mode
+ */
+static void app_ds3231_read_alarm(struct rtc_wkalrm *alarm)
+{
+	u8 control;
+	u8 buf[4];
+
+	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_CR, &control, 1);
+	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_ALARM1, buf, 4);
+
+	/* alarm->time.sec = bcd2bin((buf[0] & 0x7F));
+	alarm->time.min = bcd2bin((buf[1] & 0x7F));
+	alarm->time.hour = bcd2bin((buf[2] & 0x7F));
+	alarm->time.mday = bcd2bin((buf[3] & 0x7F)); */
+	alarm->time.sec = buf[0];
+	alarm->time.min = buf[1];
+	alarm->time.hour = buf[2];
+	alarm->time.mday = buf[3];
+
+	alarm->time.mon = 0;
+	alarm->time.year = 0;
+	alarm->time.wday = 0;
+
+	alarm->enabled = !!(control & DS3231_REG_CR_A1IE);
+}
+
+/*
+ * linux rtc-module does not support wday alarm
+ * and only 24h time mode supported indeed
+ */
+static void app_ds3231_set_alarm(struct rtc_wkalrm *alarm)
+{
+	u8 buf[4];
+
+	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_ALARM1, buf, 4);
+	
+	buf[0] = bin2bcd(alarm->time.sec) | (buf[0] & 0x80);
+	buf[1] = bin2bcd(alarm->time.min) | (buf[1] & 0x80);
+	buf[2] = bin2bcd(alarm->time.hour) | (buf[2] & 0x80);
+	buf[3] = bin2bcd(alarm->time.mday) | (buf[3] & 0x80);
+
+	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_ALARM1, buf, 4);
+}
+
+/*
+ * 入口参数:  
+ * 0: 当 RTC时间与该值匹配时，中断触发； 
+ * 1: 该值不作为判定条件，即无需匹配定时即可触发
+ */
+static void app_ds3231_set_match(u8 mday_match, u8 hour_match, u8 min_match, u8 sec_match)
+{
+	u8 buf[4];
+	
+	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_ALARM1, buf, 4);
+
+	buf[0] = sec_match ? (0x80 | buf[0]) : (buf[0] & 0x7f);
+	buf[1] = min_match ? (0x80 | buf[1]) : (buf[1] & 0x7f);
+	buf[2] = hour_match ? (0x80 | buf[2]) : (buf[2] & 0x7f);
+	buf[3] = mday_match ? (0x80 | buf[3]) : (buf[3] & 0x7f);
+
+	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_ALARM1, buf, 4);
+}
+
+static void app_ds3231_clear_state(void)
+{
+	u8 stat;
+
+	/* clear any pending alarm flag */
+	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_SR, &stat, 1);
+	stat &= ~(DS3231_REG_SR_A1F | DS3231_REG_SR_A2F);
+	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_SR, &stat, 1);
+}
+
+static void app_ds3231_enable_irq(u8 flag)
+{
+	u8 control;
+	
+	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_CR, &control, 1);
+	if(flag)
+	{
+		/* enable alarm1 interrupt */
+		control |= DS3231_REG_CR_A1IE;
+	}
+	else 
+	{
+		/* disable alarm1 interrupt */
+		control &= ~(DS3231_REG_CR_A1IE | DS3231_REG_CR_A2IE);
+	}
+	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_CR, &control, 1);	
+}
+
 void app_ds3231_task(void *parame)
 {
-	struct rtc_time time1, time2;
+	struct rtc_time /*time1, */time2;
+	struct rtc_wkalrm alarm1/*, alarm2*/;
 
-	time1.sec = 0;
-	time1.min = 30;
-	time1.hour = 19;
-	time1.wday = 7;
-	time1.mday = 29;
+	/* set time */
+	/* time1.sec = 0;
+	time1.min = 1;
+	time1.hour = 22;
+	time1.wday = 2;
+	time1.mday = 31;
 	time1.mon = 5;
 	time1.year = 16;
-	app_ds3231_set_time(&time1);
+	app_ds3231_set_time(&time1); */
+	
+	/* set alarm */
+	alarm1.enabled = 1;
+	alarm1.time.sec = 10;
+	alarm1.time.min = 1;
+	alarm1.time.hour = 1;
+	alarm1.time.mday = 1;
+	app_ds3231_enable_irq(0);	/* 设置失能RTC定时中断功能 */
+	app_ds3231_set_alarm(&alarm1);		/* 设置定时信息 */
+	app_ds3231_set_match(1, 1, 1, 1);	/* 设置闹钟模式，采用秒触发 */	
+	timeSync = xSemaphoreCreateMutex();
+	app_ds3231_enable_irq(1);	/* 设置使能RTC定时中断功能 */
+	
+	/* app_ds3231_read_alarm(&alarm2);
+	dbg_string("sec:0x%x\r\n", alarm2.time.sec);
+	dbg_string("min:0x%x\r\n", alarm2.time.min);
+	dbg_string("hour:0x%x\r\n", alarm2.time.hour);
+	dbg_string("mday:0x%x\r\n", alarm2.time.mday); */
 	while(1)
 	{
+		xSemaphoreTake(timeSync, portMAX_DELAY);
+		
 		app_ds3231_read_time(&time2);
 		
-		dbg_string("Time:%d-%d-%d %d %d:%d:%d\r\n", 
+		app_ds3231_clear_state();
+		
+		dbg_string("Time:20%d-%d-%d %d %d:%d:%d\r\n", 
 									time2.year, 
 									time2.mon, 
 									time2.mday, 
@@ -153,8 +288,20 @@ void app_ds3231_task(void *parame)
 									time2.hour, 
 									time2.min,
 									time2.sec);
-		vTaskDelay(1000);
 	}
+}
+
+
+void EXTI0_IRQHandler(void)
+{
+	portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+	
+	if(EXTI_GetITStatus(EXTI_Line0) != RESET) 
+	{		
+		xSemaphoreGiveFromISR(timeSync, &xHigherPriorityTaskWoken);
+		EXTI_ClearITPendingBit(EXTI_Line0);  
+	}  
+	portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 }
 
 

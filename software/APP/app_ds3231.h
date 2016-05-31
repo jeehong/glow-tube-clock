@@ -18,6 +18,14 @@ struct rtc_time {
 	unsigned char h12;		/* 1:12h */
 };
 
+/*
+ * This data structure is inspired by the EFI (v0.92) wakeup
+ * alarm API.
+ */
+struct rtc_wkalrm {
+	unsigned char enabled;	/* 0 = alarm disabled, 1 = alarm enabled */
+	struct rtc_time time;	/* time the alarm is set to */
+};
 
 void app_ds3231_task(void *parame);
 
