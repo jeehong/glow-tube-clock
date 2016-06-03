@@ -12,6 +12,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_exti.h"
+#include "stm32f10x_tim.h"
 #include "misc.h"
 
 static void prvSetupHardware(void);
@@ -19,6 +20,8 @@ static void bsp_hv_io_init(void);
 static void bsp_74hc595_io_init(void);
 static void bsp_point_io_init(void);
 static void bsp_ds3231_irq_init(void);
+static void bsp_TIM1_CH4_pwm_init(void); 
+static void bsp_TIM1_CH4_io_init(void); 
 
 
 void bsp_init(void)
@@ -31,6 +34,8 @@ void bsp_init(void)
 	bsp_74hc595_io_init();
 	bsp_point_io_init();
 	bsp_ds3231_irq_init();
+    bsp_TIM1_CH4_io_init();
+    bsp_TIM1_CH4_pwm_init();
 }
 
 static void prvSetupHardware(void)
@@ -178,4 +183,71 @@ static void bsp_ds3231_irq_init(void)
 }
 
 
+static void bsp_TIM1_CH4_io_init(void) 
+{ 
+    GPIO_InitTypeDef GPIO_InitStructure; 
+
+    /* 
+     * Config PA12 为浮空输入，
+     * PA12已经连接到PA11，引用PA11上的TIM1_CH4的资源，
+     * 为避免冲突，设置PA12为浮空输入 
+     */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12; 
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; 
+    GPIO_Init(GPIOA, &GPIO_InitStructure); 
+
+
+	/* TIM1 clock enable */
+	/* PCLK1 经过2倍频后座位TIM3的时钟源等于72MHz */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE); 
+
+    /* GPIOA and GPIOB clock enable */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); 
+
+    /*GPIOA Configuration: TIM3 channel 4 as alternate function push-pull */
+    GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;		    /* 复用推挽输出 */
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+}  
+
+
+static void bsp_TIM1_CH4_pwm_init(void)
+{
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+
+	u16 CCR_Val = 500; 
+
+    /* -----------------------------------------------------------------------
+    TIM1 Configuration: generate 4 PWM signals with 4 different duty cycles:
+    TIM1CLK = 72 MHz, Prescaler = 0x0, TIM1 counter clock = 72 MHz
+    TIM1 ARR Register = 999 => TIM1 Frequency = TIM1 counter clock/(ARR + 1)
+    TIM1 Frequency = 72 KHz.
+    TIM1 Channel4 duty cycle = (TIM1_CCR1 / TIM1_ARR) * 100 = 50%
+	----------------------------------------------------------------------- */
+
+	/* Time base configuration */		 
+	TIM_TimeBaseStructure.TIM_Period = 999;             /* 从0计数至999，即1000为一个定时周期 */
+	TIM_TimeBaseStructure.TIM_Prescaler = 0;	        /* 不设置预分频，即72MHz */
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1 ;	    /* 设置时钟分频系数:不分频 */
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;     /* 向上计数 */
+	
+	TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+	
+	/* PWM1 Mode configuration: Channel1 */
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;	            /* PWM mode1 */
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;	
+	TIM_OCInitStructure.TIM_Pulse = CCR_Val;	                    /* 设置跳变值，当计数器累加到该值，电平跳变 */
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;       /* 小于跳变值，为高电平 */
+	
+	TIM_OC4Init(TIM1, &TIM_OCInitStructure);	
+	TIM_OC4PreloadConfig(TIM1, TIM_OCPreload_Enable);
+	
+	TIM_ARRPreloadConfig(TIM1, ENABLE);			 /* 使能TIM1重载寄存器ARR */
+	
+	/* TIM1 enable counter */
+	TIM_Cmd(TIM1, ENABLE);                 
+}
 

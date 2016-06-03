@@ -73,21 +73,11 @@ void dm9000x_gpio_inital(void)
 	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(CONTROL_PORT, &GPIO_dm9000x);
 
-	/* Configure control io as output push-pull */
-	GPIO_dm9000x.GPIO_Pin = CMD;
-	GPIO_dm9000x.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(CMD_PORT, &GPIO_dm9000x);
 	/* Configure data io as inout */
 	GPIO_dm9000x.GPIO_Pin = GPIO_Pin_All;
 	GPIO_dm9000x.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(DATA_PORT, &GPIO_dm9000x);
-
-	GPIO_dm9000x.GPIO_Pin = EXINIT;
-	GPIO_dm9000x.GPIO_Speed = GPIO_Speed_10MHz;
-	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_Init(EXINT_PORT,&GPIO_dm9000x);
 }
 
 /*********************************************************************************************************************/
@@ -164,7 +154,8 @@ void dm9000x_inital(uint8_t *macaddr)
 	unsigned char index = 0x00;
 
 	dm9000x_gpio_inital();
-	dm9000_delay (5000);
+
+	iow(DM9000_IMR, 0x80);		/* 屏蔽网卡中断 */
 	
 	/* 设置 GPCR(1EH) bit[0]=1，使DM9000的GPIO3为输出 */
 	iow(DM9000_GPCR, 0x01);
@@ -186,7 +177,7 @@ void dm9000x_inital(uint8_t *macaddr)
 
 	/* 第二次软件复位，为了确保软件复位完全成功。此步骤是必要的 */
 	iow(DM9000_NCR, 0x03);
-	dm9000_delay(5000);
+	dm9000_delay(10000);
 
 	iow(DM9000_NCR, 0x00);
 
@@ -305,9 +296,7 @@ uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen)
 		{
 			if((ready & 0x01) != 0x00) 		/* 若第二次读取到的不是 01H 或 00H ，则表示没有初始化成功 */
 			{
-				iow(DM9000_IMR, 0x80);		/* 屏蔽网卡中断 */
 				dm9000x_inital(m_mac);		/* 重新初始化 */
-				iow(DM9000_IMR, 0x81);		/* 打开网卡中断 */
 			}
 			return 0;
 		}

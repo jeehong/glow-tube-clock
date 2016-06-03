@@ -6,7 +6,7 @@
 #define	 	TUBE_NUM	6
 
 
-void app_dispaly_show_task(DISPLAY_RESOURCE_t *display);
+void app_display_show_task(DISPLAY_RESOURCE_t *display);
 
 
 #endif 

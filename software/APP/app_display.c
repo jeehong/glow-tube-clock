@@ -148,12 +148,12 @@ static void app_display_set_point(char src)
 	}	
 }	
 
-void app_dispaly_show_task(DISPLAY_RESOURCE_t *display)
+void app_display_show_task(DISPLAY_RESOURCE_t *display)
 {
 	char map[8] = {0};
 	char *src;
 	
-	/* bsp_set_hv_state(ON); */ /* 注意先调试34063电路再打开此功能 */
+	bsp_set_hv_state(ON);       /* 注意先调试34063电路再打开此功能 */
 	app_display_set_show(Bit_RESET);
 	src = &display->map[0];
 	while(1)

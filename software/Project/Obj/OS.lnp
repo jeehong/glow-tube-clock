@@ -16,6 +16,7 @@
 ".\obj\misc.o"
 ".\obj\stm32f10x_usart.o"
 ".\obj\stm32f10x_exti.o"
+".\obj\stm32f10x_tim.o"
 ".\obj\croutine.o"
 ".\obj\event_groups.o"
 ".\obj\list.o"

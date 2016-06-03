@@ -212,6 +212,7 @@ static void app_ds3231_set_match(u8 mday_match, u8 hour_match, u8 min_match, u8 
 	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_ALARM1, buf, 4);
 }
 
+/* 清除中断状态，当触发中断后，只有清除中断状态，才允许再次触发中断 */
 static void app_ds3231_clear_state(void)
 {
 	u8 stat;
@@ -257,21 +258,22 @@ void app_ds3231_task(void *parame)
 	
 	/* set alarm */
 	alarm1.enabled = 1;
-	alarm1.time.sec = 10;
-	alarm1.time.min = 1;
-	alarm1.time.hour = 1;
+	alarm1.time.sec = 0;
+	alarm1.time.min = 0;
+	alarm1.time.hour = 12;
 	alarm1.time.mday = 1;
-	app_ds3231_enable_irq(0);	/* 设置失能RTC定时中断功能 */
-	app_ds3231_set_alarm(&alarm1);		/* 设置定时信息 */
-	app_ds3231_set_match(1, 1, 1, 1);	/* 设置闹钟模式，采用秒触发 */	
+	//app_ds3231_enable_irq(0);	/* 设置失能RTC定时中断功能 */
+	//app_ds3231_set_alarm(&alarm1);		/* 设置定时信息 */
+	//app_ds3231_set_match(1, 1, 1, 0);	/* 设置闹钟模式，采用秒触发 */	
 	timeSync = xSemaphoreCreateMutex();
-	app_ds3231_enable_irq(1);	/* 设置使能RTC定时中断功能 */
+	//app_ds3231_enable_irq(1);	/* 设置使能RTC定时中断功能 */
 	
 	/* app_ds3231_read_alarm(&alarm2);
 	dbg_string("sec:0x%x\r\n", alarm2.time.sec);
 	dbg_string("min:0x%x\r\n", alarm2.time.min);
 	dbg_string("hour:0x%x\r\n", alarm2.time.hour);
 	dbg_string("mday:0x%x\r\n", alarm2.time.mday); */
+	app_ds3231_clear_state();
 	while(1)
 	{
 		xSemaphoreTake(timeSync, portMAX_DELAY);
@@ -280,7 +282,7 @@ void app_ds3231_task(void *parame)
 		
 		app_ds3231_clear_state();
 		
-		dbg_string("Time:20%d-%d-%d %d %d:%d:%d\r\n", 
+        dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
 									time2.mon, 
 									time2.mday, 
@@ -294,7 +296,7 @@ void app_ds3231_task(void *parame)
 
 void EXTI0_IRQHandler(void)
 {
-	portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
 	
 	if(EXTI_GetITStatus(EXTI_Line0) != RESET) 
 	{		
