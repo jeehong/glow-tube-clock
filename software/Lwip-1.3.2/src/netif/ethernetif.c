@@ -79,7 +79,7 @@ static void low_level_init( struct netif *netif )	  /* µ×²ãÓ²¼þÇý¶¯Íø¿¨³õÊ¼»¯º¯Ê
 	dm9000x_inital(netif->hwaddr);     
 
 	/* Create the task that handles the EMAC. */
-	xTaskCreate( (pdTASK_CODE)ethernetif_input, "net_phy", netifINTERFACE_TASK_STACK_SIZE, netif, 3, NULL );
+	xTaskCreate( (pdTASK_CODE)ethernetif_input, "net_phy", netifINTERFACE_TASK_STACK_SIZE, netif, 3, NULL);
 }		   
 /*-----------------------------------------------------------*/
 

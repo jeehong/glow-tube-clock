@@ -244,7 +244,7 @@ static void app_ds3231_enable_irq(u8 flag)
 void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 {
 	struct rtc_time /*time1, */time2;
-	struct rtc_wkalrm alarm1/*, alarm2*/;
+	struct rtc_wkalrm /* alarm1, alarm2*/;
 
 	/* set time */
 	/* time1.sec = 0;
@@ -257,29 +257,38 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 	app_ds3231_set_time(&time1); */
 	
 	/* set alarm */
-	alarm1.enabled = 1;
-	alarm1.time.sec = 0;
-	alarm1.time.min = 0;
-	alarm1.time.hour = 12;
-	alarm1.time.mday = 1;
-	//app_ds3231_enable_irq(0);	/* 设置失能RTC定时中断功能 */
-	//app_ds3231_set_alarm(&alarm1);		/* 设置定时信息 */
-	//app_ds3231_set_match(1, 1, 1, 0);	/* 设置闹钟模式，采用秒触发 */	
-	timeSync = xSemaphoreCreateMutex();
-	//app_ds3231_enable_irq(1);	/* 设置使能RTC定时中断功能 */
+	// alarm1.enabled = 1;
+	// alarm1.time.sec = 0;
+	// alarm1.time.min = 0;
+	// alarm1.time.hour = 12;
+	// alarm1.time.mday = 1;
+	/* 设置失能RTC定时中断功能 */
+	// app_ds3231_enable_irq(0);	
+	/* 设置定时信息 */
+	// app_ds3231_set_alarm(&alarm1);	
+	/* 设置闹钟模式，采用秒触发 */	
+	// app_ds3231_set_match(1, 1, 0, 0);	
+	/* 设置使能RTC定时中断功能 */
+	// app_ds3231_enable_irq(1);
 	
 	/* app_ds3231_read_alarm(&alarm2);
 	dbg_string("sec:0x%x\r\n", alarm2.time.sec);
 	dbg_string("min:0x%x\r\n", alarm2.time.min);
 	dbg_string("hour:0x%x\r\n", alarm2.time.hour);
 	dbg_string("mday:0x%x\r\n", alarm2.time.mday); */
+	timeSync = xSemaphoreCreateMutex();
 	app_ds3231_clear_state();
 	while(1)
 	{
 		xSemaphoreTake(timeSync, portMAX_DELAY);
 		
 		app_ds3231_read_time(&time2);
-        p_src->buz[0] = 5;
+		
+		if(time2.hour > 12)
+			p_src->buz[0] = time2.hour - 12;
+		else
+        	p_src->buz[0] = time2.hour;
+        
 		xSemaphoreGive(p_src->xBuzzer);
 		app_ds3231_clear_state();
 		

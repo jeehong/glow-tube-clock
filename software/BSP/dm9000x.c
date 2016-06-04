@@ -84,7 +84,7 @@ void dm9000x_gpio_inital(void)
 static __inline void dm9000_out_byte(u16 outdata, u16 reg)
 {     
 	GPIO_InitTypeDef GPIO_dm9000x;
-	
+	portENTER_CRITICAL();
 	GPIO_dm9000x.GPIO_Pin = GPIO_Pin_All;
 	GPIO_dm9000x.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -96,14 +96,15 @@ static __inline void dm9000_out_byte(u16 outdata, u16 reg)
 	DM9000X_IOW(0);	
 	DM9000X_IOW(1);				   
 	DM9000X_CS(1); 
+	portEXIT_CRITICAL();
 }
 
 static __inline u16 dm9000_in_byte(u16 reg)
 {
 	u16 indata;
-	
 	GPIO_InitTypeDef GPIO_dm9000x;	
-	       
+
+	portENTER_CRITICAL();
  	GPIO_dm9000x.GPIO_Pin = GPIO_Pin_All;
 	GPIO_dm9000x.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_IPU ;
@@ -115,7 +116,7 @@ static __inline u16 dm9000_in_byte(u16 reg)
 	DM9000X_IOW(1);   
 	indata = DM9000X_DATA_IN();  			  
 	DM9000X_CS(1);
-	
+	portEXIT_CRITICAL();
 	return indata;
 }
 

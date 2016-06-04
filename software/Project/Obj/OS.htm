@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sat Jun 04 17:45:39 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sat Jun 04 23:50:26 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -305,8 +305,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[3a]"></a>app_ds3231_task</STRONG> (Thumb, 134 bytes, Stack size 40 bytes, app_ds3231.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = app_ds3231_task &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
+<P><STRONG><a name="[3a]"></a>app_ds3231_task</STRONG> (Thumb, 124 bytes, Stack size 32 bytes, app_ds3231.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = app_ds3231_task &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
@@ -1768,7 +1768,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[97]"></a>vPortEnterCritical</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, port.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<BR><BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_in_byte
+<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_out_byte
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
@@ -1800,7 +1802,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[98]"></a>vPortExitCritical</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, port.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<BR><BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_in_byte
+<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_out_byte
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
@@ -4381,10 +4385,12 @@ Local Symbols
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
 </UL>
 
-<P><STRONG><a name="[d6]"></a>dm9000_out_byte</STRONG> (Thumb, 124 bytes, Stack size 16 bytes, dm9000x.o(.text))
+<P><STRONG><a name="[d6]"></a>dm9000_out_byte</STRONG> (Thumb, 132 bytes, Stack size 16 bytes, dm9000x.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = dm9000_out_byte &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iow
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ior
@@ -4412,10 +4418,12 @@ Local Symbols
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
 </UL>
 
-<P><STRONG><a name="[d8]"></a>dm9000_in_byte</STRONG> (Thumb, 182 bytes, Stack size 16 bytes, dm9000x.o(.text))
+<P><STRONG><a name="[d8]"></a>dm9000_in_byte</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, dm9000x.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = dm9000_in_byte &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ior
 </UL>
