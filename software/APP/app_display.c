@@ -148,20 +148,20 @@ static void app_display_set_point(char src)
 	}	
 }	
 
-void app_display_show_task(DISPLAY_RESOURCE_t *display)
+void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 {
 	char map[8] = {0};
 	char *src;
 	
-	bsp_set_hv_state(ON);       /* 注意先调试34063电路再打开此功能 */
+	/* bsp_set_hv_state(ON); */       /* 注意先调试34063电路再打开此功能 */
 	app_display_set_show(Bit_RESET);
-	src = &display->map[0];
+	src = &p_src->map[0];
 	while(1)
 	{
-		xSemaphoreTake(display->xMutex, portMAX_DELAY);
+		xSemaphoreTake(p_src->xMutex, portMAX_DELAY);
 		app_display_set_point(src[TUBE_NUM]);
 		app_display_set_map(map, src);
-		xSemaphoreGive(display->xMutex);
+		xSemaphoreGive(p_src->xMutex);
 		app_display_set_data(map);
 		portENTER_CRITICAL();
 		app_display_show_data();

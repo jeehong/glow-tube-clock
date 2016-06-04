@@ -1,6 +1,9 @@
 #ifndef __APP_DS3131_H__
 #define	__APP_DS3131_H__
 
+#include "main.h"
+
+
 /*
  * The struct used to pass data via the following ioctl. Similar to the
  * struct tm in <time.h>, but it needs to be here so that the kernel
@@ -27,7 +30,7 @@ struct rtc_wkalrm {
 	struct rtc_time time;	/* time the alarm is set to */
 };
 
-void app_ds3231_task(void *parame);
+void app_ds3231_task(GLOBAL_SOURCE_t *p_src);
 
 #endif
 

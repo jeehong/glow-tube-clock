@@ -241,7 +241,7 @@ static void app_ds3231_enable_irq(u8 flag)
 	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_CR, &control, 1);	
 }
 
-void app_ds3231_task(void *parame)
+void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 {
 	struct rtc_time /*time1, */time2;
 	struct rtc_wkalrm alarm1/*, alarm2*/;
@@ -279,7 +279,8 @@ void app_ds3231_task(void *parame)
 		xSemaphoreTake(timeSync, portMAX_DELAY);
 		
 		app_ds3231_read_time(&time2);
-		
+        p_src->buz[0] = 5;
+		xSemaphoreGive(p_src->xBuzzer);
 		app_ds3231_clear_state();
 		
         dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 

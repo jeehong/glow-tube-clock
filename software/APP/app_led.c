@@ -29,7 +29,7 @@ void app_led_init(void)
 }
 
 
-void app_led_task_blink(DISPLAY_RESOURCE_t *display)
+void app_led_task_blink(GLOBAL_SOURCE_t *p_src)
 {
 	portTickType xLastWakeTime;
 	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
@@ -39,16 +39,16 @@ void app_led_task_blink(DISPLAY_RESOURCE_t *display)
 	while(1)
 	{
 		
-		//LED_PIN_GROUP->BSRR = port_list[index % 3];
+		LED_PIN_GROUP->BSRR = port_list[index % 3];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(80));	
-		//LED_PIN_GROUP->BRR = port_list[index % 3];
+		LED_PIN_GROUP->BRR = port_list[index % 3];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
 		if(index > 9)
 			index = 0;
-		xSemaphoreTake(display->xMutex, portMAX_DELAY);
-		memset(&display->map[0], index++, sizeof(char) * TUBE_NUM);	/* 6个辉光管 */
-		display->map[6] = ((index % 3) << 4) | (index % 3);		/* 两个冒号 */
-		xSemaphoreGive(display->xMutex);
+		xSemaphoreTake(p_src->xMutex, portMAX_DELAY);
+		memset(&p_src->map[0], index++, sizeof(char) * TUBE_NUM);	/* 6个辉光管 */
+		p_src->map[6] = ((index % 3) << 4) | (index % 3);		/* 两个冒号 */
+		xSemaphoreGive(p_src->xMutex);
 	}
 }
 

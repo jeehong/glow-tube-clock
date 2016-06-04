@@ -187,6 +187,11 @@ static void bsp_TIM1_CH4_io_init(void)
 { 
     GPIO_InitTypeDef GPIO_InitStructure; 
 
+	/* TIM1 clock enable */
+	/* PCLK1 经过2倍频后座位TIM3的时钟源等于72MHz */
+    /* GPIOA and GPIOB clock enable */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1 | RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE); 
+
     /* 
      * Config PA12 为浮空输入，
      * PA12已经连接到PA11，引用PA11上的TIM1_CH4的资源，
@@ -197,13 +202,7 @@ static void bsp_TIM1_CH4_io_init(void)
     GPIO_Init(GPIOA, &GPIO_InitStructure); 
 
 
-	/* TIM1 clock enable */
-	/* PCLK1 经过2倍频后座位TIM3的时钟源等于72MHz */
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE); 
-
-    /* GPIOA and GPIOB clock enable */
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); 
-
+    
     /*GPIOA Configuration: TIM3 channel 4 as alternate function push-pull */
     GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;		    /* 复用推挽输出 */
@@ -218,7 +217,7 @@ static void bsp_TIM1_CH4_pwm_init(void)
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_OCInitTypeDef  TIM_OCInitStructure;
 
-	u16 CCR_Val = 500; 
+	u16 CCR_Val = 1000; 
 
     /* -----------------------------------------------------------------------
     TIM1 Configuration: generate 4 PWM signals with 4 different duty cycles:
@@ -229,14 +228,14 @@ static void bsp_TIM1_CH4_pwm_init(void)
 	----------------------------------------------------------------------- */
 
 	/* Time base configuration */		 
-	TIM_TimeBaseStructure.TIM_Period = 999;             /* 从0计数至999，即1000为一个定时周期 */
+	TIM_TimeBaseStructure.TIM_Period = 48000;             /* 从0计数至999，即1000为一个定时周期 */
 	TIM_TimeBaseStructure.TIM_Prescaler = 0;	        /* 不设置预分频，即72MHz */
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1 ;	    /* 设置时钟分频系数:不分频 */
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;     /* 向上计数 */
 	
 	TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
 	
-	/* PWM1 Mode configuration: Channel1 */
+	/* PWM1 Mode configuration: Channel4 */
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;	            /* PWM mode1 */
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;	
 	TIM_OCInitStructure.TIM_Pulse = CCR_Val;	                    /* 设置跳变值，当计数器累加到该值，电平跳变 */
@@ -248,6 +247,7 @@ static void bsp_TIM1_CH4_pwm_init(void)
 	TIM_ARRPreloadConfig(TIM1, ENABLE);			 /* 使能TIM1重载寄存器ARR */
 	
 	/* TIM1 enable counter */
-	TIM_Cmd(TIM1, ENABLE);                 
+	TIM_Cmd(TIM1, ENABLE);
+    TIM_CtrlPWMOutputs(TIM1, DISABLE);
 }
 

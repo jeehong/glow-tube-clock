@@ -120,6 +120,7 @@
 #include "app_display.h"
 #include "app_sht10.h"
 #include "app_ds3231.h"
+#include "app_buz.h"
 
 #include "LwIPEntry.h"
 
@@ -129,7 +130,7 @@
 /* 这个结构体中的互斥量用来描述硬件显示资源是否可用 
  * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
  */
-static DISPLAY_RESOURCE_t display_source;	
+static GLOBAL_SOURCE_t global_source;	
 
 /* The time between cycles of the 'check' task. */
 int main( void )
@@ -138,18 +139,19 @@ int main( void )
 	dbg_string("------Glow tube clock!------\r\n");
 	
 	/* 初始化LwIP */
-	//vlwIPInit();
-	//LwIP_Init();
+	vlwIPInit();
+	LwIP_Init();
 
 	
-	display_source.xMutex = xSemaphoreCreateMutex();
-	
+	global_source.xMutex = xSemaphoreCreateMutex();
+	global_source.xBuzzer = xSemaphoreCreateMutex();
 	/* Start the tasks defined within this file/specific to this demo. */
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
-	xTaskCreate((pdTASK_CODE)app_display_show_task, "app_display", 300, &display_source, 6, NULL);
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, &display_source, 3, NULL);
+	xTaskCreate((pdTASK_CODE)app_display_show_task, "app_display", 300, &global_source, 6, NULL);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, &global_source, 3, NULL);
 	xTaskCreate((pdTASK_CODE)app_sht10_task, "app_sht10", 300, NULL, 3, NULL);
-	xTaskCreate((pdTASK_CODE)app_ds3231_task, "app_ds3231", 300, NULL, 3, NULL);
+	xTaskCreate((pdTASK_CODE)app_ds3231_task, "app_ds3231", 300, &global_source, 3, NULL);
+    xTaskCreate((pdTASK_CODE)app_buz_task, "app_buz", 300, &global_source, 4, NULL);
 	/* Start the scheduler. */
 	vTaskStartScheduler();
 

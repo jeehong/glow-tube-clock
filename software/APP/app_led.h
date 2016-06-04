@@ -5,8 +5,6 @@
 
 #include "main.h"
 
-#define mainDELAY_MS(ms)			( ( TickType_t ) ms / portTICK_PERIOD_MS )
-
 
 #define	LED_RCC_APB			RCC_APB2Periph_GPIOC
 #define	LED_PIN_GROUP		GPIOC
@@ -16,7 +14,7 @@
 
 
 void app_led_init(void);	 
-void app_led_task_blink(DISPLAY_RESOURCE_t *display);
+void app_led_task_blink(GLOBAL_SOURCE_t *display);
 	 
 
 #endif

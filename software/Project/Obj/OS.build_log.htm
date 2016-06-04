@@ -8,20 +8,16 @@ Project File Date:  06/02/2016
 
 <h2>Output:</h2>
 Build target 'FreeRTOS'
-compiling main.c...
-compiling app_led.c...
-..\APP\app_led.c(35): warning:  #177-D: variable "port_list" was declared but never referenced
-        uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
-..\APP\app_led.c: 1 warning, 0 errors
-compiling app_display.c...
+compiling app_buz.c...
 linking...
-Program Size: Code=56204 RO-data=624 RW-data=328 ZI-data=37400  
+Program Size: Code=58156 RO-data=624 RW-data=372 ZI-data=40540  
 FromELF: creating hex file...
-".\Obj\OS.axf" - 0 Error(s), 1 Warning(s).
-</pre>
-</body>
-</html>
-Link info:
+".\Obj\OS.axf" - 0 Error(s), 0 Warning(s).
+Load "C:\\Users\\Administrator\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
+Set JLink Project File to "C:\Users\Administrator\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
+* JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
+ 
+JLink info:
 ------------
 DLL: V4.80g, compiled Feb 13 2014 20:50:02
 Firmware: J-Link ARM V8 compiled Jan 31 2018 18:34:52
@@ -42,6 +38,44 @@ Target info:
 Device: STM32F103RC
 VTarget = 3.338V
 State of Pins: 
+TCK: 0, TDI: 1, TDO: 0, TMS: 0, TRES: 1, TRST: 0
+Hardware-Breakpoints: 6
+Software-Breakpoints: 8192
+Watchpoints:          4
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+</pre>
+</body>
+</html>
+\software\\Project\\Obj\\OS.axf" 
+Set JLink Project File to "C:\Users\Administrator\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
+* JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
+ 
+JLink info:
+------------
+DLL: V4.80g, compiled Feb 13 2014 20:50:02
+Firmware: J-Link ARM V8 compiled Jan 31 2018 18:34:52
+Hardware: V8.00
+S/N : 20080643 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x1BA01477
+* JLink Info: Found SWD-DP with ID 0x1BA01477
+* JLink Info: Found Cortex-M3 r1p1, Little endian.
+* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
+* JLink Info: TPIU fitted.
+* JLink Info: ETM fitted.
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: STM32F103RC
+VTarget = 3.332V
+State of Pins: 
 TCK: 0, TDI: 1, TDO: 1, TMS: 0, TRES: 1, TRST: 1
 Hardware-Breakpoints: 6
 Software-Breakpoints: 8192
@@ -52,9 +86,9 @@ Erase Done.
 Programming Done.
 Verify OK.
 Application running ...
-g ...
-Error: Target DLL has been cancelled. Debugger aborted !
-3RC" selected (256 KB flash, 48 KB RAM).
+Load "C:\\Users\\Administrator\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
+Set JLink Project File to "C:\Users\Administrator\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
+* JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
  
 JLink info:
 ------------
