@@ -47,7 +47,7 @@ void app_led_task_blink(GLOBAL_SOURCE_t *p_src)
 			index = 0;
 		xSemaphoreTake(p_src->xMutex, portMAX_DELAY);
 		memset(&p_src->map[0], index++, sizeof(char) * TUBE_NUM);	/* 6个辉光管 */
-		p_src->map[6] = ((index % 3) << 4) | (index % 3);		/* 两个冒号 */
+		p_src->map[6] = ((index % 4) << 4) | (index % 4);		/* 两个冒号 */
 		xSemaphoreGive(p_src->xMutex);
 	}
 }

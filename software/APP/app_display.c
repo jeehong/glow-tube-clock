@@ -33,13 +33,14 @@ static void app_display_set_byte(unsigned char data)
 	
 	for(index = 0; index < 8; index++) 
 	{
-		if((data << index) & 0x80) 
+	    bsp_74hc595_set_OFFSET(Bit_RESET);
+		if((data >> index) & 0x01) 
 			bsp_74hc595_set_DATA(Bit_SET);
 		else 
 			bsp_74hc595_set_DATA(Bit_RESET);
-		bsp_74hc595_set_OFFSET(Bit_RESET);
-		delay50ns();
+			
 		bsp_74hc595_set_OFFSET(Bit_SET);
+		delay50ns();
 	}
 } 
 
@@ -47,6 +48,7 @@ static void app_display_set_byte(unsigned char data)
 static void app_display_show_data(void)
 {
 	bsp_74hc595_set_LOCK(Bit_RESET);
+	delay50ns();
 	delay50ns();
 	bsp_74hc595_set_LOCK(Bit_SET);	
 }
@@ -80,7 +82,7 @@ static void app_display_set_map(char *desc, char *src)
 	const unsigned char tube_num = TUBE_NUM - 1;	/* 管子总数 */
 	unsigned char calc;
 
-	memset(desc, 0, sizeof(char) << 3);
+	memset(desc, 0, sizeof(char) * 8);
 	for(tube = 0; tube <= tube_num; tube++)
 	{
 		if((unsigned char)src[tube] <= 9)
@@ -153,7 +155,7 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 	char map[8] = {0};
 	char *src;
 	
-	/* bsp_set_hv_state(ON); */       /* 注意先调试34063电路再打开此功能 */
+	bsp_set_hv_state(ON);       /* 注意先调试34063电路再打开此功能 */
 	app_display_set_show(Bit_RESET);
 	src = &p_src->map[0];
 	while(1)
