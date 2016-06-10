@@ -21,7 +21,7 @@ static void app_display_set_point(char src);
 
 static void delay50ns(void)
 {
-	char ns = 5;
+	char ns = 20;
 	
 	while(ns--) ;
 }
@@ -34,7 +34,7 @@ static void app_display_set_byte(unsigned char data)
 	for(index = 0; index < 8; index++) 
 	{
 	    bsp_74hc595_set_OFFSET(Bit_RESET);
-		if((data >> index) & 0x01) 
+		if((data << index) & 0x08) 
 			bsp_74hc595_set_DATA(Bit_SET);
 		else 
 			bsp_74hc595_set_DATA(Bit_RESET);
@@ -47,10 +47,9 @@ static void app_display_set_byte(unsigned char data)
 /* 将传入的数据使能到输出管脚 */
 static void app_display_show_data(void)
 {
-	bsp_74hc595_set_LOCK(Bit_RESET);
-	delay50ns();
-	delay50ns();
 	bsp_74hc595_set_LOCK(Bit_SET);	
+	delay50ns();
+	bsp_74hc595_set_LOCK(Bit_RESET);
 }
 
 /* 设置锁存器是否输出 1:out */
@@ -66,8 +65,11 @@ static void app_display_set_data(char *pdata)
 {
 	unsigned char index;
 
-	for(index = 0; index < 8; index++)
-		app_display_set_byte(pdata[index]);
+	taskENTER_CRITICAL();
+	for(index = 8; index > 0; index--)
+		app_display_set_byte(pdata[index - 1]);
+	app_display_show_data();
+	taskEXIT_CRITICAL();
 }
 
 /*
@@ -158,6 +160,7 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 	bsp_set_hv_state(ON);       /* 注意先调试34063电路再打开此功能 */
 	app_display_set_show(Bit_RESET);
 	src = &p_src->map[0];
+	app_display_set_show(Bit_SET);
 	while(1)
 	{
 		xSemaphoreTake(p_src->xMutex, portMAX_DELAY);
@@ -165,10 +168,7 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 		app_display_set_map(map, src);
 		xSemaphoreGive(p_src->xMutex);
 		app_display_set_data(map);
-		portENTER_CRITICAL();
-		app_display_show_data();
-		portEXIT_CRITICAL();
-		app_display_set_show(Bit_SET);
+		
 		vTaskDelay(mainDELAY_MS(100));
 	}	
 }

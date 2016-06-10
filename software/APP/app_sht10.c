@@ -80,7 +80,7 @@ void app_sht10_task(void *parame)
 	{
 		temp = app_sht10_get_info(TEMP);
 		hum = app_sht10_get_info(HUM);
-		dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum);
+		//dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum);
 		vTaskDelay(5000);
 	}
 }

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Jun 06 20:45:35 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu Jun 09 11:51:21 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -193,13 +193,14 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_init
 </UL>
 
-<P><STRONG><a name="[38]"></a>app_led_task_blink</STRONG> (Thumb, 158 bytes, Stack size 16 bytes, app_led.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_led_task_blink &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
+<P><STRONG><a name="[38]"></a>app_led_task_blink</STRONG> (Thumb, 128 bytes, Stack size 16 bytes, app_led.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 304<LI>Call Chain = app_led_task_blink &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGetTickCount
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelayUntil
+<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbg_string
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
@@ -227,7 +228,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_read_id
-<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
+<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_led_task_blink
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -257,16 +258,13 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_display_show_task &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_point
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_map
+<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_point
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_map
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_show
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_data
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
@@ -295,13 +293,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 </UL>
 
-<P><STRONG><a name="[39]"></a>app_sht10_task</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, app_sht10.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 304<LI>Call Chain = app_sht10_task &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
+<P><STRONG><a name="[39]"></a>app_sht10_task</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, app_sht10.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = app_sht10_task &rArr; app_sht10_get_info &rArr; app_sht10_calc_th &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_info
+<BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_info
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
-<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbg_string
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
@@ -453,8 +449,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayus
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_sda_dir
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_BUS_SDA_STATE
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
@@ -468,8 +464,8 @@ Global Symbols
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayus
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_sda_dir
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_BUS_SDA_STATE
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_res
@@ -481,8 +477,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_stop
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_start_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_enable_irq
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
@@ -498,8 +494,8 @@ Global Symbols
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_start_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_enable_irq
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
@@ -1298,8 +1294,8 @@ Global Symbols
 <P><STRONG><a name="[ff]"></a>xQueueGenericReset</STRONG> (Thumb, 122 bytes, Stack size 16 bytes, queue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = xQueueGenericReset &rArr; xTaskRemoveFromEventList
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskRemoveFromEventList
 <LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInitialise
 </UL>
@@ -1321,8 +1317,8 @@ Global Symbols
 <P><STRONG><a name="[78]"></a>xQueueGenericSend</STRONG> (Thumb, 276 bytes, Stack size 56 bytes, queue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskRemoveFromEventList
 <LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskCheckForTimeOut
 <LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSetTimeOutState
@@ -1370,8 +1366,8 @@ Global Symbols
 <P><STRONG><a name="[76]"></a>xQueueGenericReceive</STRONG> (Thumb, 342 bytes, Stack size 56 bytes, queue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = xQueueGenericReceive &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskRemoveFromEventList
 <LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskCheckForTimeOut
 <LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSetTimeOutState
@@ -1410,15 +1406,15 @@ Global Symbols
 <P><STRONG><a name="[116]"></a>uxQueueMessagesWaiting</STRONG> (Thumb, 18 bytes, Stack size 16 bytes, queue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = uxQueueMessagesWaiting
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_mbox_free
 </UL>
 
 <P><STRONG><a name="[117]"></a>uxQueueSpacesAvailable</STRONG> (Thumb, 24 bytes, Stack size 16 bytes, queue.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 
 <P><STRONG><a name="[2ad]"></a>uxQueueMessagesWaitingFromISR</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, queue.o(.text), UNUSED)
@@ -1458,8 +1454,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[121]"></a>vTaskDelete</STRONG> (Thumb, 176 bytes, Stack size 16 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvDeleteTCB
 <LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvResetNextTaskUnblockTime
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
@@ -1480,8 +1476,8 @@ Global Symbols
 <P><STRONG><a name="[10e]"></a>xTaskResumeAll</STRONG> (Thumb, 284 bytes, Stack size 16 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskIncrementTick
 <LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvResetNextTaskUnblockTime
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
@@ -1536,22 +1532,22 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[127]"></a>eTaskGetState</STRONG> (Thumb, 88 bytes, Stack size 24 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskGetTaskInfo
 </UL>
 
 <P><STRONG><a name="[128]"></a>uxTaskPriorityGet</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 
 <P><STRONG><a name="[2b3]"></a>uxTaskPriorityGetFromISR</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, tasks.o(.text), UNUSED)
 
 <P><STRONG><a name="[129]"></a>vTaskPrioritySet</STRONG> (Thumb, 226 bytes, Stack size 32 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
 </UL>
@@ -1562,8 +1558,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[12a]"></a>vTaskSuspend</STRONG> (Thumb, 220 bytes, Stack size 16 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSwitchContext
 <LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvResetNextTaskUnblockTime
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
@@ -1571,8 +1567,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[12b]"></a>vTaskResume</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvTaskIsTaskSuspended
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
@@ -1668,8 +1664,8 @@ Global Symbols
 <P><STRONG><a name="[10c]"></a>xTaskCheckForTimeOut</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = xTaskCheckForTimeOut
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSetTimeOutState
 </UL>
 <BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
@@ -1713,20 +1709,20 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[138]"></a>ulTaskNotifyTake</STRONG> (Thumb, 108 bytes, Stack size 16 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvAddCurrentTaskToDelayedList
 </UL>
 
 <P><STRONG><a name="[139]"></a>xTaskNotifyWait</STRONG> (Thumb, 150 bytes, Stack size 24 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvAddCurrentTaskToDelayedList
 </UL>
 
 <P><STRONG><a name="[13a]"></a>xTaskGenericNotify</STRONG> (Thumb, 216 bytes, Stack size 32 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
 </UL>
@@ -1742,8 +1738,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[13d]"></a>xTaskNotifyStateClear</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, tasks.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 
 <P><STRONG><a name="[11f]"></a>pxPortInitialiseStack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, port.o(.text))
@@ -1767,16 +1763,16 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskEndScheduler
 </UL>
 
-<P><STRONG><a name="[97]"></a>vPortEnterCritical</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, port.o(.text))
+<P><STRONG><a name="[95]"></a>vPortEnterCritical</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, port.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_in_byte
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_out_byte
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
-<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 <LI><a href="#[155]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_assert
 <LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_arch_protect
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskNotifyStateClear
@@ -1801,16 +1797,16 @@ Global Symbols
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeAll
 </UL>
 
-<P><STRONG><a name="[98]"></a>vPortExitCritical</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, port.o(.text))
+<P><STRONG><a name="[96]"></a>vPortExitCritical</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, port.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_in_byte
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000_out_byte
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
-<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 <LI><a href="#[154]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_arch_unprotect
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskNotifyStateClear
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericNotify
@@ -2032,7 +2028,7 @@ Global Symbols
 <P><STRONG><a name="[153]"></a>sys_arch_protect</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, sys_arch.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = sys_arch_protect
 </UL>
-<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pbuf_ref
 <LI><a href="#[167]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memp_malloc
@@ -2051,7 +2047,7 @@ Global Symbols
 <P><STRONG><a name="[154]"></a>sys_arch_unprotect</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, sys_arch.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = sys_arch_unprotect
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pbuf_ref
 <LI><a href="#[167]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memp_malloc
@@ -2077,7 +2073,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[155]"></a>sys_assert</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, sys_arch.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR><BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 
 <P><STRONG><a name="[158]"></a>etharp_tmr</STRONG> (Thumb, 154 bytes, Stack size 8 bytes, etharp.o(.text))
@@ -3999,7 +3995,6 @@ Global Symbols
 
 <P><STRONG><a name="[9d]"></a>__aeabi_f2d</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, f2d.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_calc_th
-<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 </UL>
 
 <P><STRONG><a name="[a0]"></a>__aeabi_d2f</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, d2f.o(.text))
@@ -4132,7 +4127,7 @@ Global Symbols
 
 <P><STRONG><a name="[2d6]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[8d]"></a>bsp_74hc595_set_DATA</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_DATA))
+<P><STRONG><a name="[8e]"></a>bsp_74hc595_set_DATA</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_DATA))
 <BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
 </UL>
 
@@ -4144,7 +4139,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_show
 </UL>
 
-<P><STRONG><a name="[8e]"></a>bsp_74hc595_set_OFFSET</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_OFFSET))
+<P><STRONG><a name="[8d]"></a>bsp_74hc595_set_OFFSET</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_OFFSET))
 <BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
 </UL>
 <P>
@@ -4185,8 +4180,8 @@ Local Symbols
 <P><STRONG><a name="[8c]"></a>app_display_set_byte</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = app_display_set_byte
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_OFFSET
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_DATA
+<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_OFFSET
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_DATA
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay50ns
 </UL>
 <BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
@@ -4198,7 +4193,7 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_LOCK
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay50ns
 </UL>
-<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
 </UL>
 
 <P><STRONG><a name="[92]"></a>app_display_set_show</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, app_display.o(.text))
@@ -4209,21 +4204,24 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
-<P><STRONG><a name="[94]"></a>app_display_set_data</STRONG> (Thumb, 24 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[94]"></a>app_display_set_data</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = app_display_set_data &rArr; app_display_set_byte
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_data
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
 </UL>
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
-<P><STRONG><a name="[96]"></a>app_display_set_map</STRONG> (Thumb, 74 bytes, Stack size 20 bytes, app_display.o(.text))
+<P><STRONG><a name="[98]"></a>app_display_set_map</STRONG> (Thumb, 74 bytes, Stack size 20 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = app_display_set_map
 </UL>
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
-<P><STRONG><a name="[95]"></a>app_display_set_point</STRONG> (Thumb, 172 bytes, Stack size 0 bytes, app_display.o(.text))
+<P><STRONG><a name="[97]"></a>app_display_set_point</STRONG> (Thumb, 172 bytes, Stack size 0 bytes, app_display.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
@@ -4388,8 +4386,8 @@ Local Symbols
 <P><STRONG><a name="[d6]"></a>dm9000_out_byte</STRONG> (Thumb, 132 bytes, Stack size 16 bytes, dm9000x.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = dm9000_out_byte &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iow
@@ -4421,8 +4419,8 @@ Local Symbols
 <P><STRONG><a name="[d8]"></a>dm9000_in_byte</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, dm9000x.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = dm9000_in_byte &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ior
@@ -4508,8 +4506,8 @@ Local Symbols
 <P><STRONG><a name="[104]"></a>prvUnlockQueue</STRONG> (Thumb, 126 bytes, Stack size 16 bytes, queue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = prvUnlockQueue &rArr; xTaskRemoveFromEventList
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskRemoveFromEventList
 <LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskMissedYield
 </UL>
@@ -4520,8 +4518,8 @@ Local Symbols
 <P><STRONG><a name="[106]"></a>prvIsQueueFull</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, queue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = prvIsQueueFull
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 </UL>
@@ -4547,8 +4545,8 @@ Local Symbols
 <P><STRONG><a name="[111]"></a>prvIsQueueEmpty</STRONG> (Thumb, 26 bytes, Stack size 16 bytes, queue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = prvIsQueueEmpty
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 </UL>
@@ -4574,8 +4572,8 @@ Local Symbols
 <P><STRONG><a name="[11b]"></a>prvAddNewTaskToReadyList</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = prvAddNewTaskToReadyList &rArr; prvInitialiseTaskLists
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvInitialiseTaskLists
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
 </UL>
@@ -4631,8 +4629,8 @@ Local Symbols
 <P><STRONG><a name="[12e]"></a>prvCheckTasksWaitingTermination</STRONG> (Thumb, 86 bytes, Stack size 16 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = prvCheckTasksWaitingTermination &rArr; prvDeleteTCB &rArr; vPortFree &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvDeleteTCB
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeAll
