@@ -19,9 +19,12 @@ static void app_display_set_data(char *pdata);
 static void app_display_set_map(char *desc, char *src);
 static void app_display_set_point(char src);
 
+/*
+ * 实际测试1us
+ */
 static void delay50ns(void)
 {
-	char ns = 20;
+	char ns = 10;
 	
 	while(ns--) ;
 }
@@ -34,11 +37,11 @@ static void app_display_set_byte(unsigned char data)
 	for(index = 0; index < 8; index++) 
 	{
 	    bsp_74hc595_set_OFFSET(Bit_RESET);
-		if((data << index) & 0x08) 
+		if((data << index) & 0x80) 
 			bsp_74hc595_set_DATA(Bit_SET);
 		else 
 			bsp_74hc595_set_DATA(Bit_RESET);
-			
+		delay50ns();	
 		bsp_74hc595_set_OFFSET(Bit_SET);
 		delay50ns();
 	}
@@ -83,8 +86,7 @@ static void app_display_set_map(char *desc, char *src)
 	unsigned char tube;		/* 当前操作的管子序号 */
 	const unsigned char tube_num = TUBE_NUM - 1;	/* 管子总数 */
 	unsigned char calc;
-
-	memset(desc, 0, sizeof(char) * 8);
+	
 	for(tube = 0; tube <= tube_num; tube++)
 	{
 		if((unsigned char)src[tube] <= 9)
@@ -158,7 +160,6 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 	char *src;
 	
 	bsp_set_hv_state(ON);       /* 注意先调试34063电路再打开此功能 */
-	app_display_set_show(Bit_RESET);
 	src = &p_src->map[0];
 	app_display_set_show(Bit_SET);
 	while(1)

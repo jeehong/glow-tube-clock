@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu Jun 09 11:51:21 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Fri Jun 10 16:50:22 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -258,7 +258,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 98 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_display_show_task &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_point
@@ -4177,7 +4177,7 @@ Local Symbols
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
 </UL>
 
-<P><STRONG><a name="[8c]"></a>app_display_set_byte</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[8c]"></a>app_display_set_byte</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = app_display_set_byte
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_OFFSET
@@ -4215,7 +4215,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
-<P><STRONG><a name="[98]"></a>app_display_set_map</STRONG> (Thumb, 74 bytes, Stack size 20 bytes, app_display.o(.text))
+<P><STRONG><a name="[98]"></a>app_display_set_map</STRONG> (Thumb, 68 bytes, Stack size 20 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = app_display_set_map
 </UL>
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
