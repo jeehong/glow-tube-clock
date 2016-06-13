@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Fri Jun 10 16:50:22 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Jun 13 11:08:58 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -262,8 +262,8 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_display_show_task &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_point
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_map
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_calc_map
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_show
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
@@ -1770,7 +1770,7 @@ Global Symbols
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[155]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_assert
@@ -1804,7 +1804,7 @@ Global Symbols
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[154]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_arch_unprotect
@@ -4128,19 +4128,19 @@ Global Symbols
 <P><STRONG><a name="[2d6]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[8e]"></a>bsp_74hc595_set_DATA</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_DATA))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
-</UL>
-
-<P><STRONG><a name="[91]"></a>bsp_74hc595_set_LOCK</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_LOCK))
-<BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_data
+<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_byte
 </UL>
 
 <P><STRONG><a name="[93]"></a>bsp_74hc595_set_OE</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_OE))
 <BR><BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_show
 </UL>
 
-<P><STRONG><a name="[8d]"></a>bsp_74hc595_set_OFFSET</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_OFFSET))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
+<P><STRONG><a name="[8d]"></a>bsp_74hc595_set_SH_CP</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_SH_CP))
+<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_byte
+</UL>
+
+<P><STRONG><a name="[91]"></a>bsp_74hc595_set_ST_CP</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, app_display.o(i.bsp_74hc595_set_ST_CP))
+<BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_data
 </UL>
 <P>
 <H3>
@@ -4174,26 +4174,26 @@ Local Symbols
 
 <P><STRONG><a name="[8f]"></a>delay50ns</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, app_display.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_data
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_byte
 </UL>
 
-<P><STRONG><a name="[8c]"></a>app_display_set_byte</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, app_display.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = app_display_set_byte
+<P><STRONG><a name="[8c]"></a>app_display_write_byte</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, app_display.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = app_display_write_byte
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_OFFSET
+<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_SH_CP
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_DATA
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay50ns
 </UL>
-<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
+<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 </UL>
 
 <P><STRONG><a name="[90]"></a>app_display_show_data</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = app_display_show_data
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_LOCK
+<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_ST_CP
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay50ns
 </UL>
-<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_data
+<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 </UL>
 
 <P><STRONG><a name="[92]"></a>app_display_set_show</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, app_display.o(.text))
@@ -4204,19 +4204,19 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
-<P><STRONG><a name="[94]"></a>app_display_set_data</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, app_display.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = app_display_set_data &rArr; app_display_set_byte
+<P><STRONG><a name="[94]"></a>app_display_write_data</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, app_display.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = app_display_write_data &rArr; app_display_write_byte
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_data
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_byte
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_byte
 </UL>
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
-<P><STRONG><a name="[98]"></a>app_display_set_map</STRONG> (Thumb, 68 bytes, Stack size 20 bytes, app_display.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = app_display_set_map
+<P><STRONG><a name="[98]"></a>app_display_calc_map</STRONG> (Thumb, 68 bytes, Stack size 20 bytes, app_display.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = app_display_calc_map
 </UL>
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>

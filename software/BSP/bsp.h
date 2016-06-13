@@ -79,7 +79,7 @@ __inline void bsp_74hc595_set_OE(BitAction act)
 		HC595_OE_PIN_GROUP->BRR = HC595_OE_PIN;
 }
 
-__inline void bsp_74hc595_set_LOCK(BitAction act)
+__inline void bsp_74hc595_set_ST_CP(BitAction act)
 {
 	if(act == Bit_SET)
 		HC595_LOCK_PIN_GROUP->BSRR = HC595_LOCK_PIN;
@@ -87,7 +87,7 @@ __inline void bsp_74hc595_set_LOCK(BitAction act)
 		HC595_LOCK_PIN_GROUP->BRR = HC595_LOCK_PIN;
 }
 
-__inline void bsp_74hc595_set_OFFSET(BitAction act)
+__inline void bsp_74hc595_set_SH_CP(BitAction act)
 {
 	if(act == Bit_SET)
 		HC595_OFFSET_PIN_GROUP->BSRR = HC595_OFFSET_PIN;
