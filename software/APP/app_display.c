@@ -34,7 +34,7 @@ static void app_display_write_byte(unsigned char data)
 {  
 	unsigned char index;
 	
-	for(index = 0; index < 8; index++) 
+	for(index = 0; index < CHIP595_NUM; index++) 
 	{
 	    bsp_74hc595_set_SH_CP(Bit_RESET);
 		if((data << index) & 0x80) 
@@ -71,6 +71,7 @@ static void app_display_write_data(char *pdata)
 	taskENTER_CRITICAL();
 	for(index = 8; index > 0; index--)
 		app_display_write_byte(pdata[index - 1]);
+
 	app_display_show_data();
 	taskEXIT_CRITICAL();
 }
@@ -86,7 +87,8 @@ static void app_display_calc_map(char *desc, char *src)
 	unsigned char tube;		/* 当前操作的管子序号 */
 	const unsigned char tube_num = TUBE_NUM - 1;	/* 管子总数 */
 	unsigned char calc;
-	
+
+	memset(desc, 0, CHIP595_NUM);
 	for(tube = 0; tube <= tube_num; tube++)
 	{
 		if((unsigned char)src[tube] <= 9)
@@ -156,7 +158,7 @@ static void app_display_set_point(char src)
 
 void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 {
-	char map[8] = {0};
+	char map[CHIP595_NUM] = {0};
 	char *src;
 	
 	bsp_set_hv_state(ON);       /* 注意先调试34063电路再打开此功能 */
@@ -170,7 +172,13 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 		xSemaphoreGive(p_src->xMutex);
 		app_display_write_data(map);
 		
-		vTaskDelay(mainDELAY_MS(100));
+		if(p_src->map[6] == 0)
+			p_src->map[6] = 0x33;
+		else
+			p_src->map[6] = 0;
+
+		vTaskDelay(mainDELAY_MS(500));
+
 	}	
 }
 

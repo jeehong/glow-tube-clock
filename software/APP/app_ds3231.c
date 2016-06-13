@@ -267,7 +267,7 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 	/* 设置定时信息 */
 	// app_ds3231_set_alarm(&alarm1);	
 	/* 设置闹钟模式，采用秒触发 */	
-	// app_ds3231_set_match(1, 1, 0, 0);	
+	app_ds3231_set_match(1, 1, 1, 1);	
 	/* 设置使能RTC定时中断功能 */
 	// app_ds3231_enable_irq(1);
 	
@@ -284,14 +284,27 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 		
 		app_ds3231_read_time(&time2);
 		
-		if(time2.hour > 12)
-			p_src->buz[0] = time2.hour - 12;
-		else
-        	p_src->buz[0] = time2.hour;
-        
-		xSemaphoreGive(p_src->xBuzzer);
+		if((time2.min == 0) && (time2.sec == 0))
+		{
+			if(time2.hour > 12)
+				p_src->buz[0] = time2.hour - 12;
+			else
+				p_src->buz[0] = time2.hour;
+			
+			xSemaphoreGive(p_src->xBuzzer);
+		}
 		app_ds3231_clear_state();
+
+		xSemaphoreTake(p_src->xMutex, portMAX_DELAY);
 		
+		p_src->map[0] = time2.hour / 10;
+		p_src->map[1] = time2.hour % 10;
+		p_src->map[2] = time2.min / 10;
+		p_src->map[3] = time2.min % 10;
+		p_src->map[4] = time2.sec / 10;
+		p_src->map[5] = time2.sec % 10;
+
+		xSemaphoreGive(p_src->xMutex);
         dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
 									time2.mon, 
