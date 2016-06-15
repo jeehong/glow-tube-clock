@@ -143,13 +143,13 @@ int main( void )
 	LwIP_Init();
 
 	
-	global_source.xMutex = xSemaphoreCreateMutex();
+	global_source.xDisplay = xSemaphoreCreateMutex();
 	global_source.xBuzzer = xSemaphoreCreateMutex();
 	/* Start the tasks defined within this file/specific to this demo. */
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
 	xTaskCreate((pdTASK_CODE)app_display_show_task, "app_display", 300, &global_source, 6, NULL);
 	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, &global_source, 4, NULL);
-	xTaskCreate((pdTASK_CODE)app_sht10_task, "app_sht10", 300, NULL, 3, NULL);
+	xTaskCreate((pdTASK_CODE)app_sht10_task, "app_sht10", 300, &global_source, 3, NULL);
 	xTaskCreate((pdTASK_CODE)app_ds3231_task, "app_ds3231", 300, &global_source, 3, NULL);
     xTaskCreate((pdTASK_CODE)app_buz_task, "app_buz", 300, &global_source, 4, NULL);
 	/* Start the scheduler. */

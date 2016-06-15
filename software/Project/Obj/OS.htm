@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Jun 15 18:33:24 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Jun 15 19:22:06 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -224,6 +224,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_read_id
+<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -253,7 +254,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 98 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_display_show_task &rArr; xQueueGenericReceive &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
@@ -288,15 +289,17 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 </UL>
 
-<P><STRONG><a name="[39]"></a>app_sht10_task</STRONG> (Thumb, 156 bytes, Stack size 0 bytes, app_sht10.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = app_sht10_task &rArr; app_sht10_get_info &rArr; app_sht10_calc_th &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[39]"></a>app_sht10_task</STRONG> (Thumb, 190 bytes, Stack size 16 bytes, app_sht10.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 304<LI>Call Chain = app_sht10_task &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2uiz
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_info
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbg_string
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
@@ -368,7 +371,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
 </UL>
 
-<P><STRONG><a name="[db]"></a>dm9000x_inital</STRONG> (Thumb, 264 bytes, Stack size 16 bytes, dm9000x.o(.text))
+<P><STRONG><a name="[db]"></a>dm9000x_inital</STRONG> (Thumb, 274 bytes, Stack size 16 bytes, dm9000x.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = dm9000x_inital &rArr; dm9000x_read_id &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_read_id
@@ -392,7 +395,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_level_output
 </UL>
 
-<P><STRONG><a name="[de]"></a>dm9000x_receivepacket</STRONG> (Thumb, 254 bytes, Stack size 40 bytes, dm9000x.o(.text))
+<P><STRONG><a name="[de]"></a>dm9000x_receivepacket</STRONG> (Thumb, 326 bytes, Stack size 40 bytes, dm9000x.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 352<LI>Call Chain = dm9000x_receivepacket &rArr; dm9000x_inital &rArr; dm9000x_read_id &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
@@ -4001,6 +4004,7 @@ Global Symbols
 
 <P><STRONG><a name="[9c]"></a>__aeabi_f2d</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, f2d.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_calc_th
+<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 </UL>
 
 <P><STRONG><a name="[9f]"></a>__aeabi_d2f</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, d2f.o(.text))
@@ -4426,7 +4430,7 @@ Local Symbols
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
 </UL>
 
-<P><STRONG><a name="[d8]"></a>dm9000_in_byte</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, dm9000x.o(.text))
+<P><STRONG><a name="[d8]"></a>dm9000_in_byte</STRONG> (Thumb, 124 bytes, Stack size 16 bytes, dm9000x.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = dm9000_in_byte &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical

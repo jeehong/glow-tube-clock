@@ -166,13 +166,13 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 	app_display_set_show(Bit_SET);
 	while(1)
 	{
-		xSemaphoreTake(p_src->xMutex, portMAX_DELAY);
+		xSemaphoreTake(p_src->xDisplay, portMAX_DELAY);
 		app_display_set_point(src[TUBE_NUM]);
 		app_display_calc_map(map, src);
-		xSemaphoreGive(p_src->xMutex);
+		xSemaphoreGive(p_src->xDisplay);
 		app_display_write_data(map);
 		
-		vTaskDelay(mainDELAY_MS(200));
+		vTaskDelay(mainDELAY_MS(500));
 
 	}	
 }

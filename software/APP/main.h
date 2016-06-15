@@ -14,7 +14,7 @@ typedef enum {
 } ACTIVE_MEMBER_e;  
 
 typedef struct {
-	QueueHandle_t xMutex;
+	QueueHandle_t xDisplay;
     QueueHandle_t xBuzzer;
     ACTIVE_MEMBER_e flag;
     char buz[2];
