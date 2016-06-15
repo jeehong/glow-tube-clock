@@ -172,12 +172,7 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 		xSemaphoreGive(p_src->xMutex);
 		app_display_write_data(map);
 		
-		if(p_src->map[6] == 0)
-			p_src->map[6] = 0x33;
-		else
-			p_src->map[6] = 0;
-
-		vTaskDelay(mainDELAY_MS(500));
+		vTaskDelay(mainDELAY_MS(200));
 
 	}	
 }

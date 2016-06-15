@@ -1,9 +1,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
 #include "i2c_bus.h"
 #include "app_sht10.h"
 #include "app_serial.h"
+
+#include "main.h"
 
 union {
 	unsigned short sval;
@@ -72,16 +75,30 @@ float app_sht10_get_info(unsigned char  type)
 		return hum.fval;
 }
 
-void app_sht10_task(void *parame)
+void app_sht10_task(GLOBAL_SOURCE_t *p_src)
 {
 	float temp, hum;
+    unsigned int temp32;
 	
 	while(1)
 	{
 		temp = app_sht10_get_info(TEMP);
 		hum = app_sht10_get_info(HUM);
-		//dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum);
-		vTaskDelay(5000);
+
+        if((xSemaphoreTake(p_src->xMutex, 0) == pdPASS) && (p_src->flag == SHT_ACT))
+		{
+            temp32 = temp * 10;
+    		p_src->map[0] = temp32 / 100;
+    		p_src->map[1] = temp32 % 100 /10;
+    		p_src->map[2] = temp32 % 10;
+    		p_src->map[3] = 10;
+    		p_src->map[4] = (unsigned int)hum / 10;
+    		p_src->map[5] = (unsigned int)hum % 10;
+            p_src->map[6] = 0x10;
+            xSemaphoreGive(p_src->xMutex);
+		}
+		/* dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum); */
+		vTaskDelay(500);
 	}
 }
 

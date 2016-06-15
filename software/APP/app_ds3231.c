@@ -295,16 +295,26 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 		}
 		app_ds3231_clear_state();
 
-		xSemaphoreTake(p_src->xMutex, portMAX_DELAY);
-		
-		p_src->map[0] = time2.hour / 10;
-		p_src->map[1] = time2.hour % 10;
-		p_src->map[2] = time2.min / 10;
-		p_src->map[3] = time2.min % 10;
-		p_src->map[4] = time2.sec / 10;
-		p_src->map[5] = time2.sec % 10;
-
-		xSemaphoreGive(p_src->xMutex);
+		if((xSemaphoreTake(p_src->xMutex, 0) == pdPASS) && (p_src->flag == DS3231_ACT))
+		{
+    		p_src->map[0] = time2.hour / 10;
+    		p_src->map[1] = time2.hour % 10;
+    		p_src->map[2] = time2.min / 10;
+    		p_src->map[3] = time2.min % 10;
+    		p_src->map[4] = time2.sec / 10;
+    		p_src->map[5] = time2.sec % 10;
+            p_src->map[6] = 0x33;
+            xSemaphoreGive(p_src->xMutex);
+            vTaskDelay(mainDELAY_MS(500));
+			p_src->map[6] = 0;
+		}
+        if(((time2.sec > 20) && (time2.sec < 25)) || ((time2.sec > 40) && (time2.sec < 45)))
+        {
+            p_src->flag = SHT_ACT;
+        }
+        else
+            p_src->flag = DS3231_ACT;
+        
         dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
 									time2.mon, 
