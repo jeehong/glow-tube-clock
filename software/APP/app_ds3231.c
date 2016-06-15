@@ -295,18 +295,25 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 		}
 		app_ds3231_clear_state();
 
-		if((xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS) && (p_src->flag == DS3231_ACT))
+		if(p_src->flag == DS3231_ACT)
 		{
-    		p_src->map[0] = time2.hour / 10;
-    		p_src->map[1] = time2.hour % 10;
-    		p_src->map[2] = time2.min / 10;
-    		p_src->map[3] = time2.min % 10;
-    		p_src->map[4] = time2.sec / 10;
-    		p_src->map[5] = time2.sec % 10;
-            p_src->map[6] = 0x33;
-            xSemaphoreGive(p_src->xDisplay);
-            vTaskDelay(mainDELAY_MS(500));
-			p_src->map[6] = 0;
+			if(xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS)
+			{
+	    		p_src->map[0] = time2.hour / 10;
+	    		p_src->map[1] = time2.hour % 10;
+	    		p_src->map[2] = time2.min / 10;
+	    		p_src->map[3] = time2.min % 10;
+	    		p_src->map[4] = time2.sec / 10;
+	    		p_src->map[5] = time2.sec % 10;
+	            p_src->map[6] = 0x33;
+	            xSemaphoreGive(p_src->xDisplay);
+				vTaskDelay(mainDELAY_MS(490));
+			}
+			if(xSemaphoreTake(p_src->xDisplay, portMAX_DELAY) == pdPASS)
+			{
+				p_src->map[6] = 0;
+				xSemaphoreGive(p_src->xDisplay);
+			}
 		}
         if(((time2.sec > 20) && (time2.sec < 25)) || ((time2.sec > 40) && (time2.sec < 45)))
         {

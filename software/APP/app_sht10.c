@@ -85,17 +85,20 @@ void app_sht10_task(GLOBAL_SOURCE_t *p_src)
 		temp = app_sht10_get_info(TEMP);
 		hum = app_sht10_get_info(HUM);
 
-        if((xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS) && (p_src->flag == SHT_ACT))
+        if(p_src->flag == SHT_ACT)
 		{
-            temp32 = temp * 10;
-    		p_src->map[0] = temp32 / 100;
-    		p_src->map[1] = temp32 % 100 /10;
-    		p_src->map[2] = temp32 % 10;
-    		p_src->map[3] = 10;
-    		p_src->map[4] = (unsigned int)hum / 10;
-    		p_src->map[5] = (unsigned int)hum % 10;
-            p_src->map[6] = 0x10;
-            xSemaphoreGive(p_src->xDisplay);
+			if(xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS)
+			{
+	            temp32 = temp * 10;
+	    		p_src->map[0] = temp32 / 100;
+	    		p_src->map[1] = temp32 % 100 /10;
+	    		p_src->map[2] = temp32 % 10;
+	    		p_src->map[3] = 10;
+	    		p_src->map[4] = (unsigned int)hum / 10;
+	    		p_src->map[5] = (unsigned int)hum % 10;
+	            p_src->map[6] = 0x10;
+				xSemaphoreGive(p_src->xDisplay);
+			}
 		}
 		dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum);
 		vTaskDelay(2000);
