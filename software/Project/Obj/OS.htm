@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Jun 15 21:04:18 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sat Jun 18 22:31:01 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -254,7 +254,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 122 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_display_show_task &rArr; xQueueGenericReceive &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
@@ -4225,7 +4225,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
 </UL>
 
-<P><STRONG><a name="[97]"></a>app_display_calc_map</STRONG> (Thumb, 74 bytes, Stack size 20 bytes, app_display.o(.text))
+<P><STRONG><a name="[97]"></a>app_display_calc_map</STRONG> (Thumb, 82 bytes, Stack size 20 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = app_display_calc_map
 </UL>
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task

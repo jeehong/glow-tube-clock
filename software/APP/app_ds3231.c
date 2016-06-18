@@ -299,12 +299,14 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 		{
 			if(xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS)
 			{
+                
 	    		p_src->map[0] = time2.hour / 10;
 	    		p_src->map[1] = time2.hour % 10;
 	    		p_src->map[2] = time2.min / 10;
 	    		p_src->map[3] = time2.min % 10;
 	    		p_src->map[4] = time2.sec / 10;
 	    		p_src->map[5] = time2.sec % 10;
+                
 	            p_src->map[6] = 0x33;
 	            xSemaphoreGive(p_src->xDisplay);
 				vTaskDelay(mainDELAY_MS(490));
@@ -315,13 +317,13 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 				xSemaphoreGive(p_src->xDisplay);
 			}
 		}
-        if(((time2.sec > 20) && (time2.sec < 25)) || ((time2.sec > 40) && (time2.sec < 45)))
+        if(((time2.sec >= 20) && (time2.sec < 25)) || ((time2.sec >= 40) && (time2.sec < 45)))
         {
             p_src->flag = SHT_ACT;
         }
         else
             p_src->flag = DS3231_ACT;
-        
+
         dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
 									time2.mon, 
