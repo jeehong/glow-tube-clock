@@ -96,7 +96,7 @@ void app_sht10_task(GLOBAL_SOURCE_t *p_src)
 	    		p_src->map[3] = 0;
 	    		p_src->map[4] = (unsigned int)hum / 10;
 	    		p_src->map[5] = (unsigned int)hum % 10;
-	            p_src->map[6] = 0x10;
+	            p_src->map[6] = 0x11;
 				xSemaphoreGive(p_src->xDisplay);
 			}
 		}
