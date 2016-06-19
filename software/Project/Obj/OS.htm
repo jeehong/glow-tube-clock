@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sat Jun 18 23:36:33 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sun Jun 19 17:47:55 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -224,8 +224,6 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_inital
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dm9000x_read_id
-<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
-<LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -289,22 +287,20 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 </UL>
 
-<P><STRONG><a name="[39]"></a>app_sht10_task</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, app_sht10.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 304<LI>Call Chain = app_sht10_task &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
+<P><STRONG><a name="[39]"></a>app_sht10_task</STRONG> (Thumb, 158 bytes, Stack size 0 bytes, app_sht10.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = app_sht10_task &rArr; app_sht10_get_info &rArr; app_sht10_calc_th &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2uiz
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_info
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
-<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbg_string
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[3a]"></a>app_ds3231_task</STRONG> (Thumb, 342 bytes, Stack size 32 bytes, app_ds3231.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = app_ds3231_task &rArr; dbg_string &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
+<P><STRONG><a name="[3a]"></a>app_ds3231_task</STRONG> (Thumb, 300 bytes, Stack size 16 bytes, app_ds3231.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = app_ds3231_task &rArr; app_ds3231_set_match &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_match
@@ -313,7 +309,6 @@ Global Symbols
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueCreateMutex
-<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbg_string
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
@@ -4004,7 +3999,6 @@ Global Symbols
 
 <P><STRONG><a name="[9c]"></a>__aeabi_f2d</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, f2d.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_calc_th
-<LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 </UL>
 
 <P><STRONG><a name="[9f]"></a>__aeabi_d2f</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, d2f.o(.text))

@@ -324,14 +324,14 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
         else
             p_src->flag = DS3231_ACT;
 
-        dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
+        /* dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
 									time2.mon, 
 									time2.mday, 
 									time2.wday, 
 									time2.hour, 
 									time2.min,
-									time2.sec);
+									time2.sec); */
 	}
 }
 

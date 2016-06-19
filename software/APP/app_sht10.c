@@ -100,8 +100,8 @@ void app_sht10_task(GLOBAL_SOURCE_t *p_src)
 				xSemaphoreGive(p_src->xDisplay);
 			}
 		}
-		dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum);
-		vTaskDelay(2000);
+		/* dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum); */
+		vTaskDelay(500);
 	}
 }
 
