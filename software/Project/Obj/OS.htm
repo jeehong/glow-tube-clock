@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sun Jun 19 17:47:55 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Jun 20 21:30:19 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -193,7 +193,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_init
 </UL>
 
-<P><STRONG><a name="[38]"></a>app_led_task_blink</STRONG> (Thumb, 78 bytes, Stack size 16 bytes, app_led.o(.text))
+<P><STRONG><a name="[38]"></a>app_led_task_blink</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, app_led.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = app_led_task_blink &rArr; vTaskDelayUntil &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGetTickCount
@@ -265,7 +265,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[a0]"></a>app_sht10_get_res</STRONG> (Thumb, 150 bytes, Stack size 24 bytes, app_sht10.o(.text))
+<P><STRONG><a name="[a0]"></a>app_sht10_get_res</STRONG> (Thumb, 148 bytes, Stack size 24 bytes, app_sht10.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = app_sht10_get_res &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte

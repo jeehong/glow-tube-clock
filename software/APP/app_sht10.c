@@ -24,7 +24,7 @@ static void app_sht10_calc_th(void)
 	hum.fval = hum.sval * c2 + c3 * hum.sval * hum.sval / 1000000.0 + c1 + carry;	
 }
 
-u8 app_sht10_get_res(u16 *p_value, u8 *p_checksum, u8 mode)
+u8 app_sht10_get_res(u16 *p_value, u8 *p_checksum, SHT10_INFO_e mode)
 {
 	u8 error = 0;
 

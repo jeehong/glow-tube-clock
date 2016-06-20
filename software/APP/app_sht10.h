@@ -7,9 +7,10 @@
 #define		MEASURE_TEMP	0x03   //000   00011
 #define		MEASURE_HUM		0x05   //000   00101
 
-#define		HUM			1
-#define		TEMP		2
-
+typedef enum {
+	HUM = 0,
+	TEMP,
+} SHT10_INFO_e;
 
 float app_sht10_get_info(unsigned char type);
 void app_sht10_task(GLOBAL_SOURCE_t *p_src);

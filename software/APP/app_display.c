@@ -85,7 +85,7 @@ static void app_display_write_data(char *pdata)
 static void app_display_calc_map(char *desc, char *src)
 {
 	unsigned char tube;		/* 当前操作的管子序号 */
-	const unsigned char tube_num = 5;//TUBE_NUM - 1;	/* 管子总数 */
+	const unsigned char tube_num = TUBE_NUM - 1;	/* 管子总数 */
 	unsigned char calc;
 
 	memset(desc, 0, CHIP595_NUM);

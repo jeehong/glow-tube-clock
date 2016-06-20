@@ -33,7 +33,7 @@ void app_led_task_blink(GLOBAL_SOURCE_t *p_src)
 {
 	portTickType xLastWakeTime;
 	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
-	unsigned char index;
+	unsigned char index = 0;
 	
 	xLastWakeTime = xTaskGetTickCount();
 	while(1)
