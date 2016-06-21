@@ -3,15 +3,32 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\Jeehong\projects\glow-tube-clock\software\Project\OS.uvproj
-Project File Date:  06/19/2016
+C:\Users\Administrator\projects\glow-tube-clock\software\Project\OS.uvproj
+Project File Date:  06/21/2016
 
 <h2>Output:</h2>
 Build target 'FreeRTOS'
 compiling main.c...
 compiling app_led.c...
+compiling app_display.c...
 compiling app_sht10.c...
+compiling app_ds3231.c...
+..\APP\app_ds3231.c(126): warning:  #177-D: function "app_ds3231_set_time" was declared but never referenced
+  static void app_ds3231_set_time(struct rtc_time *ptime)
+..\APP\app_ds3231.c(226): warning:  #177-D: function "app_ds3231_enable_irq" was declared but never referenced
+  static void app_ds3231_enable_irq(u8 flag)
+..\APP\app_ds3231.c(154): warning:  #177-D: function "app_ds3231_read_alarm" was declared but never referenced
+  static void app_ds3231_read_alarm(struct rtc_wkalrm *alarm)
+..\APP\app_ds3231.c(182): warning:  #177-D: function "app_ds3231_set_alarm" was declared but never referenced
+  static void app_ds3231_set_alarm(struct rtc_wkalrm *alarm)
+..\APP\app_ds3231.c: 4 warnings, 0 errors
+compiling app_buz.c...
+compiling bsp.c...
+compiling i2c_bus.c...
 linking...
-Program Size: Code=58416 RO-data=632 RW-data=372 ZI-data=40540  
+Program Size: Code=58468 RO-data=632 RW-data=372 ZI-data=40540  
 FromELF: creating hex file...
-".\Obj\OS.axf" - 0 Error(s), 0 Warning(s).
+".\Obj\OS.axf" - 0 Error(s), 4 Warning(s).
+</pre>
+</body>
+</html>

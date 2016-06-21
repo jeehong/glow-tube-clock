@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Jun 20 21:30:19 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Tue Jun 21 19:54:11 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -252,7 +252,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 122 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 126 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_display_show_task &rArr; xQueueGenericReceive &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
@@ -299,7 +299,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[3a]"></a>app_ds3231_task</STRONG> (Thumb, 300 bytes, Stack size 16 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[3a]"></a>app_ds3231_task</STRONG> (Thumb, 348 bytes, Stack size 16 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = app_ds3231_task &rArr; app_ds3231_set_match &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state

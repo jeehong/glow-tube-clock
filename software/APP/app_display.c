@@ -162,12 +162,13 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 	char *src;
 	char index = 0;
     
-	bsp_set_hv_state(ON);       /* 注意先调试34063电路再打开此功能 */
+	p_src->hv = ON;
 	src = &p_src->map[0];
 	app_display_set_show(Bit_SET);
 	while(1)
 	{
 		xSemaphoreTake(p_src->xDisplay, portMAX_DELAY);
+        bsp_set_hv_state(p_src->hv);
         if(index <= 9)
         {
     	    p_src->map[0] = index;
