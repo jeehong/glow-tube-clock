@@ -50,8 +50,8 @@
 
 
 typedef enum {
-	ON = 0,
-	OFF = 1,
+	OFF = 0,
+	ON = 1,
 } SWITCH_STATE_e;
 
 void  bsp_init(void);

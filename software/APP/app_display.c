@@ -161,14 +161,37 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
 	char map[CHIP595_NUM] = {10};
 	char *src;
 	char index = 0;
+	char hv_bak;
+	TaskHandle_t app_led_handle;
     
-	p_src->hv = ON;
+	p_src->hv = OFF;
+	hv_bak = ON;
 	src = &p_src->map[0];
 	app_display_set_show(Bit_SET);
+	app_display_set_point(p_src->hv);
+
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, p_src, 4, &app_led_handle);
+	
 	while(1)
 	{
 		xSemaphoreTake(p_src->xDisplay, portMAX_DELAY);
-        bsp_set_hv_state(p_src->hv);
+        
+		if(hv_bak != p_src->hv)
+		{
+			if(hv_bak == OFF)
+			{
+				index = 0;
+				vTaskResume(app_led_handle);
+				
+			}
+			else
+			{	
+				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
+				vTaskSuspend(app_led_handle);
+			}
+			hv_bak = p_src->hv;
+			bsp_set_hv_state(p_src->hv);
+		}
         if(index <= 9)
         {
     	    p_src->map[0] = index;
@@ -179,7 +202,10 @@ void app_display_show_task(GLOBAL_SOURCE_t *p_src)
     	    p_src->map[5] = index;
             index++; 
 	    }
-		app_display_set_point(src[TUBE_NUM]);
+		if(p_src->hv == ON)
+			app_display_set_point(src[TUBE_NUM]);
+		else
+			app_display_set_point(0);
 		app_display_calc_map(map, src);
         app_display_write_data(map);
 		xSemaphoreGive(p_src->xDisplay);

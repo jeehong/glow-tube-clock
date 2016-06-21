@@ -245,7 +245,7 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 {
 	struct rtc_time /*time1, */time2;
 	struct rtc_wkalrm /* alarm1, alarm2*/;
-    unsigned short temp16 = ON;
+    unsigned short temp16;
 
 	/* set time */
 	/* time1.sec = 0;
@@ -326,10 +326,12 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
             p_src->flag = DS3231_ACT;
 
         temp16 = (time2.hour * 100) + time2.min;
-        if((temp16 >= 1930) && (temp16 < 2330))
+        if((temp16 >= 2000) && (temp16 < 2330))
             p_src->hv = ON;
         else
+        {
             p_src->hv = OFF;
+        }
 
         /* dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
