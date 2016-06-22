@@ -246,6 +246,8 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 	struct rtc_time /*time1, */time2;
 	struct rtc_wkalrm /* alarm1, alarm2*/;
     unsigned short temp16;
+	SWITCH_STATE_e first_state = ON;
+	const unsigned short ontime = 2030, offtime = 2300;
 
 	/* set time */
 	/* time1.sec = 0;
@@ -319,19 +321,23 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 			}
 		}
         if(((time2.sec >= 20) && (time2.sec < 25)) || ((time2.sec >= 40) && (time2.sec < 45)))
-        {
             p_src->flag = SHT_ACT;
-        }
         else
             p_src->flag = DS3231_ACT;
 
         temp16 = (time2.hour * 100) + time2.min;
-        if((temp16 >= 2000) && (temp16 < 2330))
-            p_src->hv = ON;
-        else
-        {
-            p_src->hv = OFF;
-        }
+		
+		if((temp16 < offtime) && (first_state == ON))
+			p_src->hv = ON;
+		else if((temp16 >= offtime) && (first_state == ON))
+			first_state = OFF;
+		else if(first_state== OFF)
+		{
+			if((temp16 >= ontime) && (temp16 < offtime))
+				p_src->hv = ON;
+			else
+				p_src->hv = OFF;
+		}
 
         /* dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
