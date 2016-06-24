@@ -246,8 +246,8 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 	struct rtc_time /*time1, */time2;
 	struct rtc_wkalrm /* alarm1, alarm2*/;
     unsigned short temp16;
-	SWITCH_STATE_e first_state = ON;
-	const unsigned short ontime = 2030, offtime = 2300;
+	/* SWITCH_STATE_e first_state = ON; */
+	const unsigned short ontime = 750, offtime = 2300;
 
 	/* set time */
 	/* time1.sec = 0;
@@ -292,7 +292,12 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 			if(time2.hour > 12)
 				p_src->buz[0] = time2.hour - 12;
 			else
-				p_src->buz[0] = time2.hour;
+			{
+				if(time2.hour < 8)	
+					p_src->buz[0] = 0;
+				else
+					p_src->buz[0] = time2.hour;
+			}
 			
 			xSemaphoreGive(p_src->xBuzzer);
 		}
@@ -327,17 +332,10 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 
         temp16 = (time2.hour * 100) + time2.min;
 		
-		if((temp16 < offtime) && (first_state == ON))
+		if((temp16 >= ontime) && (temp16 < offtime))
 			p_src->hv = ON;
-		else if((temp16 >= offtime) && (first_state == ON))
-			first_state = OFF;
-		else if(first_state== OFF)
-		{
-			if((temp16 >= ontime) && (temp16 < offtime))
-				p_src->hv = ON;
-			else
-				p_src->hv = OFF;
-		}
+		else
+			p_src->hv = OFF;
 
         /* dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 
