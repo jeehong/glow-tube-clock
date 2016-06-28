@@ -247,7 +247,7 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 	struct rtc_wkalrm /* alarm1, alarm2*/;
     unsigned short temp16;
 	/* SWITCH_STATE_e first_state = ON; */
-	const unsigned short ontime = 750, offtime = 2300;
+	const unsigned short ontime1 = 750, offtime1 = 840, ontime2 = 2030, offtime2 = 2300;
 
 	/* set time */
 	/* time1.sec = 0;
@@ -332,7 +332,8 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 
         temp16 = (time2.hour * 100) + time2.min;
 		
-		if((temp16 >= ontime) && (temp16 < offtime))
+		if(((temp16 >= ontime1) && (temp16 < offtime1)) || 
+            ((temp16 >= ontime2) && (temp16 < offtime2)))
 			p_src->hv = ON;
 		else
 			p_src->hv = OFF;
