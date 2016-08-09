@@ -50,10 +50,8 @@
 #define IFNAME0 'S'
 #define IFNAME1 'T'
 
-extern  uint8_t m_mac[6];	        /* ´æ·ÅÓ²¼þÍø¿¨µØÖ·Öµ´óÐ¡ */
-
-unsigned char Rx_Data_Buf[1516];	    /* ´æ·Å½ÓÊÕÊý¾Ý»º³åÆ÷ */
-unsigned char Tx_Data_Buf[1516]; /* ´æ·Å·¢ËÍÊý¾Ý»º³åÆ÷ */
+static unsigned char Rx_Data_Buf[1516];	    /* ´æ·Å½ÓÊÕÊý¾Ý»º³åÆ÷ */
+static unsigned char Tx_Data_Buf[1516]; /* ´æ·Å·¢ËÍÊý¾Ý»º³åÆ÷ */
 
 err_t  ethernetif_input(struct netif *netif);
 
@@ -76,7 +74,7 @@ static void low_level_init( struct netif *netif )	  /* µ×²ãÓ²¼þÇý¶¯Íø¿¨³õÊ¼»¯º¯Ê
 	time.  To prevent this starving lower priority tasks of processing time we
 	lower our priority prior to the call, then raise it back again once the
 	initialisation is complete. */
-	dm9000x_inital(netif->hwaddr);     
+	dm9000x_inital();     
 
 	/* Create the task that handles the EMAC. */
 	xTaskCreate( (pdTASK_CODE)ethernetif_input, "net_phy", netifINTERFACE_TASK_STACK_SIZE, netif, 3, NULL);

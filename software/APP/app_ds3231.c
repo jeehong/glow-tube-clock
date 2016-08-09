@@ -61,7 +61,7 @@ static int rtc_month_days(unsigned int month, unsigned int year)
 }
 
 static int app_ds3231_read_time(struct rtc_time *ptime);
-static void app_ds3231_set_time(struct rtc_time *ptime);
+static void app_ds3231_set_time(const struct rtc_time *ptime);
 static void app_ds3231_enable_irq(u8 flag);
 static void app_ds3231_read_alarm(struct rtc_wkalrm *alarm);
 static void app_ds3231_set_alarm(struct rtc_wkalrm *alarm);
@@ -123,7 +123,7 @@ static int app_ds3231_read_time(struct rtc_time *ptime)
 	return rtc_valid_tm(ptime);
 }
 
-static void app_ds3231_set_time(struct rtc_time *ptime)
+static void app_ds3231_set_time(const struct rtc_time *ptime)
 {
 	/* Extract time from rtc_time and load into ds3231*/
 	u8 data[7];
@@ -159,10 +159,6 @@ static void app_ds3231_read_alarm(struct rtc_wkalrm *alarm)
 	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_CR, &control, 1);
 	i2c_bus_read_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_ALARM1, buf, 4);
 
-	/* alarm->time.sec = bcd2bin((buf[0] & 0x7F));
-	alarm->time.min = bcd2bin((buf[1] & 0x7F));
-	alarm->time.hour = bcd2bin((buf[2] & 0x7F));
-	alarm->time.mday = bcd2bin((buf[3] & 0x7F)); */
 	alarm->time.sec = buf[0];
 	alarm->time.min = buf[1];
 	alarm->time.hour = buf[2];

@@ -262,7 +262,7 @@ u8 i2c_bus_read_byte(CHIP_LIST_e chip, u8 ack)
 	return val;
 }
 
-void i2c_bus_write_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, u8 *pdata, u8 len)
+void i2c_bus_write_ds3231(CHIP_LIST_e chip, u8 addr, u8 reg, const u8 *pdata, u8 len)
 {
 	u8 index;
 

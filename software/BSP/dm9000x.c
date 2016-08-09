@@ -1,6 +1,6 @@
 #include "stm32f10x.h"
 #include <stdio.h>
-
+#include "netconfig.h"	
 #include "DM9000x.h"
 #include "app_serial.h"
 
@@ -152,9 +152,10 @@ unsigned int dm9000x_read_id(void)
 	return 0;	 
 }
 
-void dm9000x_inital(uint8_t *macaddr)
+void dm9000x_inital(void)
 {
 	unsigned char index = 0x00;
+	const unsigned char *pmac = netconfig_get_pmac();
 
 	dm9000x_gpio_inital();
 
@@ -213,7 +214,7 @@ void dm9000x_inital(uint8_t *macaddr)
 	
 	for(index = 0; index < 6; index++)
 	{
-		iow(DM9000_PAR + index, macaddr[index]);
+		iow(DM9000_PAR + index, pmac[index]);
 	}
 	
 	dbg_string("Mac: ");
@@ -273,8 +274,6 @@ void dm9000x_sendpacket( uint8_t* packet, uint16_t len)
 	iow(DM9000_IMR, 0x81);	/* DM9000网卡的接收中断使能 */
 }
 
-extern 	uint8_t m_mac[6];
-
 uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen)
 {
 	unsigned char ready;
@@ -303,7 +302,7 @@ uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen)
 		{
 			if((ready & 0x01) != 0x00) 		/* 若第二次读取到的不是 01H 或 00H ，则表示没有初始化成功 */
 			{
-				dm9000x_inital(m_mac);		/* 重新初始化 */
+				dm9000x_inital();			/* 重新初始化 */
 			}
 			return 0;
 		}

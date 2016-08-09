@@ -15,8 +15,8 @@
 static void app_display_write_byte(unsigned char data);
 static void app_display_show_data(void);
 static void app_display_set_show(BitAction act);
-static void app_display_write_data(char *pdata);
-static void app_display_calc_map(char *desc, char *src);
+static void app_display_write_data(const char *pdata);
+static void app_display_calc_map(char *desc, const char *src);
 static void app_display_set_point(char src);
 
 /*
@@ -64,7 +64,7 @@ static void app_display_set_show(BitAction act)
 		bsp_74hc595_set_OE(Bit_SET);
 }
 
-static void app_display_write_data(char *pdata)
+static void app_display_write_data(const char *pdata)
 {
 	unsigned char index;
 
@@ -82,7 +82,7 @@ static void app_display_write_data(char *pdata)
  * 小时高 小时低 分钟高 分钟低  秒高   秒低
  * src[0] src[1] src[2] src[3] src[4] src[5]
  */
-static void app_display_calc_map(char *desc, char *src)
+static void app_display_calc_map(char *desc, const char *src)
 {
 	unsigned char tube;		/* 当前操作的管子序号 */
 	const unsigned char tube_num = TUBE_NUM - 1;	/* 管子总数 */

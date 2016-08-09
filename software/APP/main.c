@@ -127,7 +127,8 @@
 /* The check task uses the sprintf function so requires a little more stack. */
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
 
-/* 这个结构体中的互斥量用来描述硬件显示资源是否可用 
+/* 
+ * 这个结构体中的互斥量用来描述硬件显示资源是否可用 
  * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
  */
 static GLOBAL_SOURCE_t global_source;	

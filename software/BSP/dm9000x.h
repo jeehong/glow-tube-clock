@@ -172,7 +172,7 @@
 #define ISR_UNDERRUN		(1<<4)
 
 void dm9000x_gpio_inital(void);
-void dm9000x_inital(uint8_t *macaddr);
+void dm9000x_inital(void);
 unsigned int dm9000x_read_id(void);
 void dm9000x_sendpacket( uint8_t* packet, uint16_t len);
 uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen);

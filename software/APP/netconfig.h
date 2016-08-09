@@ -10,6 +10,7 @@
 
 
 void LwIP_Init( void );
+const unsigned char *netconfig_get_pmac(void);
 
 
 #endif
