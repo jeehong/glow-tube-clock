@@ -45,6 +45,33 @@
 #define bcd2bin(bcd) 	(((bcd) & 0x0f) + ((bcd) >> 4) * 10)
 #define bin2bcd(bin) 	((((bin) / 10) << 4) | ((bin) % 10))
 
+/*
+ * The struct used to pass data via the following ioctl. Similar to the
+ * struct tm in <time.h>, but it needs to be here so that the kernel
+ * source is self contained, allowing cross-compiles, etc. etc.
+ */
+struct rtc_time {
+	unsigned char sec;
+	unsigned char min;
+	unsigned char hour;
+	unsigned char wday;
+	unsigned char mday;
+	unsigned char mon;
+	unsigned char year;
+	unsigned char am_pm;	/* 1:pm */
+	unsigned char h12;		/* 1:12h */
+};
+
+/*
+ * This data structure is inspired by the EFI (v0.92) wakeup
+ * alarm API.
+ */
+struct rtc_wkalrm {
+	unsigned char enabled;	/* 0 = alarm disabled, 1 = alarm enabled */
+	struct rtc_time time;	/* time the alarm is set to */
+};
+
+
 static const unsigned char rtc_days_in_month[] = {
 	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
@@ -256,19 +283,23 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 	app_ds3231_set_time(&time1); */
 	
 	/* set alarm */
-	// alarm1.enabled = 1;
-	// alarm1.time.sec = 0;
-	// alarm1.time.min = 0;
-	// alarm1.time.hour = 12;
-	// alarm1.time.mday = 1;
+	/* alarm1.enabled = 1;
+	alarm1.time.sec = 0;
+	alarm1.time.min = 0;
+	alarm1.time.hour = 12;
+	alarm1.time.mday = 1; */
+	
 	/* 设置失能RTC定时中断功能 */
-	// app_ds3231_enable_irq(0);	
+	/* app_ds3231_enable_irq(0); */	
+    
 	/* 设置定时信息 */
-	// app_ds3231_set_alarm(&alarm1);	
+	/* app_ds3231_set_alarm(&alarm1); */
+    
 	/* 设置闹钟模式，采用秒触发 */	
 	app_ds3231_set_match(1, 1, 1, 1);	
+    
 	/* 设置使能RTC定时中断功能 */
-	// app_ds3231_enable_irq(1);
+	/* app_ds3231_enable_irq(1); */
 	
 	/* app_ds3231_read_alarm(&alarm2);
 	dbg_string("sec:0x%x\r\n", alarm2.time.sec);

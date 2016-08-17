@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Tue Aug 09 23:47:23 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Aug 17 17:56:59 2016
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -79,7 +79,7 @@ Function Pointers
  <LI><a href="#[64]">_sputc</a> from printfa.o(i._sputc) referenced from printfa.o(i.__0vsprintf)
  <LI><a href="#[5b]">accept_function</a> from api_msg.o(.text) referenced from api_msg.o(.text)
  <LI><a href="#[3a]">app_buz_task</a> from app_buz.o(.text) referenced from main.o(.text)
- <LI><a href="#[37]">app_display_show_task</a> from app_display.o(.text) referenced from main.o(.text)
+ <LI><a href="#[37]">app_display_task</a> from app_display.o(.text) referenced from main.o(.text)
  <LI><a href="#[39]">app_ds3231_task</a> from app_ds3231.o(.text) referenced from main.o(.text)
  <LI><a href="#[3e]">app_led_task_blink</a> from app_led.o(.text) referenced from app_display.o(.text)
  <LI><a href="#[38]">app_sht10_task</a> from app_sht10.o(.text) referenced from main.o(.text)
@@ -256,8 +256,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[37]"></a>app_display_show_task</STRONG> (Thumb, 206 bytes, Stack size 24 bytes, app_display.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = app_display_show_task &rArr; xTaskCreate &rArr; pvPortMalloc &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[37]"></a>app_display_task</STRONG> (Thumb, 206 bytes, Stack size 24 bytes, app_display.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = app_display_task &rArr; xTaskCreate &rArr; pvPortMalloc &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
@@ -747,7 +747,7 @@ Global Symbols
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_hv_io_init
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_point_io_init
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_led_init
-<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
 <P><STRONG><a name="[238]"></a>GPIO_WriteBit</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f10x_gpio.o(.text), UNUSED)
@@ -1341,7 +1341,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xSerialPutChar
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
-<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 <LI><a href="#[151]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_sem_signal
 <LI><a href="#[14f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_sem_new
 <LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_mbox_trypost
@@ -1391,7 +1391,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
-<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_buz_task
 <LI><a href="#[150]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_arch_sem_wait
 <LI><a href="#[14f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_sem_new
@@ -1458,7 +1458,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vStartComTasks
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskStartScheduler
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_thread_new
-<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[147]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_level_init
 </UL>
@@ -1537,7 +1537,7 @@ Global Symbols
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vComTxTask
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
-<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_buz_task
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LwIPEntry
 </UL>
@@ -1578,7 +1578,7 @@ Global Symbols
 <LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
 <LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
 <P><STRONG><a name="[97]"></a>vTaskResume</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, tasks.o(.text))
@@ -1590,7 +1590,7 @@ Global Symbols
 <LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
 <LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
 <P><STRONG><a name="[12f]"></a>xTaskResumeFromISR</STRONG> (Thumb, 130 bytes, Stack size 24 bytes, tasks.o(.text), UNUSED)
@@ -4224,7 +4224,7 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_74hc595_set_OE
 </UL>
-<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
 <P><STRONG><a name="[92]"></a>app_display_write_data</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, app_display.o(.text))
@@ -4235,17 +4235,17 @@ Local Symbols
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_data
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_byte
 </UL>
-<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
 <P><STRONG><a name="[99]"></a>app_display_calc_map</STRONG> (Thumb, 82 bytes, Stack size 20 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = app_display_calc_map
 </UL>
-<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
 <P><STRONG><a name="[95]"></a>app_display_set_point</STRONG> (Thumb, 172 bytes, Stack size 0 bytes, app_display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_task
+<BR><BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
 <P><STRONG><a name="[9a]"></a>app_sht10_calc_th</STRONG> (Thumb, 196 bytes, Stack size 96 bytes, app_sht10.o(.text))
