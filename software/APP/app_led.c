@@ -32,17 +32,15 @@ void app_led_init(void)
 void app_led_task_blink(GLOBAL_SOURCE_t *p_src)
 {
 	portTickType xLastWakeTime;
-	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
-	unsigned char index = 0;
+	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_B, LED_PIN_G};
 	
 	xLastWakeTime = xTaskGetTickCount();
 	while(1)
 	{
-		LED_PIN_GROUP->BSRR = port_list[index % 3];
-		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(80));	
-		LED_PIN_GROUP->BRR = port_list[index % 3];
-		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1920));
-		index++;
+		LED_PIN_GROUP->BSRR = port_list[2];
+		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(100));	
+		LED_PIN_GROUP->BRR = port_list[2];
+		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1900));
 	}
 }
 

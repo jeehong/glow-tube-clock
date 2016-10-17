@@ -56,7 +56,7 @@ u8 app_sht10_get_res(u16 *p_value, u8 *p_checksum, SHT10_INFO_e mode)
 	
 	*p_value = i2c_bus_read_byte(sht, 0) << 8;	/* 读第一个字节，高字节 (MSB) */
 	*p_value |= i2c_bus_read_byte(sht, 0);		/* 读第二个字节，低字节 (LSB) */
-	*p_checksum  = i2c_bus_read_byte(sht, 1);	/* read CRC校验码*/
+	*p_checksum  = i2c_bus_read_byte(sht, 1);	/* read CRC校验码 */
 	
 	return error;
 }
@@ -82,11 +82,11 @@ void app_sht10_task(GLOBAL_SOURCE_t *p_src)
 	
 	while(1)
 	{
-		temp = app_sht10_get_info(TEMP);
-		hum = app_sht10_get_info(HUM);
-
-        if(p_src->flag == SHT_ACT)
+		if(p_src->flag == SHT_ACT)
 		{
+			temp = app_sht10_get_info(TEMP);
+			hum = app_sht10_get_info(HUM);
+		
 			if(xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS)
 			{
 	            temp32 = temp * 10;

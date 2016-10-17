@@ -173,7 +173,7 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 	app_display_set_show(Bit_SET);
 	app_display_set_point(p_src->hv);
 
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, p_src, 4, &app_led_handle);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, p_src, 3, &app_led_handle);
 	
 	while(1)
 	{
