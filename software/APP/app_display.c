@@ -17,11 +17,11 @@
 
 static void app_display_write_byte(unsigned char data);
 static void app_display_show_data(void);
-static void app_display_set_show(BitAction act);
 static void app_display_write_data(const char *pdata);
 static void app_display_calc_map(char *desc, const char *src);
 static void app_display_set_point(char src);
 
+static char start_dis = 0;
 /*
  * Êµ¼Ê²âÊÔ1us
  */
@@ -59,10 +59,13 @@ static void app_display_show_data(void)
 }
 
 /* ÉèÖÃËø´æÆ÷ÊÇ·ñÊä³ö 1:out */
-static void app_display_set_show(BitAction act)
+void app_display_set_show(BitAction act)
 {
 	if(act == Bit_SET)
+	{
+		start_dis = 0;
 		bsp_74hc595_set_OE(Bit_RESET);
+	}
 	else
 		bsp_74hc595_set_OE(Bit_SET);
 }
@@ -163,7 +166,6 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 {
 	char map[CHIP595_NUM] = {10};
 	char *src;
-	char index = 0;
 	char hv_bak;
 
 	p_src->hv = OFF;
@@ -180,7 +182,7 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 		{
 			if(hv_bak == OFF)
 			{
-				index = 0;
+				start_dis = 0;
 				vTaskResume(main_get_task_handle(4));
 				
 			}
@@ -192,15 +194,15 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 			hv_bak = p_src->hv;
 			bsp_set_hv_state(p_src->hv);
 		}
-        if(index <= 9)
+        if(start_dis <= 9)
         {
-    	    p_src->map[0] = index;
-            p_src->map[1] = index;
-    	    p_src->map[2] = index;
-    	    p_src->map[3] = index;
-    	    p_src->map[4] = index;
-    	    p_src->map[5] = index;
-            index++; 
+    	    p_src->map[0] = start_dis;
+            p_src->map[1] = start_dis;
+    	    p_src->map[2] = start_dis;
+    	    p_src->map[3] = start_dis;
+    	    p_src->map[4] = start_dis;
+    	    p_src->map[5] = start_dis;
+            start_dis++; 
 	    }
 		if(p_src->hv == ON)
 			app_display_set_point(src[TUBE_NUM]);

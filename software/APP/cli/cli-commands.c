@@ -75,6 +75,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "bsp.h"
+
 /* FreeRTOS+CLI includes. */
 #include "main.h"
 #include "cli_api.h" 
@@ -89,6 +91,8 @@ static BaseType_t prvSetDateCommand(const char * const pcCommandInput, char *pcW
 static BaseType_t prvTHCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvRebootCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
+static BaseType_t prvDisplayCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
+
 
 static const CLI_Command_Definition_t xHelloCommand =
 {
@@ -154,6 +158,15 @@ static const CLI_Command_Definition_t xRebootCommand =
 	0
 };
 
+static const CLI_Command_Definition_t xDisplayCommand =
+{
+	"display",
+	"Turn ON/OFF lcd display,format:display state(1:ON,0:OFF).\r\n",
+	prvDisplayCommand,
+	1
+};
+
+
 /*-----------------------------------------------------------*/
 
 void vRegisterCLICommands( void )
@@ -167,6 +180,7 @@ void vRegisterCLICommands( void )
 	FreeRTOS_CLIRegisterCommand( &xTHCommand );
 	FreeRTOS_CLIRegisterCommand( &xLedCommand );
 	FreeRTOS_CLIRegisterCommand( &xRebootCommand );
+	FreeRTOS_CLIRegisterCommand( &xDisplayCommand );
 }
 
 static BaseType_t prvHelloCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
@@ -251,13 +265,10 @@ static BaseType_t prvDateCommand(const char * const pcCommandInput, char *pcWrit
 {
 	struct rtc_time tm;
 
-	( void ) pcCommandInput;
-	( void ) pHelpString;
-	( void ) xWriteBufferLen;
-
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
+	( void ) pcCommandInput;
 	( void ) pHelpString;
 	( void ) xWriteBufferLen;
 	configASSERT(pcWriteBuffer);
@@ -365,8 +376,14 @@ static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWrite
 
 	
 	/* Generate a table of task stats. */
-	pled = main_get_task_handle(4);
 	sscanf(pcCommandInput, "%s %d", string, &state);
+	if((state != 1) && (state != 0))
+	{
+		sprintf(pcWriteBuffer, "    Command of led control Format incorrect,please try again.\r\n");
+		return pdFALSE;
+	}
+		
+	pled = main_get_task_handle(4);
 	
 	if(state == 1)
 		vTaskResume(pled);
@@ -391,6 +408,50 @@ static BaseType_t prvRebootCommand(const char * const pcCommandInput, char *pcWr
 
 	NVIC_SystemReset();
 	
+	/* There is no more data to return after this single string, so return
+	pdFALSE. */
+	return pdFALSE;
+}
+
+static BaseType_t prvDisplayCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
+{
+	TaskHandle_t plcd;
+	char string[10], state;
+	
+	/* Remove compile time warnings about unused parameters, and check the
+	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+	write buffer length is adequate, so does not check for buffer overflows. */
+	(void) pcCommandInput;
+	( void ) pHelpString;
+	( void ) xWriteBufferLen;
+	configASSERT(pcWriteBuffer);
+
+	
+	/* Generate a table of task stats. */
+	plcd = main_get_task_handle(0);
+	sscanf(pcCommandInput, "%s %d", string, &state);
+	
+	if((state != 1) && (state != 0))
+	{
+		sprintf(pcWriteBuffer, "    Command of lcd control Format incorrect,please try again.\r\n");
+		return pdFALSE;
+	}
+	
+	if(state == 1)
+	{
+		bsp_set_hv_state(ON);
+		app_display_set_show(1);
+		vTaskResume(plcd);
+	}
+	else
+	{
+		bsp_set_hv_state(OFF);
+		app_display_set_show(0);
+		vTaskSuspend(plcd);
+	}
+	
+	sprintf(pcWriteBuffer, "    Lcd display task is %s\r\n", state ? "working." : "stoped.");
+
 	/* There is no more data to return after this single string, so return
 	pdFALSE. */
 	return pdFALSE;
