@@ -122,6 +122,8 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 
 #define	configUSE_MUTEXES	1		/* 使用互斥信号量 */
 
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE	256
+
 /* This is the value being used as per the ST library which permits 16
 priority values, 0 to 15.  This must correspond to the
 configKERNEL_INTERRUPT_PRIORITY setting.  Here 15 corresponds to the lowest

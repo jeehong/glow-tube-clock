@@ -72,8 +72,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
@@ -130,7 +128,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -142,8 +139,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -364,7 +361,7 @@
               <MiscControls></MiscControls>
               <Define>RVDS_ARMCM3_LM3S102 USE_STDPERIPH_DRIVER STM32F10X_HD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\APP;..\STMLIB\inc;..\FreeRTOS\include;..\BSP;..\Lwip-1.3.2\src\arch;..\Lwip-1.3.2\src\include;..\Lwip-1.3.2\src\include\ipv4;..\Lwip-1.3.2\src\include\lwip;..\Lwip-1.3.2\src\include\netif;..\Lwip-1.3.2\src\include\arch;..\Lwip-1.3.2;..\Lwip-1.3.2\src\LwIPEntry;..\Lwip-1.3.2\src\api;..\Lwip-1.3.2\src\include\ipv4\lwip</IncludePath>
+              <IncludePath>..\APP;..\STMLIB\inc;..\FreeRTOS\include;..\BSP;..\Lwip-1.3.2\src\arch;..\Lwip-1.3.2\src\include;..\Lwip-1.3.2\src\include\ipv4;..\Lwip-1.3.2\src\include\lwip;..\Lwip-1.3.2\src\include\netif;..\Lwip-1.3.2\src\include\arch;..\Lwip-1.3.2;..\Lwip-1.3.2\src\LwIPEntry;..\Lwip-1.3.2\src\api;..\Lwip-1.3.2\src\include\ipv4\lwip;..\APP\cli</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -446,6 +443,21 @@
               <FileName>app_buz.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\app_buz.c</FilePath>
+            </File>
+            <File>
+              <FileName>cli_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\cli\cli_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>cli-commands.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\cli\cli-commands.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart_console.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\cli\uart_console.c</FilePath>
             </File>
           </Files>
         </Group>

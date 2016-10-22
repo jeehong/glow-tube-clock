@@ -3,7 +3,7 @@
 
 
 #include "queue.h"
-
+#include "task.h"
 
 #include "bsp.h"
 
@@ -24,6 +24,8 @@ typedef struct {
     char buz[2];
 	char map[7];		/* 前6个是显示数字内容，最后一个是四个点的显示内容 */
 } GLOBAL_SOURCE_t;
+
+TaskHandle_t main_get_task_handle(unsigned char id);
 
 #endif
 

@@ -165,15 +165,12 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 	char *src;
 	char index = 0;
 	char hv_bak;
-	TaskHandle_t app_led_handle;
-    
+
 	p_src->hv = OFF;
 	hv_bak = ON;
 	src = &p_src->map[0];
 	app_display_set_show(Bit_SET);
 	app_display_set_point(p_src->hv);
-
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 300, p_src, 3, &app_led_handle);
 	
 	while(1)
 	{
@@ -184,13 +181,13 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 			if(hv_bak == OFF)
 			{
 				index = 0;
-				vTaskResume(app_led_handle);
+				vTaskResume(main_get_task_handle(4));
 				
 			}
 			else
 			{	
 				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
-				vTaskSuspend(app_led_handle);
+				vTaskSuspend(main_get_task_handle(4));
 			}
 			hv_bak = p_src->hv;
 			bsp_set_hv_state(p_src->hv);

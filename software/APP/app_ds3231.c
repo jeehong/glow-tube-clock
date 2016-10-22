@@ -46,23 +46,6 @@
 #define bin2bcd(bin) 	((((bin) / 10) << 4) | ((bin) % 10))
 
 /*
- * The struct used to pass data via the following ioctl. Similar to the
- * struct tm in <time.h>, but it needs to be here so that the kernel
- * source is self contained, allowing cross-compiles, etc. etc.
- */
-struct rtc_time {
-	unsigned char sec;
-	unsigned char min;
-	unsigned char hour;
-	unsigned char wday;
-	unsigned char mday;
-	unsigned char mon;
-	unsigned char year;
-	unsigned char am_pm;	/* 1:pm */
-	unsigned char h12;		/* 1:12h */
-};
-
-/*
  * This data structure is inspired by the EFI (v0.92) wakeup
  * alarm API.
  */
@@ -87,8 +70,6 @@ static int rtc_month_days(unsigned int month, unsigned int year)
 	return rtc_days_in_month[month] + (is_leap_year(year) && month == 1);
 }
 
-static int app_ds3231_read_time(struct rtc_time *ptime);
-static void app_ds3231_set_time(const struct rtc_time *ptime);
 static void app_ds3231_enable_irq(u8 flag);
 static void app_ds3231_read_alarm(struct rtc_wkalrm *alarm);
 static void app_ds3231_set_alarm(struct rtc_wkalrm *alarm);
@@ -97,12 +78,13 @@ static void app_ds3231_set_alarm(struct rtc_wkalrm *alarm);
 /*
  * Does the rtc_time represent a valid date/time?
  */
-static int rtc_valid_tm(struct rtc_time *tm)
+int rtc_valid_tm(struct rtc_time *tm)
 {
-	if (tm->year < 70
-		|| ((unsigned)tm->mon) >= 12
+	if (tm->year > 100
+		|| ((unsigned)tm->mon) > 12
 		|| tm->mday < 1
-		|| tm->mday > rtc_month_days(tm->mon, tm->year + 1900)
+		|| tm->mday > rtc_month_days(tm->mon, tm->year + 2000)
+		|| ((unsigned)tm->wday) > 7
 		|| ((unsigned)tm->hour) >= 24
 		|| ((unsigned)tm->min) >= 60
 		|| ((unsigned)tm->sec) >= 60)
@@ -111,7 +93,7 @@ static int rtc_valid_tm(struct rtc_time *tm)
 	return 0;
 }
 
-static int app_ds3231_read_time(struct rtc_time *ptime)
+int app_ds3231_read_time(struct rtc_time *ptime)
 {
 	u8 data[7];
 	unsigned int century;
@@ -150,7 +132,7 @@ static int app_ds3231_read_time(struct rtc_time *ptime)
 	return rtc_valid_tm(ptime);
 }
 
-static void app_ds3231_set_time(const struct rtc_time *ptime)
+void app_ds3231_set_time(const struct rtc_time *ptime)
 {
 	/* Extract time from rtc_time and load into ds3231*/
 	u8 data[7];

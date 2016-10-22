@@ -33,26 +33,13 @@ don't have to block to send. */
 #define comFIRST_BYTE				( ' ' )
 #define comLAST_BYTE				( '~' )
 
-#define comBUFFER_LEN				( ( UBaseType_t ) ( comLAST_BYTE - comFIRST_BYTE ) + ( UBaseType_t ) 1 )
 #define comINITIAL_RX_COUNT_VALUE	( 0 )
 
 
-
-static void vComTxTask(void *pvParameters);
-/* static signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedChar, TickType_t xBlockTime ); */
-static void vSerialPutString( xComPortHandle pxPort, const signed char * const pcString, unsigned short usStringLength );
-static signed portBASE_TYPE xSerialPutChar( xComPortHandle pxPort, signed char cOutChar, TickType_t xBlockTime );
-
 /* The queue used to hold received characters. */
-/* static QueueHandle_t xRxedChars; */
+static QueueHandle_t xRxedChars; 
 static QueueHandle_t xCharsForTx;
 static xComPortHandle xPort = NULL;
-
-void vStartComTasks( UBaseType_t uxPriority)
-{
-	xTaskCreate( vComTxTask, "COMTx", comSTACK_SIZE, NULL, uxPriority, ( TaskHandle_t * ) NULL );
-	/* xTaskCreate( vComRxTask, "COMRx", comSTACK_SIZE, NULL, uxPriority, ( TaskHandle_t * ) NULL ); */
-}
 
 void dbg_string(const char *fmt, ...)
 {
@@ -66,47 +53,6 @@ void dbg_string(const char *fmt, ...)
 	vSerialPutString(xPort, (signed char *)&dbg_buf, comNO_BLOCK);
 }
 
-/*-----------------------------------------------------------*/
-
-static void vComTxTask(void *pvParameters)
-{
-	char cByteToSend = comFIRST_BYTE;
-	
-	/* Just to stop compiler warnings. */
-	( void ) pvParameters;
-	
-	for( ;; )
-	{
-		xSerialPutChar( xPort, cByteToSend, comNO_BLOCK );
-		if(cByteToSend < comLAST_BYTE)
-			cByteToSend++;
-		else
-		{
-			xSerialPutChar( xPort, '\r', comNO_BLOCK );
-			vTaskDelay(100);
-			xSerialPutChar( xPort, '\n', comNO_BLOCK );
-			cByteToSend = comFIRST_BYTE;
-		}
-
-		vTaskDelay(100);
-	}
-} 
-/*-----------------------------------------------------------*/
-/*
-static portTASK_FUNCTION( vComRxTask, pvParameters )
-{
-	signed char cByteRxed;
-
-	( void ) pvParameters;
-
-	for( ;; )
-	{
-			xSerialGetChar( xPort, &cByteRxed, comRX_BLOCK_TIME );
-
-			xSerialPutChar( xPort, cByteRxed, comNO_BLOCK );
-	}
-}*/
-
 xComPortHandle serial_init( unsigned long ulWantedBaud)
 {
 	xComPortHandle xReturn;
@@ -116,12 +62,12 @@ xComPortHandle serial_init( unsigned long ulWantedBaud)
 	GPIO_InitTypeDef GPIO_InitStructure;
 
 	/* Create the queues used to hold Rx/Tx characters. */
-	/* xRxedChars = xQueueCreate( comBUFFER_LEN, ( unsigned portBASE_TYPE ) sizeof( signed char ) ); */
-	xCharsForTx = xQueueCreate( comBUFFER_LEN + 1, ( unsigned portBASE_TYPE ) sizeof( signed char ) );
+	xRxedChars = xQueueCreate( configCOMMAND_INT_MAX_OUTPUT_SIZE, ( unsigned portBASE_TYPE ) sizeof( signed char ) ); 
+	xCharsForTx = xQueueCreate( configCOMMAND_INT_MAX_OUTPUT_SIZE, ( unsigned portBASE_TYPE ) sizeof( signed char ) );
 	
 	/* If the queue/semaphore was created correctly then setup the serial port
 	hardware. */
-	if(/* ( xRxedChars != serINVALID_QUEUE ) && */( xCharsForTx != serINVALID_QUEUE ) )
+	if(( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
 	{
 		/* Enable USART1 clock */
 		RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA, ENABLE );	
@@ -173,7 +119,7 @@ xComPortHandle serial_init( unsigned long ulWantedBaud)
 	return xReturn;
 }
 
-/*static signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedChar, TickType_t xBlockTime )
+signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedChar, TickType_t xBlockTime )
 {
 	( void ) pxPort;
 
@@ -186,10 +132,10 @@ xComPortHandle serial_init( unsigned long ulWantedBaud)
 	{
 		return pdFALSE;
 	}
-}*/
+}
 /*-----------------------------------------------------------*/
 
-static void vSerialPutString( xComPortHandle pxPort, const signed char * const pcString, unsigned short usStringLength )
+void vSerialPutString( xComPortHandle pxPort, const signed char * const pcString, unsigned short usStringLength )
 {
 	signed char *pxNext;
 
@@ -212,7 +158,7 @@ static void vSerialPutString( xComPortHandle pxPort, const signed char * const p
 	}
 }
 
-static signed portBASE_TYPE xSerialPutChar( xComPortHandle pxPort, signed char cOutChar, TickType_t xBlockTime )
+signed portBASE_TYPE xSerialPutChar( xComPortHandle pxPort, signed char cOutChar, TickType_t xBlockTime )
 {
 signed portBASE_TYPE xReturn;
 
@@ -239,23 +185,24 @@ void USART1_IRQHandler( void )
 	{
 		/* The interrupt was caused by the THR becoming empty.  Are there any
 		more characters to transmit? */
-		if( xQueueReceiveFromISR( xCharsForTx, &cChar, &xHigherPriorityTaskWoken ) == pdTRUE )
+		while(xQueueReceiveFromISR( xCharsForTx, &cChar, &xHigherPriorityTaskWoken ) == pdTRUE)
 		{
 			/* A character was retrieved from the queue so can be sent to the
 			THR now. */
 			USART_SendData( USART1, cChar );
+            while(USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
+                ;
 		}
-		else
-		{
-			USART_ITConfig( USART1, USART_IT_TXE, DISABLE );		
-		}		
+		USART_ClearITPendingBit(USART1, USART_IT_TXE);
+		USART_ITConfig(USART1, USART_IT_TXE, DISABLE);				
 	}
 	
-	/* if( USART_GetITStatus( USART1, USART_IT_RXNE ) == SET )
+	if( USART_GetITStatus( USART1, USART_IT_RXNE ) == SET )
 	{
 		cChar = USART_ReceiveData( USART1 );
 		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );
-	} */	
+		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
+	} 	
 	
 	portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 }

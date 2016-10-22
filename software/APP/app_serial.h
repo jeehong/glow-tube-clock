@@ -18,8 +18,10 @@ typedef void * xComPortHandle;
 #define serTX_BLOCK_TIME				( 40 / portTICK_PERIOD_MS )
 
 xComPortHandle serial_init( unsigned long ulWantedBaud);
-void vStartComTasks(UBaseType_t uxPriority);
 void dbg_string(const char *fmt,...);
+void vSerialPutString( xComPortHandle pxPort, const signed char * const pcString, unsigned short usStringLength );
+signed portBASE_TYPE xSerialPutChar( xComPortHandle pxPort, signed char cOutChar, TickType_t xBlockTime );
+signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedChar, TickType_t xBlockTime );
 
 
 #endif

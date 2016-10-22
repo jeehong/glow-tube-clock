@@ -3,35 +3,99 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\Administrator\projects\glow-tube-clock\software\Project\OS.uvproj
-Project File Date:  08/17/2016
+C:\Users\Jeehong\projects\glow-tube-clock\software\Project\OS.uvproj
+Project File Date:  10/17/2016
 
 <h2>Output:</h2>
 Build target 'FreeRTOS'
-compiling main.c...
-compiling app_led.c...
-compiling netconfig.c...
-compiling app_display.c...
-compiling app_sht10.c...
-compiling app_ds3231.c...
-..\APP\app_ds3231.c(153): warning:  #177-D: function "app_ds3231_set_time" was declared but never referenced
-  static void app_ds3231_set_time(const struct rtc_time *ptime)
-..\APP\app_ds3231.c(249): warning:  #177-D: function "app_ds3231_enable_irq" was declared but never referenced
-  static void app_ds3231_enable_irq(u8 flag)
-..\APP\app_ds3231.c(181): warning:  #177-D: function "app_ds3231_read_alarm" was declared but never referenced
-  static void app_ds3231_read_alarm(struct rtc_wkalrm *alarm)
-..\APP\app_ds3231.c(205): warning:  #177-D: function "app_ds3231_set_alarm" was declared but never referenced
-  static void app_ds3231_set_alarm(struct rtc_wkalrm *alarm)
-..\APP\app_ds3231.c: 4 warnings, 0 errors
-compiling bsp.c...
-compiling dm9000x.c...
-compiling i2c_bus.c...
-compiling ethernetif.c...
-compiling LwIPEntry.c...
+compiling cli-commands.c...
+..\APP\cli\cli-commands.c(295): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(295): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(295): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(295): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(295): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(295): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(295): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(369): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        sscanf(pcCommandInput, "%s %d", string, &state);
+..\APP\cli\cli-commands.c: 8 warnings, 0 errors
 linking...
-Program Size: Code=58564 RO-data=632 RW-data=356 ZI-data=40484  
+Program Size: Code=62176 RO-data=1612 RW-data=412 ZI-data=41276  
 FromELF: creating hex file...
-".\Obj\OS.axf" - 0 Error(s), 4 Warning(s).
+".\Obj\OS.axf" - 0 Error(s), 8 Warning(s).
+Load "C:\\Users\\Jeehong\\projects\\glow-tube-clock\\software\\Project\\Obj\\OS.axf" 
+Set JLink Project File to "C:\Users\Jeehong\projects\glow-tube-clock\software\Project\JLinkSettings.ini"
+* JLink Info: Device "STM32F103RC" selected (256 KB flash, 48 KB RAM).
+ 
+JLink info:
+------------
+DLL: V4.80g, compiled Feb 13 2014 20:50:02
+Firmware: J-Link ARM V8 compiled Jan 31 2018 18:34:52
+Hardware: V8.00
+S/N : 20080643 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x1BA01477
+* JLink Info: Found SWD-DP with ID 0x1BA01477
+* JLink Info: Found Cortex-M3 r1p1, Little endian.
+* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
+* JLink Info: TPIU fitted.
+* JLink Info: ETM fitted.
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: STM32F103RC
+VTarget = 3.351V
+State of Pins: 
+TCK: 0, TDI: 1, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 6
+Software-Breakpoints: 8192
+Watchpoints:          4
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
 </pre>
 </body>
 </html>
+string, &state);
+..\APP\cli\cli-commands.c: 8 warnings, 0 errors
+".\Obj\OS.axf" - 8 Error(s), 12 Warning(s).
+Target not created
+ string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(285): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        result = sscanf(pcCommandInput, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
+..\APP\cli\cli-commands.c(343): error:  #247: function "prvTHCommand" has already been defined
+  static BaseType_t prvTHCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
+..\APP\cli\cli-commands.c(359): warning:  #181-D: argument is incompatible with corresponding format string conversion
+        sscanf(pcCommandInput, "%s %d", string, &state);
+..\APP\cli\cli-commands.c(90): error:  #114: function "prvLedCommand" was referenced but not defined
+  static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
+..\APP\cli\cli-commands.c: 8 warnings, 2 errors
+compiling bsp.c...
+compiling i2c_bus.c...
+".\Obj\OS.axf" - 10 Error(s), 15 Warning(s).
+Target not created
+eferenced but not defined
+  static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
+..\APP\cli\cli-commands.c: 8 warnings, 2 errors
+compiling bsp.c...
+compiling i2c_bus.c...
+".\Obj\OS.axf" - 12 Error(s), 15 Warning(s).
+Target not created
+in_get_task_handle(unsigned char id);
+..\BSP\bsp.c: 0 warnings, 1 error
+compiling i2c_bus.c...
+".\Obj\OS.axf" - 13 Error(s), 15 Warning(s).
+Target not created
