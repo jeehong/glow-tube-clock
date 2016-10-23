@@ -166,13 +166,12 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 {
 	char map[CHIP595_NUM] = {10};
 	char *src;
-	//char hv_bak;
 
 	p_src->hv = ON;
-	//hv_bak = ON;
 	src = &p_src->map[0];
 	app_display_set_show(Bit_SET);
 	app_display_set_point(p_src->hv);
+	bsp_set_hv_state(ON);
 	
 	while(1)
 	{

@@ -106,8 +106,6 @@ CLI_Definition_List_Item_t *cli_api_get_cmd_list(void)
     return &cHeadListCommands;
 }
 
-
-
 BaseType_t FreeRTOS_CLIRegisterCommand( const CLI_Command_Definition_t * const pxCommandToRegister )
 {
     static CLI_Definition_List_Item_t *pxLastCommandInList = &cHeadListCommands;
@@ -125,19 +123,9 @@ BaseType_t FreeRTOS_CLIRegisterCommand( const CLI_Command_Definition_t * const p
 	{
 		taskENTER_CRITICAL();
 		{
-			/* Reference the command being registered from the newly created
-			list item. */
 			pxNewListItem->pxCommandLineDefinition = pxCommandToRegister;
-
-			/* The new list item will get added to the end of the list, so
-			pxNext has nowhere to point. */
 			pxNewListItem->pxNext = NULL;
-
-			/* Add the newly created list item to the end of the already existing
-			list. */
 			pxLastCommandInList->pxNext = pxNewListItem;
-
-			/* Set the end of list marker to the new list item. */
 			pxLastCommandInList = pxNewListItem;
 		}
 		taskEXIT_CRITICAL();
@@ -157,29 +145,17 @@ BaseType_t FreeRTOS_CLIProcessCommand( const char * const pcCommandInput, char *
 	size_t xCommandStringLength;
 	const static char log1[] = " not recognised. Enter 'help' to view a list of available commands.\r\n";
 
-	/* Note:  This function is not re-entrant.  It must not be called from more
-	thank one task. */
-
 	if( pxCommand == NULL )
 	{
-		/* Search for the command string in the list of registered commands. */
 		for( pxCommand = &cHeadListCommands; pxCommand != NULL; pxCommand = pxCommand->pxNext )
 		{
 			pcRegisteredCommandString = pxCommand->pxCommandLineDefinition->pcCommand;
 			xCommandStringLength = strlen( pcRegisteredCommandString );
 
-			/* To ensure the string lengths match exactly, so as not to pick up
-			a sub-string of a longer command, check the byte after the expected
-			end of the string is either the end of the string or a space before
-			a parameter. */
 			if( ( pcCommandInput[ xCommandStringLength ] == ' ' ) || ( pcCommandInput[ xCommandStringLength ] == 0x00 ) )
 			{
 				if( strncmp( pcCommandInput, pcRegisteredCommandString, xCommandStringLength ) == 0 )
 				{
-					/* The command has been found.  Check it has the expected
-					number of parameters.  If cExpectedNumberOfParameters is -1,
-					then there could be a variable number of parameters and no
-					check is made. */
 					if( pxCommand->pxCommandLineDefinition->cExpectedNumberOfParameters >= 0 )
 					{
 						if( prvGetNumberOfParameters( pcCommandInput ) != pxCommand->pxCommandLineDefinition->cExpectedNumberOfParameters )
@@ -196,19 +172,13 @@ BaseType_t FreeRTOS_CLIProcessCommand( const char * const pcCommandInput, char *
     
 	if((pxCommand != NULL) && (xReturn == pdFALSE))
 	{
-		/* The command was found, but the number of parameters with the command
-		was incorrect. */
 		sprintf(pcWriteBuffer, "  '%s'%s", pcCommandInput, log1);
 		pxCommand = NULL;
 	}
 	else if( pxCommand != NULL )
 	{
-		/* Call the callback function that is registered to this command. */
 		xReturn = pxCommand->pxCommandLineDefinition->pxCommandInterpreter( pcCommandInput, pcWriteBuffer, xWriteBufferLen, pxCommand->pxCommandLineDefinition->pcHelpString);
 
-		/* If xReturn is pdFALSE, then no further strings will be returned
-		after this one, and	pxCommand can be reset to NULL ready to search
-		for the next entered command. */
 		if( xReturn == pdFALSE )
 		{
 			pxCommand = NULL;
@@ -216,7 +186,6 @@ BaseType_t FreeRTOS_CLIProcessCommand( const char * const pcCommandInput, char *
 	}
 	else
 	{
-		/* pxCommand was NULL, the command was not found. */
         if(*pcCommandInput != 0)
         {
             sprintf(pcWriteBuffer, "  '%s'%s", pcCommandInput, log1);

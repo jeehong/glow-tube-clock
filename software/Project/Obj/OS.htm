@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sun Oct 23 14:22:17 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sun Oct 23 22:04:33 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1192 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -316,7 +316,7 @@ Global Symbols
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
-<P><STRONG><a name="[37]"></a>app_display_task</STRONG> (Thumb, 142 bytes, Stack size 16 bytes, app_display.o(.text))
+<P><STRONG><a name="[37]"></a>app_display_task</STRONG> (Thumb, 164 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_display_task &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
@@ -4129,8 +4129,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d5]"></a>strcpy</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, strcpy.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvUARTCommandConsoleTask
-<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvSetDateCommand
+<BR><BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvSetDateCommand
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvClearCommand
 <LI><a href="#[1a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dns_enqueue
 </UL>
@@ -4649,7 +4648,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cli-commands.o(.constdata)
 </UL>
-<P><STRONG><a name="[3e]"></a>prvUARTCommandConsoleTask</STRONG> (Thumb, 270 bytes, Stack size 1032 bytes, uart_console.o(.text))
+<P><STRONG><a name="[3e]"></a>prvUARTCommandConsoleTask</STRONG> (Thumb, 260 bytes, Stack size 1032 bytes, uart_console.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1192<LI>Call Chain = prvUARTCommandConsoleTask &rArr; vSerialPutString &rArr; xSerialPutChar &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FreeRTOS_CLIProcessCommand
@@ -4658,7 +4657,6 @@ Local Symbols
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xSerialGetChar
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vSerialPutString
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xSerialPutChar
-<LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcpy
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
@@ -4689,11 +4687,11 @@ Local Symbols
 <P><STRONG><a name="[e7]"></a>bsp_ds3231_irq_init</STRONG> (Thumb, 98 bytes, Stack size 24 bytes, bsp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = bsp_ds3231_irq_init &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_EXTILineConfig
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI_Init
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphClockCmd
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_EXTILineConfig
+<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_init
 </UL>
