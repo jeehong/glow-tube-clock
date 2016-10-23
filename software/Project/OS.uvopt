@@ -152,7 +152,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>/</Name>
+          <Name></Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -179,98 +179,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>278</LineNumber>
+          <LineNumber>239</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223302</Address>
+          <Address>134224568</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\cli-commands.c</Filename>
+          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\uart_console.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>271</LineNumber>
+          <LineNumber>153</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223246</Address>
+          <Address>134224320</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\cli-commands.c</Filename>
+          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\uart_console.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>269</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134223242</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\cli-commands.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>202</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134222638</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\cli_api.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OS\../APP/cli/cli_api.c\202</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>206</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134222646</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\cli_api.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OS\../APP/cli/cli_api.c\206</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>212</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134222668</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Jeehong\projects\glow-tube-clock\software\APP\cli\cli_api.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OS\../APP/cli/cli_api.c\212</Expression>
+          <Expression>\\OS\../APP/cli/uart_console.c\153</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -348,9 +284,9 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>46</ColumnNumber>
+      <ColumnNumber>101</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>134</TopLine>
+      <TopLine>135</TopLine>
       <CurrentLine>161</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\main.c</PathWithFileName>
@@ -414,8 +350,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>48</TopLine>
+      <CurrentLine>62</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\app_display.c</PathWithFileName>
       <FilenameWithoutPath>app_display.c</FilenameWithoutPath>
@@ -428,10 +364,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>24</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>65</TopLine>
-      <CurrentLine>104</CurrentLine>
+      <TopLine>63</TopLine>
+      <CurrentLine>106</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\app_sht10.c</PathWithFileName>
       <FilenameWithoutPath>app_sht10.c</FilenameWithoutPath>
@@ -446,7 +382,7 @@
       <Focus>0</Focus>
       <ColumnNumber>1</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>58</TopLine>
+      <TopLine>59</TopLine>
       <CurrentLine>82</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\app_ds3231.c</PathWithFileName>
@@ -476,10 +412,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>10</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>71</TopLine>
-      <CurrentLine>207</CurrentLine>
+      <TopLine>215</TopLine>
+      <CurrentLine>228</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\cli\cli_api.c</PathWithFileName>
       <FilenameWithoutPath>cli_api.c</FilenameWithoutPath>
@@ -492,10 +428,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>5</ColumnNumber>
+      <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>360</TopLine>
-      <CurrentLine>381</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>15</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\cli\cli-commands.c</PathWithFileName>
       <FilenameWithoutPath>cli-commands.c</FilenameWithoutPath>
@@ -508,10 +444,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>64</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>211</TopLine>
-      <CurrentLine>188</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\cli\uart_console.c</PathWithFileName>
       <FilenameWithoutPath>uart_console.c</FilenameWithoutPath>
@@ -590,7 +526,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>108</TopLine>
+      <TopLine>109</TopLine>
       <CurrentLine>120</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\STMLIB\startup\cstartup.s</PathWithFileName>
@@ -604,10 +540,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>50</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>231</TopLine>
-      <CurrentLine>250</CurrentLine>
+      <TopLine>204</TopLine>
+      <CurrentLine>205</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\STMLIB\src\stm32f10x_gpio.c</PathWithFileName>
       <FilenameWithoutPath>stm32f10x_gpio.c</FilenameWithoutPath>
@@ -790,7 +726,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1593</TopLine>
+      <TopLine>1595</TopLine>
       <CurrentLine>1606</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\FreeRTOS\tasks.c</PathWithFileName>

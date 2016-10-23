@@ -129,13 +129,14 @@
 
 /* The check task uses the sprintf function so requires a little more stack. */
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
+#define mainALL_TASK_LIST_MAX		( 10 )
 
 /* 
  * 这个结构体中的互斥量用来描述硬件显示资源是否可用 
  * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
  */
 static GLOBAL_SOURCE_t global_source;	
-static TaskHandle_t handle_source[5];
+static TaskHandle_t handle_source[mainALL_TASK_LIST_MAX];
 
 TaskHandle_t main_get_task_handle(unsigned char id)
 {
@@ -155,13 +156,13 @@ int main( void )
 	global_source.xDisplay = xSemaphoreCreateMutex();
 	global_source.xBuzzer = xSemaphoreCreateMutex();
 	/* Start the tasks defined within this file/specific to this demo. */
-	vUARTCommandConsoleStart(500, 3);
+	vUARTCommandConsoleStart(500, 3, &handle_source[0]);
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
-	xTaskCreate((pdTASK_CODE)app_display_task, "app_display", 300, &global_source, 3, &handle_source[0]);
-	xTaskCreate((pdTASK_CODE)app_sht10_task, "app_sht10", 300, &global_source, 4, &handle_source[1]);
-	xTaskCreate((pdTASK_CODE)app_ds3231_task, "app_ds3231", 300, &global_source, 3, &handle_source[2]);
-    xTaskCreate((pdTASK_CODE)app_buz_task, "app_buz", 300, &global_source, 4, &handle_source[3]);
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "app_led", 200, &global_source, 4, &handle_source[4]);
+	xTaskCreate((pdTASK_CODE)app_display_task, "display", 300, &global_source, 3, &handle_source[1]);
+	xTaskCreate((pdTASK_CODE)app_sht10_task, "sht10", 300, &global_source, 4, &handle_source[2]);
+	xTaskCreate((pdTASK_CODE)app_ds3231_task, "ds3231", 300, &global_source, 3, &handle_source[3]);
+    xTaskCreate((pdTASK_CODE)app_buz_task, "buz", 300, &global_source, 4, &handle_source[4]);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, &global_source, 4, &handle_source[5]);
 
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
 	vRegisterCLICommands();

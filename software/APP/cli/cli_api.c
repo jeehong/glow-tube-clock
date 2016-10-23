@@ -98,11 +98,6 @@ attempted.
 configAPPLICATION_PROVIDES_cOutputBuffer is provided to allow the application
 writer to provide their own cOutputBuffer declaration in cases where the
 buffer needs to be placed at a fixed address (rather than by the linker). */
-#if( configAPPLICATION_PROVIDES_cOutputBuffer == 0 )
-	static char cOutputBuffer[ configCOMMAND_INT_MAX_OUTPUT_SIZE ];
-#else
-	extern char cOutputBuffer[ configCOMMAND_INT_MAX_OUTPUT_SIZE ];
-#endif
 
 
 /*-----------------------------------------------------------*/
@@ -233,13 +228,6 @@ BaseType_t FreeRTOS_CLIProcessCommand( const char * const pcCommandInput, char *
 	
 	return xReturn;
 }
-/*-----------------------------------------------------------*/
-
-char *FreeRTOS_CLIGetOutputBuffer( void )
-{
-	return cOutputBuffer;
-}
-/*-----------------------------------------------------------*/
 
 const char *FreeRTOS_CLIGetParameter( const char *pcCommandString, UBaseType_t uxWantedParameter, BaseType_t *pxParameterStringLength )
 {
@@ -302,8 +290,8 @@ const char *pcReturn = NULL;
 
 static int8_t prvGetNumberOfParameters( const char *pcCommandString )
 {
-int8_t cParameters = 0;
-BaseType_t xLastCharacterWasSpace = pdFALSE;
+	int8_t cParameters = 0;
+	BaseType_t xLastCharacterWasSpace = pdFALSE;
 
 	/* Count the number of space delimited words in pcCommandString. */
 	while( *pcCommandString != 0x00 )
@@ -356,7 +344,6 @@ static BaseType_t prvHelpCommand(const char * const pcCommandInput, char *pcWrit
         strcat(pcWriteBuffer, cmd_index->pxCommandLineDefinition->pcCommand);
         strcat(pcWriteBuffer, ": ");
         strcat(pcWriteBuffer, cmd_index->pxCommandLineDefinition->pcHelpString);
-        //strcat(pcWriteBuffer, "\r\n");
     }
 	
 	/* There is no more data to return after this single string, so return

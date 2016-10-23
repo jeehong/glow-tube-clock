@@ -92,7 +92,7 @@
 /* The maximum time to wait for the mutex that guards the UART to become
 available. */
 #define cmdMAX_MUTEX_WAIT		pdMS_TO_TICKS( 300 )
-
+#define cmdMAX_MAX_INPUT_SIZE		100
 #ifndef configCLI_BAUD_RATE
 	#define configCLI_BAUD_RATE	115200
 #endif
@@ -119,7 +119,7 @@ static xComPortHandle xPort = 0;
 
 /*-----------------------------------------------------------*/
 
-void vUARTCommandConsoleStart( unsigned short usStackSize, UBaseType_t uxPriority )
+void vUARTCommandConsoleStart( unsigned short usStackSize, UBaseType_t uxPriority, TaskHandle_t *handle)
 {
 	/* Create the semaphore used to access the UART Tx. */
 	xTxMutex = xSemaphoreCreateMutex();
@@ -127,11 +127,11 @@ void vUARTCommandConsoleStart( unsigned short usStackSize, UBaseType_t uxPriorit
 
 	/* Create that task that handles the console itself. */
 	xTaskCreate( 	prvUARTCommandConsoleTask,	/* The task that implements the command console. */
-					"CLI",						/* Text name assigned to the task.  This is just to assist debugging.  The kernel does not use this name itself. */
+					"cli",						/* Text name assigned to the task.  This is just to assist debugging.  The kernel does not use this name itself. */
 					usStackSize,				/* The size of the stack allocated to the task. */
 					NULL,						/* The parameter is not used, so NULL is passed. */
 					uxPriority,					/* The priority allocated to the task. */
-					NULL );						/* A handle is not required, so just pass NULL. */
+					handle );						/* A handle is not required, so just pass NULL. */
 }
 /*-----------------------------------------------------------*/
 
@@ -139,18 +139,13 @@ static void prvUARTCommandConsoleTask( void *pvParameters )
 {
 	signed char cRxedChar;
 	unsigned char ucInputIndex = 0;
-	char *pcOutputString;
-	static char cInputString[configCOMMAND_INT_MAX_OUTPUT_SIZE], cLastInputString[configCOMMAND_INT_MAX_OUTPUT_SIZE];
+	char pcOutputString[configCOMMAND_INT_MAX_OUTPUT_SIZE];
+	static char cInputString[cmdMAX_MAX_INPUT_SIZE], cLastInputString[cmdMAX_MAX_INPUT_SIZE];
 	BaseType_t xReturned;
 	xComPortHandle xPort;
-
+	
 	( void ) pvParameters;
-
-	/* Obtain the address of the output buffer.  Note there is no mutual
-	exclusion on this buffer as it is assumed only one command console interface
-	will be used at any one time. */
-	pcOutputString = FreeRTOS_CLIGetOutputBuffer();
-
+	
 	for( ;; )
 	{
 		/* Wait for the next character.  The while loop is used in case
@@ -198,7 +193,7 @@ static void prvUARTCommandConsoleTask( void *pvParameters )
 				to be processed again. */
 				//strcpy( cLastInputString, cInputString );
 				ucInputIndex = 0;
-				memset( cInputString, 0x0, configCOMMAND_INT_MAX_OUTPUT_SIZE);
+				memset( cInputString, '\0', cmdMAX_MAX_INPUT_SIZE);
 
 				vSerialPutString( xPort, ( signed char * ) pcEndOfOutputMessage, ( unsigned short ) strlen( pcEndOfOutputMessage ) );
 			}
@@ -233,7 +228,6 @@ static void prvUARTCommandConsoleTask( void *pvParameters )
 					}
 				}
 			}
-
 			/* Must ensure to give the mutex back. */
 			xSemaphoreGive( xTxMutex );
 		}

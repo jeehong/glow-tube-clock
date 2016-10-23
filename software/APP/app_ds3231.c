@@ -341,11 +341,11 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 
         temp16 = (time2.hour * 100) + time2.min;
 		
-		if(((temp16 >= ontime1) && (temp16 < offtime1)) || 
+		/* if(((temp16 >= ontime1) && (temp16 < offtime1)) || 
             ((temp16 >= ontime2) && (temp16 < offtime2)))
 			p_src->hv = ON;
 		else
-			p_src->hv = OFF;
+			p_src->hv = OFF; */
 
         /* dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
 									time2.year, 

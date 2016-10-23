@@ -83,7 +83,6 @@
 #include "app_ds3231.h"
 #include "app_sht10.h"
 
-static BaseType_t prvHelloCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvInfoCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvClearCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvDateCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
@@ -92,15 +91,7 @@ static BaseType_t prvTHCommand(const char * const pcCommandInput, char *pcWriteB
 static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvRebootCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvDisplayCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
-
-
-static const CLI_Command_Definition_t xHelloCommand =
-{
-	"hi",
-	"Nice to meet you!\r\n",
-	prvHelloCommand,
-	0
-};
+static BaseType_t prvTaskCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 
 static const CLI_Command_Definition_t xInfoCommand =
 {
@@ -166,13 +157,19 @@ static const CLI_Command_Definition_t xDisplayCommand =
 	1
 };
 
+static const CLI_Command_Definition_t xTaskCommand =
+{
+	"task",
+	"List all the task name.\r\n",
+	prvTaskCommand,
+	0
+};
 
 /*-----------------------------------------------------------*/
 
 void vRegisterCLICommands( void )
 {
 	/* Register all the command line commands defined immediately above. */
-	FreeRTOS_CLIRegisterCommand( &xHelloCommand );
 	FreeRTOS_CLIRegisterCommand( &xInfoCommand );
     FreeRTOS_CLIRegisterCommand( &xClearCommand );
 	FreeRTOS_CLIRegisterCommand( &xDateCommand );
@@ -181,24 +178,7 @@ void vRegisterCLICommands( void )
 	FreeRTOS_CLIRegisterCommand( &xLedCommand );
 	FreeRTOS_CLIRegisterCommand( &xRebootCommand );
 	FreeRTOS_CLIRegisterCommand( &xDisplayCommand );
-}
-
-static BaseType_t prvHelloCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
-{
-	/* Remove compile time warnings about unused parameters, and check the
-	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
-	write buffer length is adequate, so does not check for buffer overflows. */
-	( void ) pcCommandInput;
-	( void ) pHelpString;
-	( void ) xWriteBufferLen;
-	configASSERT(pcWriteBuffer);
-
-	/* Generate a table of task stats. */
-    sprintf(pcWriteBuffer, "    %s", pHelpString);
-	
-	/* There is no more data to return after this single string, so return
-	pdFALSE. */
-	return pdFALSE;
+	FreeRTOS_CLIRegisterCommand( &xTaskCommand );
 }
 
 static BaseType_t prvInfoCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
@@ -383,7 +363,7 @@ static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWrite
 		return pdFALSE;
 	}
 		
-	pled = main_get_task_handle(4);
+	pled = main_get_task_handle(5);
 	
 	if(state == 1)
 		vTaskResume(pled);
@@ -428,7 +408,7 @@ static BaseType_t prvDisplayCommand(const char * const pcCommandInput, char *pcW
 
 	
 	/* Generate a table of task stats. */
-	plcd = main_get_task_handle(0);
+	plcd = main_get_task_handle(1);
 	sscanf(pcCommandInput, "%s %d", string, &state);
 	
 	if((state != 1) && (state != 0))
@@ -440,18 +420,63 @@ static BaseType_t prvDisplayCommand(const char * const pcCommandInput, char *pcW
 	if(state == 1)
 	{
 		bsp_set_hv_state(ON);
-		app_display_set_show(1);
+		app_display_set_show(Bit_SET);
 		vTaskResume(plcd);
 	}
 	else
 	{
 		bsp_set_hv_state(OFF);
-		app_display_set_show(0);
+		app_display_set_show(Bit_RESET);
 		vTaskSuspend(plcd);
 	}
 	
 	sprintf(pcWriteBuffer, "    Lcd display task is %s\r\n", state ? "working." : "stoped.");
 
+	/* There is no more data to return after this single string, so return
+	pdFALSE. */
+	return pdFALSE;
+}
+
+static BaseType_t prvTaskCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
+{
+	TaskHandle_t ptask;
+	unsigned char list = 0;
+	char string[15];
+	
+	/* Remove compile time warnings about unused parameters, and check the
+	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+	write buffer length is adequate, so does not check for buffer overflows. */
+	(void) pcCommandInput;
+	( void ) pHelpString;
+	( void ) xWriteBufferLen;
+	configASSERT(pcWriteBuffer);
+	
+	/* Generate a table of task stats. */
+	sprintf(pcWriteBuffer, "	Priority	Name	State		Mem(B)\r\n");
+	for(list = 0; main_get_task_handle(list) != NULL; list++)
+	{
+		ptask = main_get_task_handle(list);
+		strcat(pcWriteBuffer, "	");
+		sprintf(string, "%d", uxTaskPriorityGet(ptask));
+		strcat(pcWriteBuffer, string);
+		strcat(pcWriteBuffer, "		");
+		strcat(pcWriteBuffer, pcTaskGetName(ptask));
+		strcat(pcWriteBuffer, "	");
+		switch(eTaskGetState(ptask))
+		{
+			case eRunning: strcat(pcWriteBuffer, "run"); break;
+			case eReady: strcat(pcWriteBuffer, "ready"); break;
+			case eBlocked: strcat(pcWriteBuffer, "block"); break;
+			case eSuspended: strcat(pcWriteBuffer, "suspend"); break;
+			case eDeleted: strcat(pcWriteBuffer, "delet"); break;
+			case eInvalid: strcat(pcWriteBuffer, "invalid"); break;
+			default: strcat(pcWriteBuffer, "NULL"); break;
+		}
+		strcat(pcWriteBuffer, "		");
+		sprintf(string, "%d", uxTaskGetStackHighWaterMark(ptask));
+		strcat(pcWriteBuffer, string);
+		strcat(pcWriteBuffer, "\r\n");
+	}	
 	/* There is no more data to return after this single string, so return
 	pdFALSE. */
 	return pdFALSE;
