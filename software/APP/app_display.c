@@ -166,17 +166,33 @@ void app_display_task(GLOBAL_SOURCE_t *p_src)
 {
 	char map[CHIP595_NUM] = {10};
 	char *src;
-
-	p_src->hv = ON;
+	char hv_bak = ON;
+	
+	p_src->hv = OFF;
 	src = &p_src->map[0];
 	app_display_set_show(Bit_SET);
 	app_display_set_point(p_src->hv);
-	bsp_set_hv_state(ON);
-	
+	/* bsp_set_hv_state(ON); */
 	while(1)
 	{
 		xSemaphoreTake(p_src->xDisplay, portMAX_DELAY);
-        
+
+		if(hv_bak != p_src->hv)
+		{
+			if(hv_bak == OFF)
+			{
+				start_dis = 0;
+				vTaskResume(p_src->ptaskHandle[HD_LED]);
+			}
+			else
+			{	
+				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
+				vTaskSuspend(p_src->ptaskHandle[HD_LED]);
+			}
+			hv_bak = p_src->hv;
+			bsp_set_hv_state(p_src->hv);
+		}
+		
         if(start_dis <= 9)
         {
     	    p_src->map[0] = start_dis;

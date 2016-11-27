@@ -59,6 +59,7 @@ static const unsigned char rtc_days_in_month[] = {
 	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
 static QueueHandle_t timeSync;
+static unsigned short ontime = 0, offtime = 0;
 
 static __inline unsigned char is_leap_year(unsigned int year)
 {
@@ -246,13 +247,26 @@ static void app_ds3231_enable_irq(u8 flag)
 	i2c_bus_write_ds3231(ds, DS1231_SLAVE_ADDR, DS3231_REG_CR, &control, 1);	
 }
 
+void app_ds3231_set_showtime(short on, short off)
+{
+	ontime = on;
+	offtime = off;
+}
+
+void app_ds3231_get_showtime(short *on, short *off)
+{
+	*on = ontime;
+	*off = offtime;
+}
+
+
 void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 {
 	struct rtc_time /*time1, */time2;
 	struct rtc_wkalrm /* alarm1, alarm2*/;
     unsigned short temp16;
 	/* SWITCH_STATE_e first_state = ON; */
-	const unsigned short ontime1 = 750, offtime1 = 840, ontime2 = 2030, offtime2 = 2300;
+	
 
 	/* set time */
 	/* time1.sec = 0;
@@ -339,22 +353,14 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
         else
             p_src->flag = DS3231_ACT;
 
-        temp16 = (time2.hour * 100) + time2.min;
-		
-		/* if(((temp16 >= ontime1) && (temp16 < offtime1)) || 
-            ((temp16 >= ontime2) && (temp16 < offtime2)))
-			p_src->hv = ON;
-		else
-			p_src->hv = OFF; */
-
-        /* dbg_string("Time:20%02d-%d-%02d %d %02d:%02d:%02d\r\n", 
-									time2.year, 
-									time2.mon, 
-									time2.mday, 
-									time2.wday, 
-									time2.hour, 
-									time2.min,
-									time2.sec); */
+		if(ontime || offtime)
+		{
+			temp16 = (time2.hour * 100) + time2.min;
+			if((temp16 >= ontime) && (temp16 < offtime))
+				p_src->hv = ON;
+			else
+				p_src->hv = OFF;
+		}
 	}
 }
 

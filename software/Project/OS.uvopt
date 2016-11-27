@@ -348,10 +348,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>9</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>48</TopLine>
-      <CurrentLine>62</CurrentLine>
+      <TopLine>160</TopLine>
+      <CurrentLine>181</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\app_display.c</PathWithFileName>
       <FilenameWithoutPath>app_display.c</FilenameWithoutPath>
@@ -380,10 +380,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>59</TopLine>
-      <CurrentLine>82</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\app_ds3231.c</PathWithFileName>
       <FilenameWithoutPath>app_ds3231.c</FilenameWithoutPath>
@@ -428,10 +428,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>62</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>2</TopLine>
-      <CurrentLine>14</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>6</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\APP\cli\cli-commands.c</PathWithFileName>
       <FilenameWithoutPath>cli-commands.c</FilenameWithoutPath>
@@ -526,7 +526,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>110</TopLine>
+      <TopLine>113</TopLine>
       <CurrentLine>120</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\STMLIB\startup\cstartup.s</PathWithFileName>
@@ -726,7 +726,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1596</TopLine>
+      <TopLine>1599</TopLine>
       <CurrentLine>1606</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\FreeRTOS\tasks.c</PathWithFileName>

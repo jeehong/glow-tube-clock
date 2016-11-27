@@ -148,7 +148,7 @@ static void prvUARTCommandConsoleTask( void *pvParameters )
 	
 	for(;;)
 	{
-		while( xSerialGetChar( xPort, &cRxedChar, portMAX_DELAY ) != pdPASS );
+		while( xSerialGetChar( xPort, &cRxedChar, 0 ) != pdPASS );
 
 		if( xSemaphoreTake( xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS )
 		{

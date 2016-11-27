@@ -24,6 +24,9 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src);
 int app_ds3231_read_time(struct rtc_time *ptime);
 void app_ds3231_set_time(const struct rtc_time *ptime);
 int rtc_valid_tm(struct rtc_time *tm);
+void app_ds3231_set_showtime(short on, short off);
+void app_ds3231_get_showtime(short *on, short *off);
+
 
 #endif
 

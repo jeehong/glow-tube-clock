@@ -136,12 +136,13 @@
  * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
  */
 static GLOBAL_SOURCE_t global_source;	
-static TaskHandle_t handle_source[mainALL_TASK_LIST_MAX];
+static TaskHandle_t hd[HD_ALL];
 
 TaskHandle_t main_get_task_handle(unsigned char id)
 {
-	return handle_source[id];
+	return hd[id];
 }
+
 
 /* The time between cycles of the 'check' task. */
 int main( void )
@@ -152,17 +153,17 @@ int main( void )
 	/* 初始化LwIP */
 	vlwIPInit();
 	LwIP_Init();
-	
+	global_source.ptaskHandle = hd;
 	global_source.xDisplay = xSemaphoreCreateMutex();
 	global_source.xBuzzer = xSemaphoreCreateMutex();
 	/* Start the tasks defined within this file/specific to this demo. */
-	vUARTCommandConsoleStart(500, 3, &handle_source[0]);
+	vUARTCommandConsoleStart(500, 3, &hd[0]);
 	sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 500, 5); 
-	xTaskCreate((pdTASK_CODE)app_display_task, "display", 300, &global_source, 3, &handle_source[1]);
-	xTaskCreate((pdTASK_CODE)app_sht10_task, "sht10", 300, &global_source, 4, &handle_source[2]);
-	xTaskCreate((pdTASK_CODE)app_ds3231_task, "ds3231", 300, &global_source, 3, &handle_source[3]);
-    xTaskCreate((pdTASK_CODE)app_buz_task, "buz", 300, &global_source, 4, &handle_source[4]);
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, &global_source, 4, &handle_source[5]);
+	xTaskCreate((pdTASK_CODE)app_display_task, "display", 300, &global_source, 3, &hd[HD_DISPLAY]);
+	xTaskCreate((pdTASK_CODE)app_sht10_task, "sht10", 300, &global_source, 4, &hd[HD_SHT10]);
+	xTaskCreate((pdTASK_CODE)app_ds3231_task, "ds3231", 300, &global_source, 3, &hd[HD_DS3131]);
+    xTaskCreate((pdTASK_CODE)app_buz_task, "buz", 300, &global_source, 4, &hd[HD_BUZ]);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, &global_source, 4, &hd[HD_LED]);
 
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
 	vRegisterCLICommands();
@@ -172,7 +173,6 @@ int main( void )
 
 	return 0;
 }
-
 
 
 

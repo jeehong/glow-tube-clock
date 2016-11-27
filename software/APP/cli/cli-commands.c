@@ -92,7 +92,11 @@ static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWrite
 static BaseType_t prvRebootCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvDisplayCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 static BaseType_t prvTaskCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
+static BaseType_t prvShowtimeCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString);
 
+/*
+ * Example: info
+ */
 static const CLI_Command_Definition_t xInfoCommand =
 {
 	"info",
@@ -101,6 +105,9 @@ static const CLI_Command_Definition_t xInfoCommand =
 	0
 };
 
+/*
+ * Example: clear
+ */
 static const CLI_Command_Definition_t xClearCommand =
 {
 	"clear",
@@ -109,6 +116,10 @@ static const CLI_Command_Definition_t xClearCommand =
 	0
 };
 
+
+/*
+ * Example: date
+ */
 static const CLI_Command_Definition_t xDateCommand =
 {
 	"date",
@@ -117,14 +128,20 @@ static const CLI_Command_Definition_t xDateCommand =
 	0
 };
 
+/*
+ * Example: sdate 16 11 27 7 22 48 50
+ */
 static const CLI_Command_Definition_t xSetDateCommand =
 {
 	"sdate",
-	"Set system current time,format:sdate year[0,99] month[0,12] mday[1,31] wday[1-7] hour[0-23] min[0-59] sec[0-59]\r\n",
+	"Set system current time,format:[sdate year[0,99] month[0,12] mday[1,31] wday[1-7] hour[0-23] min[0-59] sec[0-59]]\r\n",
 	prvSetDateCommand,
 	7
 };
 
+/*
+ * Example: th
+ */
 static const CLI_Command_Definition_t xTHCommand =
 {
 	"th",
@@ -133,14 +150,20 @@ static const CLI_Command_Definition_t xTHCommand =
 	0
 };
 
+/*
+ * Example: led 0
+ */
 static const CLI_Command_Definition_t xLedCommand =
 {
 	"led",
-	"Turn ON/OFF led blink,format:led state(1:ON,0:OFF).\r\n",
+	"Turn ON/OFF led blink,format:[led state(1:ON,0:OFF)].\r\n",
 	prvLedCommand,
 	1
 };
 
+/*
+ * Example: reboot
+ */
 static const CLI_Command_Definition_t xRebootCommand =
 {
 	"reboot",
@@ -149,14 +172,20 @@ static const CLI_Command_Definition_t xRebootCommand =
 	0
 };
 
+/*
+ * Example: display 1
+ */
 static const CLI_Command_Definition_t xDisplayCommand =
 {
 	"display",
-	"Turn ON/OFF lcd display,format:display state(1:ON,0:OFF).\r\n",
+	"Turn ON/OFF lcd display,format:[display state(1:ON,0:OFF)].\r\n",
 	prvDisplayCommand,
 	1
 };
 
+/*
+ * Example: task
+ */
 static const CLI_Command_Definition_t xTaskCommand =
 {
 	"task",
@@ -164,6 +193,19 @@ static const CLI_Command_Definition_t xTaskCommand =
 	prvTaskCommand,
 	0
 };
+
+/*
+ * Example set: showtime 800 1930
+ * get: showtime on off
+ */
+static const CLI_Command_Definition_t xShowtimeCommand =
+{
+	"showtime",
+	"Time ON/OFF lcd display and led blink,format:[showtime on(800) off(1930)]\r\n",
+	prvShowtimeCommand,
+	2
+};
+
 
 /*-----------------------------------------------------------*/
 
@@ -179,6 +221,7 @@ void vRegisterCLICommands( void )
 	FreeRTOS_CLIRegisterCommand( &xRebootCommand );
 	FreeRTOS_CLIRegisterCommand( &xDisplayCommand );
 	FreeRTOS_CLIRegisterCommand( &xTaskCommand );
+	FreeRTOS_CLIRegisterCommand( &xShowtimeCommand );
 }
 
 static BaseType_t prvInfoCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
@@ -363,7 +406,7 @@ static BaseType_t prvLedCommand(const char * const pcCommandInput, char *pcWrite
 		return pdFALSE;
 	}
 		
-	pled = main_get_task_handle(5);
+	pled = main_get_task_handle(HD_LED);
 	
 	if(state == 1)
 		vTaskResume(pled);
@@ -408,7 +451,7 @@ static BaseType_t prvDisplayCommand(const char * const pcCommandInput, char *pcW
 
 	
 	/* Generate a table of task stats. */
-	plcd = main_get_task_handle(1);
+	plcd = main_get_task_handle(HD_DISPLAY);
 	sscanf(pcCommandInput, "%s %d", string, &state);
 	
 	if((state != 1) && (state != 0))
@@ -481,4 +524,60 @@ static BaseType_t prvTaskCommand(const char * const pcCommandInput, char *pcWrit
 	pdFALSE. */
 	return pdFALSE;
 }
+
+static BaseType_t prvShowtimeCommand(const char * const pcCommandInput, char *pcWriteBuffer, size_t xWriteBufferLen, const char * const pHelpString)
+{
+	char string[10], on_hour, on_min, off_hour, off_min;
+	short on, off;
+	unsigned char result = 0;
+	
+	/* Remove compile time warnings about unused parameters, and check the
+	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+	write buffer length is adequate, so does not check for buffer overflows. */
+	(void) pcCommandInput;
+	( void ) pHelpString;
+	( void ) xWriteBufferLen;
+	configASSERT(pcWriteBuffer);
+
+	result = sscanf(pcCommandInput, "%s %d %d", string, &on, &off);
+
+	on_hour = on / 100;
+	on_min = on % 100;
+	off_hour = off / 100;
+	off_min = off % 100;
+	if((result == 3) 
+		&& on_hour <= 23
+		&& on_min <= 59
+		&& off_hour <= 23
+		&& off_min <= 59)
+	{
+		app_ds3231_set_showtime(on, off);
+		/* Generate a table of task stats. */
+		sprintf(pcWriteBuffer, "    Set show time success,current: ON-%02d:%02d  OFF-%02d:%02d\r\n", 
+													on_hour,
+													on_min,
+													off_hour,
+													off_min);
+	}
+	else
+	{
+		app_ds3231_get_showtime(&on, &off);
+		on_hour = on / 100;
+		on_min = on % 100;
+		off_hour = off / 100;
+		off_min = off % 100;
+		sprintf(pcWriteBuffer, "	Format incorrect,please try again! current: ON-%02d:%02d  OFF-%02d:%02d\r\n",
+													on_hour,
+													on_min,
+													off_hour,
+													off_min);
+	}
+	
+
+
+	/* There is no more data to return after this single string, so return
+	pdFALSE. */
+	return pdFALSE;
+}
+
 
