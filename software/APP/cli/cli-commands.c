@@ -188,8 +188,8 @@ static const CLI_Command_Definition_t xDisplayCommand =
  */
 static const CLI_Command_Definition_t xTaskCommand =
 {
-	"task",
-	"List all the task name.\r\n",
+	"top",
+	"List all the tasks state.\r\n",
 	prvTaskCommand,
 	0
 };
@@ -298,7 +298,7 @@ static BaseType_t prvDateCommand(const char * const pcCommandInput, char *pcWrit
 
 	app_ds3231_read_time(&tm);
 	/* Generate a table of task stats. */
-	sprintf(pcWriteBuffer, "    20%d-%d-%d %d %d:%d:%d\r\n", 
+	sprintf(pcWriteBuffer, "    20%02d-%02d-%02d %d %02d:%02d:%02d\r\n", 
 												tm.year,
 												tm.mon,
 												tm.mday,

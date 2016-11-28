@@ -11,11 +11,13 @@
 
 enum TASK_HANDLE_e 
 {
-	HD_DISPLAY = 0,
+	HD_SERIAL = 0,
+	HD_DISPLAY,
 	HD_SHT10,
-	HD_DS3131,
+	HD_DS3231,
 	HD_BUZ,
 	HD_LED,
+	HD_DATA,
 	HD_ALL,
 };
 

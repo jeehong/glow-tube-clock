@@ -8,11 +8,13 @@
 
 #include "app_serial.h"
 #include "app_led.h"
+#include "app_data.h"
 
 #include "stm32f10x.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_exti.h"
 #include "stm32f10x_tim.h"
+#include "stm32f10x_flash.h"
 #include "misc.h"
 
 static void prvSetupHardware(void);
@@ -36,6 +38,7 @@ void bsp_init(void)
 	bsp_ds3231_irq_init();
     bsp_TIM1_CH4_io_init();
     bsp_TIM1_CH4_pwm_init();
+	app_data_init();
 }
 
 static void prvSetupHardware(void)

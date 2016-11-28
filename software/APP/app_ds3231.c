@@ -9,6 +9,7 @@
 
 #include "app_ds3231.h"
 #include "app_serial.h"
+#include "app_data.h"
 
 #define	DS1231_SLAVE_ADDR		0xD0
 
@@ -251,6 +252,7 @@ void app_ds3231_set_showtime(short on, short off)
 {
 	ontime = on;
 	offtime = off;
+	app_data_write_showtime(ontime, offtime);
 }
 
 void app_ds3231_get_showtime(short *on, short *off)
@@ -284,6 +286,8 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 	alarm1.time.min = 0;
 	alarm1.time.hour = 12;
 	alarm1.time.mday = 1; */
+
+	app_data_read_showtime(&ontime, &offtime);
 	
 	/* 设置失能RTC定时中断功能 */
 	/* app_ds3231_enable_irq(0); */	
