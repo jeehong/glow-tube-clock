@@ -112,8 +112,7 @@
 
 #include "netconfig.h"
 
-#include "cli_commands.h"
-#include "uart_console.h"
+#include "app_cli.h"
 
 #include "bsp.h"
 #include "main.h"
@@ -152,12 +151,12 @@ int main( void )
 	
 	/* ≥ı ºªØLwIP */
 	vlwIPInit();
-	LwIP_Init();
+	//LwIP_Init();
 	global_source.ptaskHandle = hd;
 	global_source.xDisplay = xSemaphoreCreateMutex();
 	global_source.xBuzzer = xSemaphoreCreateMutex();
-	/* Start the tasks defined within this file/specific to this demo. */
-	vUARTCommandConsoleStart(400, 3, &hd[HD_SERIAL]);
+	app_cli_init(&hd[HD_SERIAL]);
+
 	/* sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 250, 5); */
 	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, &global_source, 3, &hd[HD_DISPLAY]);
 	xTaskCreate((pdTASK_CODE)app_sht10_task, "sht10", 280, &global_source, 4, &hd[HD_SHT10]);
@@ -165,9 +164,6 @@ int main( void )
     xTaskCreate((pdTASK_CODE)app_buz_task, "buz", 290, &global_source, 4, &hd[HD_BUZ]);
 	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, &global_source, 4, &hd[HD_LED]);
 	xTaskCreate((pdTASK_CODE)app_data_store_task, "data", 200, &global_source, 4, &hd[HD_DATA]);
-
-	/* Register commands with the FreeRTOS+CLI command interpreter. */
-	vRegisterCLICommands();
 		
 	/* Start the scheduler. */
 	vTaskStartScheduler();

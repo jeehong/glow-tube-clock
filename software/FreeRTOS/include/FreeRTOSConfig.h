@@ -124,7 +124,7 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 
 #define INCLUDE_uxTaskGetStackHighWaterMark 1
 
-#define configCOMMAND_INT_MAX_OUTPUT_SIZE	1024
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE	255
 
 /* This is the value being used as per the ST library which permits 16
 priority values, 0 to 15.  This must correspond to the
