@@ -23,6 +23,5 @@ void vSerialPutString( xComPortHandle pxPort, const signed char * const pcString
 signed portBASE_TYPE xSerialPutChar( xComPortHandle pxPort, signed char cOutChar, TickType_t xBlockTime );
 signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedChar, TickType_t xBlockTime );
 
-
 #endif
 

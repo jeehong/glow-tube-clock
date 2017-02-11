@@ -8,6 +8,7 @@
 
 #include "freertos.h"
 #include "task.h"
+#include "semphr.h"
 
 #include "app_serial.h"
 
@@ -40,6 +41,7 @@ don't have to block to send. */
 static QueueHandle_t xRxedChars; 
 static QueueHandle_t xCharsForTx;
 static xComPortHandle xPort = NULL;
+static QueueHandle_t rcv_flag;
 
 void dbg_string(const char *fmt, ...)
 {
@@ -64,7 +66,7 @@ xComPortHandle serial_init( unsigned long ulWantedBaud)
 	/* Create the queues used to hold Rx/Tx characters. */
 	xRxedChars = xQueueCreate( configCOMMAND_INT_MAX_OUTPUT_SIZE, ( unsigned portBASE_TYPE ) sizeof( signed char ) ); 
 	xCharsForTx = xQueueCreate( configCOMMAND_INT_MAX_OUTPUT_SIZE, ( unsigned portBASE_TYPE ) sizeof( signed char ) );
-	
+	rcv_flag = xSemaphoreCreateMutex();
 	/* If the queue/semaphore was created correctly then setup the serial port
 	hardware. */
 	if(( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
@@ -123,15 +125,16 @@ signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedC
 {
 	( void ) pxPort;
 
-
+	repeat:
 	if( xQueueReceive( xRxedChars, pcRxedChar, xBlockTime ) )
-	{
 		return pdTRUE;
-	}
 	else
 	{
-		return pdFALSE;
+		xSemaphoreTake(rcv_flag, portMAX_DELAY);
+		goto repeat;
+		
 	}
+	return pdTRUE;
 }
 /*-----------------------------------------------------------*/
 
@@ -189,7 +192,7 @@ void USART1_IRQHandler( void )
 		{
 			/* A character was retrieved from the queue so can be sent to the
 			THR now. */
-			USART_SendData( USART1, cChar );
+			USART_SendData( USART1, cChar );	
             while(USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
                 ;
 		}
@@ -201,6 +204,7 @@ void USART1_IRQHandler( void )
 	{
 		cChar = USART_ReceiveData( USART1 );
 		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );
+		xSemaphoreGiveFromISR(rcv_flag, &xHigherPriorityTaskWoken);
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
 	} 	
 	

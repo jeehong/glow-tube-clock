@@ -203,7 +203,7 @@ static void mid_cli_console_task(void *parame)
 		/* Wait for the next character.  The while loop is used in case
 		INCLUDE_vTaskSuspend is not set to 1 - in which case portMAX_DELAY will
 		be a genuine block time rather than an infinite block time. */
-		while(hal_cli_data_rx(&rx_char, 1) != pdPASS) ;
+		hal_cli_data_rx(&rx_char, 1);
 
 		/* Ensure exclusive access to the UART Tx. */
 		if(xSemaphoreTake(xTxMutex, cmdMAX_MUTEX_WAIT ) == pdPASS)
