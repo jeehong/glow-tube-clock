@@ -1,127 +1,105 @@
-/*
- * FreeRTOS+CLI V1.0.4 (C) 2014 Real Time Engineers ltd. All rights reserved.
+/**  @file Mid_cli.h
+ * @brief 串口命令行功能
+ * @details 该功能运用调试串口，在终端上实现人机交互，
+ 			通过输入命令得到返回结果，以实现对MCU控制或状态监测。
  *
- * This file is part of the FreeRTOS+CLI distribution.  The FreeRTOS+CLI license
- * terms are different to the FreeRTOS license terms.
- *
- * FreeRTOS+CLI uses a dual license model that allows the software to be used
- * under a standard GPL open source license, or a commercial license.  The
- * standard GPL license (unlike the modified GPL license under which FreeRTOS
- * itself is distributed) requires that all software statically linked with
- * FreeRTOS+CLI is also distributed under the same GPL V2 license terms.
- * Details of both license options follow:
- *
- * - Open source licensing -
- * FreeRTOS+CLI is a free download and may be used, modified, evaluated and
- * distributed without charge provided the user adheres to version two of the
- * GNU General Public License (GPL) and does not remove the copyright notice or
- * this text.  The GPL V2 text is available on the gnu.org web site, and on the
- * following URL: http://www.FreeRTOS.org/gpl-2.0.txt.
- *
- * - Commercial licensing -
- * Businesses and individuals that for commercial or other reasons cannot comply
- * with the terms of the GPL V2 license must obtain a low cost commercial
- * license before incorporating FreeRTOS+CLI into proprietary software for
- * distribution in any form.  Commercial licenses can be purchased from
- * http://shop.freertos.org/cli and do not require any source files to be
- * changed.
- *
- * FreeRTOS+CLI is distributed in the hope that it will be useful.  You cannot
- * use FreeRTOS+CLI unless you agree that you use the software 'as is'.
- * FreeRTOS+CLI is provided WITHOUT ANY WARRANTY; without even the implied
- * warranties of NON-INFRINGEMENT, MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE. Real Time Engineers Ltd. disclaims all conditions and terms, be they
- * implied, expressed, or statutory.
- *
- * 1 tab == 4 spaces!
- *
- * http://www.FreeRTOS.org
- * http://www.FreeRTOS.org/FreeRTOS-Plus
- *
- */
+ * Example usage:\n
+	1)创建一个命令结构体，设定相关信息
+		build_var(cmd, help_info, parame_num);
+			cmd: 命令名称；
+			help_info: 帮助信息，输入各参数所代表的含义；
+			parame_num: 期望输入的参数个数，输入参数不匹配时，命令行无法识别；参数不包括命令本身；
+	2)创建一个函数，这个函数用于命令参数解析和功能执行；
+		static BaseType_t cmd##_handle( char *dest, argv_attribute argv, const char * const help_info);
+			字符串cmd必须与build_var中的cmd保持一致；
+			dest: 需要返回信息时，向该地址写入字符串数据，如果需要多项数据返回，可参考info_handle函数结构；
+			argv: 提供给命令执行函数各个参数信息
+				例如命令cp -r src dest，则argv[0] = "cp",argv[1] = "-r",argv[2] = "src",argv[3] = "dest"
+			help_info: 提供命令在构建时的帮助信息所在地址；
+	3)将命令注册到命令行功能中:
+		mid_cli_register(&cmd);
+			cmd: 构建命令时的命令名称；
+			将上面的函数放到app_cli_register( void )函数中调用；
+	\n
+日期       | 修改人    |描述
+---------- | --------- | -------------
+2017/04/25 | 姬宏光    |创建
 
+* Copyright (c), 2017, AutoIO Co., Ltd. 
+*/
+
+/** @defgroup Mid_cli 串口命令行功能
+*/
 #ifndef __MID_CLI_H__
 #define __MID_CLI_H__
 
-/* The prototype to which callback functions used to process command line
-commands must comply.  dest is a buffer into which the output from
-executing the command can be written, len is the length, in bytes of
-the dest buffer, and commandString is the entire string as input by
-the user (from which parameters can be extracted).*/
-typedef BaseType_t (*module_func_handle)( char * /*dest*/, const char * const /*src*/, const char * /*help_info*/);
+/** @breif 定义每个参数最大字符长度为19个+'\0'*/
+#define	cmdMAX_STRING_SIZE		20
+/** @breif 定义每个输入命令的字符串最大参数个数为7个，包含命令本身*/
+#define	cmdMAX_VARS_SIZE		10
 
+/** @breif 命令传入时参数属性类型*/
+typedef char** const argv_attribute;
+
+/** @breif 命令触发回调函数结构类型*/
+typedef BaseType_t (*module_func_handle)( char * /*dest*/, argv_attribute /*argv*/, const char * const /*help_info*/);
+
+/** @breif 命令参数结构体*/
+typedef struct _command_t
+{
+	const char * const command;			/**< 命令*/
+	const char * const help_info;		/**< 帮助信息*/
+	const module_func_handle handle;	/**< 执行函数*/
+	unsigned char expect_parame_num;	/**< 期望输入的参数个数，不包含命令本身*/
+} command_t;
+
+/** @ingroup Mid_cli
+*
+* 为新的命令创建一个数据结构
+* 
+* @param var 命令前缀，命令最基本的参数
+* 
+* @param help 帮助信息，字符串类型
+*
+* @param want 期望的参数个数，不包含命令前缀本身
+*
+* @return 无返回值
+*/
 #define	build_var(var, help, want) 			\
-static BaseType_t var##_main( char *, const char * const, const char * const);	\
-static const struct cli_module_t var =	{	#var, help, var##_main, want	}
+static BaseType_t var##_main(char* /*dest*/, argv_attribute /*argv*/, const char* /*help_info*/);		\
+static const struct _command_t var =	{	#var, help, var##_main, want	}
 
-/* The structure that defines command line commands.  A command line command
-should be defined by declaring a const structure of this type. */
-typedef struct cli_module_t
-{
-	const char * const command;			/* The command that causes handle to be executed.  For example "help".  Must be all lower case. */
-	const char * const help_info;		/* String that describes how to use the command.  Should start with the command itself, and end with "\r\n".  For example "help: Returns a list of all the commands\r\n". */
-	const module_func_handle handle;	/* A pointer to the callback function that will return the output generated by the command. */
-	unsigned char expect_parame_num;	/* Commands expect a fixed number of parameters, which may be zero. */
-} CLI_MODULE_t;
+/** @ingroup Mid_cli
+*
+* 注册一个新的命令
+* 
+* @param p 新命令的数据指针
+*
+* @return 
+返回值|描述
+------- | --------- 
+pdFAIL | 注册失败
+pdPASS  | 注册成功
+*/
+BaseType_t mid_cli_register(const struct _command_t *const p);
 
-typedef struct cli_module_list_t
-{
-	const struct cli_module_t *module;
-	struct cli_module_list_t *next;
-} CLI_MODULE_LIST_t;
-
-/*
- * Register the command passed in using the pxCommandToRegister parameter.
- * Registering a command adds the command to the list of commands that are
- * handled by the command interpreter.  Once a command has been registered it
- * can be executed from the command line.
- */
-BaseType_t mid_cli_module_register(const struct cli_module_t *const p);
-BaseType_t mid_cli_module_unregister(const struct cli_module_t *const p);
-
-/*
- * Runs the command interpreter for the command string "commandInput".  Any
- * output generated by running the command will be placed into dest.
- * len must indicate the size, in bytes, of the buffer pointed to
- * by dest.
- *
- * mid_cli_parse_command should be called repeatedly until it returns pdFALSE.
- *
- * pcCmdIntProcessCommand is not reentrant.  It must not be called from more
- * than one task - or at least - by more than one task at a time.
- */
-BaseType_t mid_cli_parse_command(char * dest, const char * const commandInput, size_t len);
-
-/*-----------------------------------------------------------*/
-
-/*
- * A buffer into which command outputs can be written is declared in the
- * main command interpreter, rather than in the command console implementation,
- * to allow application that provide access to the command console via multiple
- * interfaces to share a buffer, and therefore save RAM.  Note, however, that
- * the command interpreter itself is not re-entrant, so only one command
- * console interface can be used at any one time.  For that reason, no attempt
- * is made to provide any mutual exclusion mechanism on the output buffer.
- *
- * mid_cli_output_buffer() returns the address of the output buffer.
- */
-char *mid_cli_output_buffer(void);
-struct cli_module_list_t *mid_cli_cmd_list_head(void);
-void mid_cli_init(unsigned short usStackSize, UBaseType_t uxPriority, TaskHandle_t *h);
-
+/** @ingroup Mid_cli
+*
+* 初始化命令行功能
+* 默认系统仅提供一个帮助命令 help
+* help 命令会将当前可用的命令以及相应的帮助信息打印出来
+* 
+* @param usStackSize 命令行功能分配的栈尺寸
+*
+* @param uxPriority 命令行功能任务优先级
+*
+* @param prjPrefix 命令返回值，返回前缀，一般设置为项目代号+版本号: "Whale-1.0.0 "
+*
+* @return 无返回值
+*/
+void mid_cli_init(unsigned short usStackSize, UBaseType_t uxPriority, char *t, TaskHandle_t *h);
 
 
 #endif /* COMMAND_INTERPRETER_H */
-
-
-
-
-
-
-
-
-
-
-
 
 

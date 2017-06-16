@@ -13,6 +13,7 @@
 #include "main.h"
 #include "app_ds3231.h"
 #include "app_sht10.h"
+#include "app_display.h"
 #include "bsp.h"
 
 /*
@@ -53,7 +54,7 @@ build_var(reboot, "Reboot system.\r\n", 0);
 /*
  * Example: display 1
  */
-build_var(display, "Turn ON/OFF lcd display,format:[display state(1:ON,0:OFF)].\r\n", 1);
+build_var(lcd, "Turn ON/OFF lcd display,format:[display state(1:ON,0:OFF)].\r\n", 1);
 
 /*
  * Example: task
@@ -64,24 +65,24 @@ build_var(top, "List all the tasks state.\r\n", 0);
  * Example set: showtime 800 1930
  * get: showtime on off
  */
-build_var(showtime, "Time ON/OFF lcd display and led blink,format:[showtime on(800) off(1930)]\r\n", 2);
+build_var(setlcd, "Time ON/OFF lcd display and led blink,format:[showtime on(800) off(1930)]\r\n", 2);
 
-static void app_cli_default_register(void)
+static void app_cli_register(void)
 {
 	/* Register all the command line commands defined immediately above. */
-	mid_cli_module_register(&info);
-	mid_cli_module_register(&clear);
-	mid_cli_module_register(&date);
-	mid_cli_module_register(&sdate);
-	mid_cli_module_register(&th);
-	mid_cli_module_register(&led);
-	mid_cli_module_register(&reboot);
-	mid_cli_module_register(&display);
-	mid_cli_module_register(&top);
-	mid_cli_module_register(&showtime);
+	mid_cli_register(&info);
+	mid_cli_register(&clear);
+	mid_cli_register(&date);
+	mid_cli_register(&sdate);
+	mid_cli_register(&th);
+	mid_cli_register(&led);
+	mid_cli_register(&reboot);
+	mid_cli_register(&lcd);
+	mid_cli_register(&top);
+	mid_cli_register(&setlcd);
 }
 
-static BaseType_t info_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t info_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	unsigned char index;
 	const static char *dev_info[] =
@@ -97,7 +98,6 @@ static BaseType_t info_main(char *dest, const char * const src, const char * con
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
@@ -113,14 +113,13 @@ static BaseType_t info_main(char *dest, const char * const src, const char * con
 	return pdFALSE;
 }
 
-static BaseType_t clear_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t clear_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	const static char *string = "\033[H\033[J";
 
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
@@ -132,14 +131,13 @@ static BaseType_t clear_main(char *dest, const char * const src, const char * co
 	return pdFALSE;
 }
 
-static BaseType_t date_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t date_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	struct rtc_time tm;
 
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
@@ -159,27 +157,24 @@ static BaseType_t date_main(char *dest, const char * const src, const char * con
 	return pdFALSE;
 }
 
-static BaseType_t sdate_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t sdate_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	struct rtc_time tm;
-	char string[10], year, mon, mday, wday, hour, min, sec;
 	unsigned char result = 0;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
-	result = sscanf(src, "%s %d %d %d %d %d %d %d", string, &year, &mon, &mday, &wday, &hour, &min, &sec);
-	tm.year = year;
-	tm.mon = mon;
-	tm.mday = mday;
-	tm.wday = wday;
-	tm.hour = hour;
-	tm.min = min;
-	tm.sec = sec;	
+	tm.year = atoi(argv[1]);
+	tm.mon = atoi(argv[2]);
+	tm.mday = atoi(argv[3]);
+	tm.wday = atoi(argv[4]);
+	tm.hour = atoi(argv[5]);
+	tm.min = atoi(argv[6]);
+	tm.sec = atoi(argv[7]);
 	if((result == 8) && !rtc_valid_tm(&tm))
 	{
 		app_ds3231_set_time(&tm);
@@ -207,14 +202,13 @@ static BaseType_t sdate_main(char *dest, const char * const src, const char * co
 	return pdFALSE;
 }
 
-static BaseType_t th_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t th_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	float temp, hum;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
@@ -228,20 +222,19 @@ static BaseType_t th_main(char *dest, const char * const src, const char * const
 	return pdFALSE;
 }
 
-static BaseType_t led_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t led_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	TaskHandle_t pled;
-	char string[10], state;
+	char state;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 	
 	/* Generate a table of task stats. */
-	sscanf(src, "%s %d", string, &state);
+	state = atoi(argv[1]);
 	if((state != 1) && (state != 0))
 	{
 		sprintf(dest, "\tCommand of led control Format incorrect,please try again.\r\n");
@@ -261,12 +254,11 @@ static BaseType_t led_main(char *dest, const char * const src, const char * cons
 	return pdFALSE;
 }
 
-static BaseType_t reboot_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t reboot_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
@@ -277,22 +269,20 @@ static BaseType_t reboot_main(char *dest, const char * const src, const char * c
 	return pdFALSE;
 }
 
-static BaseType_t display_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t lcd_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	TaskHandle_t plcd;
-	char string[10], state;
+	char state;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 	
 	/* Generate a table of task stats. */
 	plcd = main_get_task_handle(HD_DISPLAY);
-	sscanf(src, "%s %d", string, &state);
-	
+	state = atoi(argv[1]);
 	if((state != 1) && (state != 0))
 	{
 		sprintf(dest, "\tCommand of lcd control Format incorrect,please try again.\r\n");
@@ -319,7 +309,7 @@ static BaseType_t display_main(char *dest, const char * const src, const char * 
 	return pdFALSE;
 }
 
-static BaseType_t top_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t top_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	TaskHandle_t ptask;
 	unsigned char list = 0;
@@ -328,7 +318,6 @@ static BaseType_t top_main(char *dest, const char * const src, const char * cons
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
@@ -365,20 +354,20 @@ static BaseType_t top_main(char *dest, const char * const src, const char * cons
 	return pdFALSE;
 }
 
-static BaseType_t showtime_main(char *dest, const char * const src, const char * const help_info)
+static BaseType_t setlcd_main( char *dest, argv_attribute argv, const char * const help_info)
 {
-	char string[10], on_hour, on_min, off_hour, off_min;
+	char on_hour, on_min, off_hour, off_min;
 	short on, off;
 	unsigned char result = 0;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
 	write buffer length is adequate, so does not check for buffer overflows. */
-	(void) src;
 	(void) help_info;
 	configASSERT(dest);
 
-	result = sscanf(src, "%s %d %d", string, &on, &off);
+	on = atoi(argv[1]);
+	off = atoi(argv[2]);
 
 	on_hour = on / 100;
 	on_min = on % 100;
@@ -419,12 +408,12 @@ static BaseType_t showtime_main(char *dest, const char * const src, const char *
 	return pdFALSE;
 }
 
-void app_cli_init(TaskHandle_t *h)
+void app_cli_init(u8 priority, char *t, TaskHandle_t *handle)
 {
-	mid_cli_init(400, 3, h);
+	mid_cli_init(400, priority, t, handle);
 
 	/* Register commands with the FreeRTOS+CLI command interpreter. */
-	app_cli_default_register();
+	app_cli_register();
 }
 
 

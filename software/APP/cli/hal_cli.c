@@ -9,6 +9,6 @@ portBASE_TYPE hal_cli_data_tx(signed char *data, unsigned short len)
 
 portBASE_TYPE hal_cli_data_rx(signed char *data, unsigned short len)
 {
-	return xSerialGetChar(0, data, 1);
+	return xSerialGetChar(0, data, 10);
 }
 

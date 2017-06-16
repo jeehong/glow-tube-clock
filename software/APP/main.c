@@ -146,6 +146,7 @@ TaskHandle_t main_get_task_handle(unsigned char id)
 /* The time between cycles of the 'check' task. */
 int main( void )
 {
+	static char cmd_prefix[20];
 	bsp_init();
 	dbg_string("------Glow tube clock!------\r\n");
 	
@@ -155,7 +156,9 @@ int main( void )
 	global_source.ptaskHandle = hd;
 	global_source.xDisplay = xSemaphoreCreateMutex();
 	global_source.xBuzzer = xSemaphoreCreateMutex();
-	app_cli_init(&hd[HD_SERIAL]);
+
+	sprintf(cmd_prefix, "%s-%d.%d.%d ", "clock", 0, 0, 1);
+	app_cli_init(tskIDLE_PRIORITY + 1, cmd_prefix, &hd[HD_SERIAL]);
 
 	/* sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 250, 5); */
 	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, &global_source, 3, &hd[HD_DISPLAY]);

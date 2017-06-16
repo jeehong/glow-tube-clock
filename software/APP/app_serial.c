@@ -52,7 +52,7 @@ void dbg_string(const char *fmt, ...)
 	vsprintf(dbg_buf, fmt, vp);
 	va_end(vp);
 	
-	vSerialPutString(xPort, (signed char *)&dbg_buf, comNO_BLOCK);
+	vSerialPutString(xPort, (signed char *)&dbg_buf, strlen(dbg_buf));
 }
 
 xComPortHandle serial_init( unsigned long ulWantedBaud)
@@ -125,45 +125,28 @@ signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedC
 {
 	( void ) pxPort;
 
-	repeat:
+	xSemaphoreTake(rcv_flag, portMAX_DELAY);
+
 	if( xQueueReceive( xRxedChars, pcRxedChar, xBlockTime ) )
 		return pdTRUE;
 	else
-	{
-		xSemaphoreTake(rcv_flag, portMAX_DELAY);
-		goto repeat;
-		
-	}
-	return pdTRUE;
+		return pdFALSE;
 }
 /*-----------------------------------------------------------*/
 
 void vSerialPutString( xComPortHandle pxPort, const signed char * const pcString, unsigned short usStringLength )
 {
-	signed char *pxNext;
+	u16 index;
 
-	/* A couple of parameters that this port does not use. */
-	( void ) usStringLength;
-	( void ) pxPort;
-
-	/* NOTE: This implementation does not handle the queue being full as no
-	block time is used! */
-
-	/* The port handle is not required as this driver only supports UART1. */
-	( void ) pxPort;
-
-	/* Send each character in the string, one at a time. */
-	pxNext = ( signed char * ) pcString;
-	while( *pxNext )
+	for(index = 0; index < usStringLength; index ++)
 	{
-		xSerialPutChar( pxPort, *pxNext, serNO_BLOCK );
-		pxNext++;
+		xSerialPutChar( pxPort, pcString[index], serNO_BLOCK );
 	}
 }
 
 signed portBASE_TYPE xSerialPutChar( xComPortHandle pxPort, signed char cOutChar, TickType_t xBlockTime )
 {
-signed portBASE_TYPE xReturn;
+	signed portBASE_TYPE xReturn;
 
 	if( xQueueSend( xCharsForTx, &cOutChar, xBlockTime ) == pdPASS )
 	{
