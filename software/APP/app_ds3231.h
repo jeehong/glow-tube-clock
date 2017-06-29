@@ -20,7 +20,7 @@ struct rtc_time {
 	unsigned char h12;		/* 1:12h */
 };
 
-void app_ds3231_task(GLOBAL_SOURCE_t *p_src);
+void app_ds3231_task(void *parame);
 int app_ds3231_read_time(struct rtc_time *ptime);
 void app_ds3231_set_time(const struct rtc_time *ptime);
 int rtc_valid_tm(struct rtc_time *tm);

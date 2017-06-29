@@ -241,7 +241,7 @@ static BaseType_t led_main( char *dest, argv_attribute argv, const char * const 
 		return pdFALSE;
 	}
 		
-	pled = main_get_task_handle(HD_LED);
+	pled = main_get_task_handle(TASK_HANDLE_LED);
 	
 	if(state == 1)
 		vTaskResume(pled);
@@ -281,7 +281,7 @@ static BaseType_t lcd_main( char *dest, argv_attribute argv, const char * const 
 	configASSERT(dest);
 	
 	/* Generate a table of task stats. */
-	plcd = main_get_task_handle(HD_DISPLAY);
+	plcd = main_get_task_handle(TASK_HANDLE_DISPLAY);
 	state = atoi(argv[1]);
 	if((state != 1) && (state != 0))
 	{
@@ -325,7 +325,7 @@ static BaseType_t top_main( char *dest, argv_attribute argv, const char * const 
 	/* Generate a table of task stats. */
 	sprintf(dest, "\tPri\tName\tState\tMem(B)\r\n");
 	
-	for(list = 0; list < HD_ALL; list++)
+	for(list = 0; list < TASK_HANDLE_ALL; list++)
 	{
 		ptask = main_get_task_handle(list);
 		strcat(dest, "\t");

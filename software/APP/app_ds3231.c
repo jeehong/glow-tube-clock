@@ -262,7 +262,7 @@ void app_ds3231_get_showtime(short *on, short *off)
 }
 
 
-void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
+void app_ds3231_task(void *parame)
 {
 	struct rtc_time /*time1, */time2;
 	struct rtc_wkalrm /* alarm1, alarm2*/;
@@ -317,53 +317,49 @@ void app_ds3231_task(GLOBAL_SOURCE_t *p_src)
 		if((time2.min == 0) && (time2.sec == 0))
 		{
 			if(time2.hour > 12)
-				p_src->buz[0] = time2.hour - 12;
+				app_buzzer_set_times(time2.hour - 12);
 			else
 			{
 				if(time2.hour < 8)	
-					p_src->buz[0] = 0;
+					app_buzzer_set_times(0);
 				else
-					p_src->buz[0] = time2.hour;
+					app_buzzer_set_times(time2.hour);
 			}
 			
-			xSemaphoreGive(p_src->xBuzzer);
+			app_buzzer_running(ON);
 		}
 		app_ds3231_clear_state();
 
-		if(p_src->flag == DS3231_ACT)
-		{
-			if(xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS)
-			{
-                
-	    		p_src->map[0] = time2.hour / 10;
-	    		p_src->map[1] = time2.hour % 10;
-	    		p_src->map[2] = time2.min / 10;
-	    		p_src->map[3] = time2.min % 10;
-	    		p_src->map[4] = time2.sec / 10;
-	    		p_src->map[5] = time2.sec % 10;
-                
-	            p_src->map[6] = 0x33;
-	            xSemaphoreGive(p_src->xDisplay);
-				vTaskDelay(mainDELAY_MS(490));
-			}
-			if(xSemaphoreTake(p_src->xDisplay, portMAX_DELAY) == pdPASS)
-			{
-				p_src->map[6] = 0;
-				xSemaphoreGive(p_src->xDisplay);
-			}
-		}
         if(((time2.sec >= 20) && (time2.sec < 25)) || ((time2.sec >= 40) && (time2.sec < 45)))
-            p_src->flag = SHT_ACT;
+        {
+			app_sht10_set_running(ON);
+        }
         else
-            p_src->flag = DS3231_ACT;
+		{
+			u8 info[7];
+
+			app_sht10_set_running(OFF);
+			info[0] = time2.hour / 10;
+			info[1] = time2.hour % 10;
+			info[2] = time2.min / 10;
+			info[3] = time2.min % 10;
+			info[4] = time2.sec / 10;
+			info[5] = time2.sec % 10;
+			
+			info[6] = 0x33;
+			app_display_show_info(info);	
+			vTaskDelay(mainDELAY_MS(490));
+			info[6] = 0;
+			app_display_show_info(info);
+		}
 
 		if(ontime || offtime)
 		{
 			temp16 = (time2.hour * 100) + time2.min;
 			if((temp16 >= ontime) && (temp16 < offtime))
-				p_src->hv = ON;
+				app_display_set_hv(ON);
 			else
-				p_src->hv = OFF;
+				app_display_set_hv(OFF);
 		}
 	}
 }

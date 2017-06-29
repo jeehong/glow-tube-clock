@@ -129,17 +129,12 @@
 
 /* The check task uses the sprintf function so requires a little more stack. */
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
+	
+static TaskHandle_t task_handle[TASK_HANDLE_ALL];
 
-/* 
- * 这个结构体中的互斥量用来描述硬件显示资源是否可用 
- * src数组用于描述需要显示内容，具体描述请跳转到app_display.c中查看
- */
-static GLOBAL_SOURCE_t global_source;	
-static TaskHandle_t hd[HD_ALL];
-
-TaskHandle_t main_get_task_handle(unsigned char id)
+ TaskHandle_t main_get_task_handle(unsigned char id)
 {
-	return hd[id];
+	return task_handle[id];
 }
 
 
@@ -153,20 +148,17 @@ int main( void )
 	/* 初始化LwIP */
 	vlwIPInit();
 	//LwIP_Init();
-	global_source.ptaskHandle = hd;
-	global_source.xDisplay = xSemaphoreCreateMutex();
-	global_source.xBuzzer = xSemaphoreCreateMutex();
 
 	sprintf(cmd_prefix, "%s-%d.%d.%d ", "clock", 0, 0, 1);
-	app_cli_init(tskIDLE_PRIORITY + 1, cmd_prefix, &hd[HD_SERIAL]);
+	app_cli_init(tskIDLE_PRIORITY + 1, cmd_prefix, &task_handle[TASK_HANDLE_CLI]);
 
 	/* sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 250, 5); */
-	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, &global_source, 3, &hd[HD_DISPLAY]);
-	xTaskCreate((pdTASK_CODE)app_sht10_task, "sht10", 280, &global_source, 4, &hd[HD_SHT10]);
-	xTaskCreate((pdTASK_CODE)app_ds3231_task, "ds3231", 280, &global_source, 3, &hd[HD_DS3231]);
-    xTaskCreate((pdTASK_CODE)app_buz_task, "buz", 290, &global_source, 4, &hd[HD_BUZ]);
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, &global_source, 4, &hd[HD_LED]);
-	xTaskCreate((pdTASK_CODE)app_data_store_task, "data", 200, &global_source, 4, &hd[HD_DATA]);
+	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, NULL, 3, &task_handle[TASK_HANDLE_DISPLAY]);
+	xTaskCreate((pdTASK_CODE)app_sht10_task, "sht10", 280, NULL, 4, &task_handle[TASK_HANDLE_SHT10]);
+	xTaskCreate((pdTASK_CODE)app_ds3231_task, "ds3231", 280, NULL, 3, &task_handle[TASK_HANDLE_DS3231]);
+    xTaskCreate((pdTASK_CODE)app_buz_task, "buz", 290, NULL, 4, &task_handle[TASK_HANDLE_BUZ]);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, NULL, 4, &task_handle[TASK_HANDLE_LED]);
+	xTaskCreate((pdTASK_CODE)app_data_store_task, "data", 200, NULL, 4, &task_handle[TASK_HANDLE_DATA]);
 		
 	/* Start the scheduler. */
 	vTaskStartScheduler();

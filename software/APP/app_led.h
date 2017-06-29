@@ -14,7 +14,7 @@
 
 
 void app_led_init(void);	 
-void app_led_task_blink(GLOBAL_SOURCE_t *display);
+void app_led_task_blink(void *parame);
 	 
 
 #endif

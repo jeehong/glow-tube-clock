@@ -17,6 +17,6 @@ typedef struct _data_map
 void app_data_init(void);
 void app_data_read_showtime(unsigned short *on, unsigned short *off);
 void app_data_write_showtime(unsigned short on, unsigned short off);
-void app_data_store_task(GLOBAL_SOURCE_t *p_src);
+void app_data_store_task(void *parame);
 
 #endif

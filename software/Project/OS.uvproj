@@ -445,19 +445,24 @@
               <FilePath>..\APP\app_buz.c</FilePath>
             </File>
             <File>
-              <FileName>cli_api.c</FileName>
+              <FileName>app_cli.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\APP\cli\cli_api.c</FilePath>
+              <FilePath>..\APP\cli\app_cli.c</FilePath>
             </File>
             <File>
-              <FileName>cli-commands.c</FileName>
+              <FileName>hal_cli.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\APP\cli\cli-commands.c</FilePath>
+              <FilePath>..\APP\cli\hal_cli.c</FilePath>
             </File>
             <File>
-              <FileName>uart_console.c</FileName>
+              <FileName>mid_cli.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\APP\cli\uart_console.c</FilePath>
+              <FilePath>..\APP\cli\mid_cli.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\app_data.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -523,6 +528,11 @@
               <FileName>stm32f10x_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\STMLIB\src\stm32f10x_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\STMLIB\src\stm32f10x_flash.c</FilePath>
             </File>
           </Files>
         </Group>

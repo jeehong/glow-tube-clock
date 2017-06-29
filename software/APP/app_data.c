@@ -73,7 +73,7 @@ void app_data_write_showtime(unsigned short on, unsigned short off)
 	xSemaphoreGive(dataSync);
 }
 
-void app_data_store_task(GLOBAL_SOURCE_t *p_src)
+void app_data_store_task(void *parame)
 
 {	
 	const char unit = sizeof(int);

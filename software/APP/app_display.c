@@ -162,56 +162,76 @@ static void app_display_set_point(char src)
 	}	
 }	
 
-void app_display_task(GLOBAL_SOURCE_t *p_src)
+
+static char lcd_pixel[7], refresh = FALSE;
+static SWITCH_STATE_e hv_state = OFF;
+void app_display_task(void *parame)
 {
 	char map[CHIP595_NUM] = {10};
-	char *src;
-	char hv_bak = ON;
-	
-	p_src->hv = OFF;
-	src = &p_src->map[0];
+	SWITCH_STATE_e hv_bak = ON;
+
+	hv_state = OFF;
 	app_display_set_show(Bit_SET);
-	app_display_set_point(p_src->hv);
-	/* bsp_set_hv_state(ON); */
+	app_display_set_point(hv_state);
 	while(1)
 	{
-		xSemaphoreTake(p_src->xDisplay, portMAX_DELAY);
-
-		if(hv_bak != p_src->hv)
+		if(refresh == FALSE)
 		{
-			if(hv_bak == OFF)
-			{
-				start_dis = 0;
-				vTaskResume(p_src->ptaskHandle[HD_LED]);
-			}
-			else
-			{	
-				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
-				vTaskSuspend(p_src->ptaskHandle[HD_LED]);
-			}
-			hv_bak = p_src->hv;
-			bsp_set_hv_state(p_src->hv);
+			vTaskDelay(mainDELAY_MS(100));
 		}
-		
-        if(start_dis <= 9)
-        {
-    	    p_src->map[0] = start_dis;
-            p_src->map[1] = start_dis;
-    	    p_src->map[2] = start_dis;
-    	    p_src->map[3] = start_dis;
-    	    p_src->map[4] = start_dis;
-    	    p_src->map[5] = start_dis;
-            start_dis++; 
-	    }
-		if(p_src->hv == ON)
-			app_display_set_point(src[TUBE_NUM]);
 		else
-			app_display_set_point(0);
-		app_display_calc_map(map, src);
-        app_display_write_data(map);
-		xSemaphoreGive(p_src->xDisplay);
-		
-		vTaskDelay(mainDELAY_MS(200));
+		{
+			if(hv_bak != hv_state)
+			{
+				if(hv_bak == OFF)
+				{
+					start_dis = 0;
+					vTaskResume(main_get_task_handle(TASK_HANDLE_LED));
+				}
+				else
+				{	
+					GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
+					vTaskSuspend(main_get_task_handle(TASK_HANDLE_LED));
+				}
+				hv_bak = hv_state;
+				bsp_set_hv_state(hv_state);
+			}
+			
+	        if(start_dis <= 9)
+	        {
+	    	    lcd_pixel[0] = start_dis;
+	            lcd_pixel[1] = start_dis;
+	    	    lcd_pixel[2] = start_dis;
+	    	    lcd_pixel[3] = start_dis;
+	    	    lcd_pixel[4] = start_dis;
+	    	    lcd_pixel[5] = start_dis;
+	            start_dis++; 
+		    }
+			if(hv_state == ON)
+				app_display_set_point(lcd_pixel[6]);
+			else
+				app_display_set_point(0);
+			app_display_calc_map(map, lcd_pixel);
+			app_display_write_data(map);
+		}
+		refresh = FALSE;
 	}	
+}
+
+void app_display_show_info(u8 *src)
+{
+	static u8 processing = FALSE;
+
+	if(processing == TRUE)
+		return;
+	processing = TRUE;
+	memcpy(lcd_pixel, src, 7);
+	refresh = TRUE;
+	processing = FALSE;
+}
+
+void app_display_set_hv(SWITCH_STATE_e state)
+{
+	hv_state = state;
 }
 

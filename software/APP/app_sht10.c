@@ -5,6 +5,7 @@
 #include "i2c_bus.h"
 #include "app_sht10.h"
 #include "app_serial.h"
+#include "app_display.h"
 
 #include "main.h"
 
@@ -75,33 +76,42 @@ float app_sht10_get_info(unsigned char  type)
 		return hum.fval;
 }
 
-void app_sht10_task(GLOBAL_SOURCE_t *p_src)
+static u8 running = FALSE;
+
+void app_sht10_task(void *parame)
 {
 	float temp, hum;
     unsigned int temp32;
 	
 	while(1)
 	{
-		if(p_src->flag == SHT_ACT)
+		if(running == FALSE)
 		{
+			vTaskDelay(100);
+		}
+		else
+		{
+			u8 info[7];
+			
 			temp = app_sht10_get_info(TEMP);
 			hum = app_sht10_get_info(HUM);
 		
-			if(xSemaphoreTake(p_src->xDisplay, mainDELAY_MS(5)) == pdPASS)
-			{
-	            temp32 = temp * 10;
-	    		p_src->map[0] = temp32 / 100;
-	    		p_src->map[1] = temp32 % 100 /10;
-	    		p_src->map[2] = temp32 % 10;
-	    		p_src->map[3] = 0;
-	    		p_src->map[4] = (unsigned int)hum / 10;
-	    		p_src->map[5] = (unsigned int)hum % 10;
-	            p_src->map[6] = 0x11;
-				xSemaphoreGive(p_src->xDisplay);
-			}
+            temp32 = temp * 10;
+    		info[0] = temp32 / 100;
+    		info[1] = temp32 % 100 /10;
+    		info[2] = temp32 % 10;
+    		info[3] = 0;
+    		info[4] = (unsigned int)hum / 10;
+    		info[5] = (unsigned int)hum % 10;
+            info[6] = 0x11;
+			app_display_show_info(info);
 		}
 		/* dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum); */
 		vTaskDelay(500);
 	}
 }
 
+void app_sht10_set_running(u8 state)
+{
+	running = state;
+}

@@ -9,34 +9,35 @@
 
 #define mainDELAY_MS(ms)			( ( TickType_t ) ms / portTICK_PERIOD_MS )
 
+/* Some useful definitions */
+#undef FALSE
+#define FALSE   ((int) 0)
+#undef TRUE
+#define TRUE    ((int) 1)
+#undef SKIP
+#define SKIP	((int) 2)
+
+/* Macros for min/max.  */
+#ifndef MIN
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#endif
+
+#ifndef MAX
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#endif
+
+
 enum TASK_HANDLE_e 
 {
-	HD_SERIAL = 0,
-	HD_DISPLAY,
-	HD_SHT10,
-	HD_DS3231,
-	HD_BUZ,
-	HD_LED,
-	HD_DATA,
-	HD_ALL,
+	TASK_HANDLE_CLI = 0,
+	TASK_HANDLE_DISPLAY,
+	TASK_HANDLE_SHT10,
+	TASK_HANDLE_DS3231,
+	TASK_HANDLE_BUZ,
+	TASK_HANDLE_LED,
+	TASK_HANDLE_DATA,
+	TASK_HANDLE_ALL,
 };
-
-/* 当前有权限使用display的成员 */
-typedef enum {
-    SHT_ACT = 0,
-    DS3231_ACT,
-    FREE_ACT,
-} ACTIVE_MEMBER_e;  
-
-typedef struct {
-	QueueHandle_t xDisplay;
-    QueueHandle_t xBuzzer;
-    ACTIVE_MEMBER_e flag;
-    SWITCH_STATE_e hv;
-    char buz[2];
-	char map[7];		/* 前6个是显示数字内容，最后一个是四个点的显示内容 */
-	TaskHandle_t *ptaskHandle;
-} GLOBAL_SOURCE_t;
 
 TaskHandle_t main_get_task_handle(unsigned char id);
 

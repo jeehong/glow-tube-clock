@@ -3,7 +3,9 @@
 
 #include "main.h"
 
-void app_buz_task(GLOBAL_SOURCE_t *p_src);
+void app_buz_task(void *parame);
+void app_buzzer_set_times(u8 times);
+void app_buzzer_running(u8 state);
 
 
 #endif 

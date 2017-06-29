@@ -29,7 +29,7 @@ void app_led_init(void)
 }
 
 
-void app_led_task_blink(GLOBAL_SOURCE_t *p_src)
+void app_led_task_blink(void *parame)
 {
 	portTickType xLastWakeTime;
 	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_B, LED_PIN_G};
