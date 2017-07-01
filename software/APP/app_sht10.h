@@ -14,7 +14,7 @@ typedef enum {
 
 float app_sht10_get_info(unsigned char type);
 void app_sht10_task(void *parame);
-void app_sht10_set_running(u8 state);
+void app_sht10_refresh_display(void);
 
 
 #endif

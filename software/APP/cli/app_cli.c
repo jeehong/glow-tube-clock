@@ -54,7 +54,7 @@ build_var(reboot, "Reboot system.\r\n", 0);
 /*
  * Example: display 1
  */
-build_var(lcd, "Turn ON/OFF lcd display,format:[display state(1:ON,0:OFF)].\r\n", 1);
+build_var(lcd, "Turn ON/OFF lcd display,format:[lcd state(1:ON,0:OFF)].\r\n", 1);
 
 /*
  * Example: task
@@ -65,7 +65,7 @@ build_var(top, "List all the tasks state.\r\n", 0);
  * Example set: showtime 800 1930
  * get: showtime on off
  */
-build_var(setlcd, "Time ON/OFF lcd display and led blink,format:[showtime on(800) off(1930)]\r\n", 2);
+build_var(setlcd, "Time ON/OFF lcd display and led blink,format:[setlcd on(800) off(1930)]\r\n", 2);
 
 static void app_cli_register(void)
 {

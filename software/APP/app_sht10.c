@@ -76,42 +76,34 @@ float app_sht10_get_info(unsigned char  type)
 		return hum.fval;
 }
 
-static u8 running = FALSE;
+static u8 sht_info[7];
 
 void app_sht10_task(void *parame)
 {
 	float temp, hum;
     unsigned int temp32;
 	
+	
 	while(1)
 	{
-		if(running == FALSE)
-		{
-			vTaskDelay(100);
-		}
-		else
-		{
-			u8 info[7];
-			
-			temp = app_sht10_get_info(TEMP);
-			hum = app_sht10_get_info(HUM);
-		
-            temp32 = temp * 10;
-    		info[0] = temp32 / 100;
-    		info[1] = temp32 % 100 /10;
-    		info[2] = temp32 % 10;
-    		info[3] = 0;
-    		info[4] = (unsigned int)hum / 10;
-    		info[5] = (unsigned int)hum % 10;
-            info[6] = 0x11;
-			app_display_show_info(info);
-		}
+		vTaskDelay(1000);
+
+		temp = app_sht10_get_info(TEMP);
+		hum = app_sht10_get_info(HUM);
+	
+        temp32 = temp * 10;
+		sht_info[0] = temp32 / 100;
+		sht_info[1] = temp32 % 100 /10;
+		sht_info[2] = temp32 % 10;
+		sht_info[3] = 0;
+		sht_info[4] = (unsigned int)hum / 10;
+		sht_info[5] = (unsigned int)hum % 10;
+        sht_info[6] = 0x11;
 		/* dbg_string("Temperature:%3.1fC   Humidity:%3.1f%%\r\n", temp, hum); */
-		vTaskDelay(500);
 	}
 }
 
-void app_sht10_set_running(u8 state)
+void app_sht10_refresh_display(void)
 {
-	running = state;
+	app_display_show_info(sht_info);
 }

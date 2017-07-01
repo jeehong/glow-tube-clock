@@ -163,8 +163,10 @@ static void app_display_set_point(char src)
 }	
 
 
-static char lcd_pixel[7], refresh = FALSE;
+static char lcd_pixel[7];
 static SWITCH_STATE_e hv_state = OFF;
+static u8 processing = TRUE;
+
 void app_display_task(void *parame)
 {
 	char map[CHIP595_NUM] = {10};
@@ -175,59 +177,51 @@ void app_display_task(void *parame)
 	app_display_set_point(hv_state);
 	while(1)
 	{
-		if(refresh == FALSE)
+		if(hv_bak != hv_state)
 		{
-			vTaskDelay(mainDELAY_MS(100));
-		}
-		else
-		{
-			if(hv_bak != hv_state)
+			if(hv_bak == OFF)
 			{
-				if(hv_bak == OFF)
-				{
-					start_dis = 0;
-					vTaskResume(main_get_task_handle(TASK_HANDLE_LED));
-				}
-				else
-				{	
-					GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
-					vTaskSuspend(main_get_task_handle(TASK_HANDLE_LED));
-				}
-				hv_bak = hv_state;
-				bsp_set_hv_state(hv_state);
+				start_dis = 0;
+				vTaskResume(main_get_task_handle(TASK_HANDLE_LED));
 			}
-			
-	        if(start_dis <= 9)
-	        {
-	    	    lcd_pixel[0] = start_dis;
-	            lcd_pixel[1] = start_dis;
-	    	    lcd_pixel[2] = start_dis;
-	    	    lcd_pixel[3] = start_dis;
-	    	    lcd_pixel[4] = start_dis;
-	    	    lcd_pixel[5] = start_dis;
-	            start_dis++; 
-		    }
-			if(hv_state == ON)
-				app_display_set_point(lcd_pixel[6]);
 			else
-				app_display_set_point(0);
-			app_display_calc_map(map, lcd_pixel);
-			app_display_write_data(map);
+			{	
+				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
+				vTaskSuspend(main_get_task_handle(TASK_HANDLE_LED));
+			}
+			hv_bak = hv_state;
+			bsp_set_hv_state(hv_state);
 		}
-		refresh = FALSE;
+		processing = TRUE;
+		if(start_dis <= 9)
+		{
+		    lcd_pixel[0] = start_dis;
+		    lcd_pixel[1] = start_dis;
+		    lcd_pixel[2] = start_dis;
+		    lcd_pixel[3] = start_dis;
+		    lcd_pixel[4] = start_dis;
+		    lcd_pixel[5] = start_dis;
+		    start_dis ++;
+			
+		}
+		app_display_set_point(lcd_pixel[6]);
+		app_display_calc_map(map, lcd_pixel);
+		processing = FALSE;
+		app_display_write_data(map);
+		if(start_dis <= 9)
+			vTaskDelay(mainDELAY_MS(500));
+		else
+			vTaskDelay(mainDELAY_MS(100));
 	}	
 }
 
 void app_display_show_info(u8 *src)
 {
-	static u8 processing = FALSE;
-
 	if(processing == TRUE)
 		return;
-	processing = TRUE;
+	
 	memcpy(lcd_pixel, src, 7);
-	refresh = TRUE;
-	processing = FALSE;
+	
 }
 
 void app_display_set_hv(SWITCH_STATE_e state)

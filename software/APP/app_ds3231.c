@@ -332,13 +332,12 @@ void app_ds3231_task(void *parame)
 
         if(((time2.sec >= 20) && (time2.sec < 25)) || ((time2.sec >= 40) && (time2.sec < 45)))
         {
-			app_sht10_set_running(ON);
+			app_sht10_refresh_display();
         }
         else
 		{
 			u8 info[7];
 
-			app_sht10_set_running(OFF);
 			info[0] = time2.hour / 10;
 			info[1] = time2.hour % 10;
 			info[2] = time2.min / 10;
@@ -351,15 +350,15 @@ void app_ds3231_task(void *parame)
 			vTaskDelay(mainDELAY_MS(490));
 			info[6] = 0;
 			app_display_show_info(info);
-		}
-
-		if(ontime || offtime)
-		{
-			temp16 = (time2.hour * 100) + time2.min;
-			if((temp16 >= ontime) && (temp16 < offtime))
-				app_display_set_hv(ON);
-			else
-				app_display_set_hv(OFF);
+			
+			if(ontime || offtime)
+			{
+				temp16 = (time2.hour * 100) + time2.min;
+				if((temp16 >= ontime) && (temp16 < offtime))
+					app_display_set_hv(ON);
+				else
+					app_display_set_hv(OFF);
+			}
 		}
 	}
 }

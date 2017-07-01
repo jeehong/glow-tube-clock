@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\OS.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\OS.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu Jun 29 23:15:43 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sat Jul 01 12:09:24 2017
 <BR><P>
 <H3>Maximum Stack Usage =        688 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -176,7 +176,7 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[264]"></a>vPortGetIPSR</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, port.o(.emb_text), UNUSED)
 
-<P><STRONG><a name="[a0]"></a>main_get_task_handle</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[9f]"></a>main_get_task_handle</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;top_main
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_main
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;led_main
@@ -293,20 +293,20 @@ Global Symbols
 <P><STRONG><a name="[36]"></a>app_display_task</STRONG> (Thumb, 234 bytes, Stack size 16 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = app_display_task &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<BR>[Calls]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_show
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_point
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_calc_map
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_calc_map
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[b4]"></a>app_display_show_info</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, app_display.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
+<P><STRONG><a name="[b5]"></a>app_display_show_info</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, app_display.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_refresh_display
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
@@ -322,7 +322,7 @@ Global Symbols
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_sda_dir
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_BUS_SDA_STATE
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_info
 </UL>
@@ -337,53 +337,56 @@ Global Symbols
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_task
 </UL>
 
-<P><STRONG><a name="[37]"></a>app_sht10_task</STRONG> (Thumb, 164 bytes, Stack size 16 bytes, app_sht10.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = app_sht10_task &rArr; app_sht10_get_info &rArr; app_sht10_calc_th &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[37]"></a>app_sht10_task</STRONG> (Thumb, 130 bytes, Stack size 0 bytes, app_sht10.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = app_sht10_task &rArr; app_sht10_get_info &rArr; app_sht10_calc_th &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2uiz
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_info
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
-<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_info
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[c5]"></a>app_sht10_set_running</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, app_sht10.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
+<P><STRONG><a name="[b4]"></a>app_sht10_refresh_display</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, app_sht10.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = app_sht10_refresh_display
+</UL>
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_info
+</UL>
+<BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
-<P><STRONG><a name="[b5]"></a>rtc_valid_tm</STRONG> (Thumb, 72 bytes, Stack size 8 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[b6]"></a>rtc_valid_tm</STRONG> (Thumb, 72 bytes, Stack size 8 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = rtc_valid_tm &rArr; rtc_month_days
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_month_days
+<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_month_days
 </UL>
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sdate_main
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
+<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
 </UL>
 
-<P><STRONG><a name="[b7]"></a>app_ds3231_read_time</STRONG> (Thumb, 302 bytes, Stack size 24 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[b8]"></a>app_ds3231_read_time</STRONG> (Thumb, 302 bytes, Stack size 24 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = app_ds3231_read_time &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
-<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_valid_tm
+<BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_valid_tm
 </UL>
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sdate_main
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;date_main
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
-<P><STRONG><a name="[b9]"></a>app_ds3231_set_time</STRONG> (Thumb, 292 bytes, Stack size 24 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[ba]"></a>app_ds3231_set_time</STRONG> (Thumb, 292 bytes, Stack size 24 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_ds3231_set_time &rArr; i2c_bus_write_ds3231 &rArr; i2c_bus_write_byte &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
 </UL>
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sdate_main
 </UL>
 
-<P><STRONG><a name="[c0]"></a>app_ds3231_set_showtime</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[c1]"></a>app_ds3231_set_showtime</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = app_ds3231_set_showtime &rArr; app_data_write_showtime &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_write_showtime
+<BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_write_showtime
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setlcd_main
 </UL>
@@ -392,19 +395,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setlcd_main
 </UL>
 
-<P><STRONG><a name="[38]"></a>app_ds3231_task</STRONG> (Thumb, 368 bytes, Stack size 24 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[38]"></a>app_ds3231_task</STRONG> (Thumb, 360 bytes, Stack size 24 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = app_ds3231_task &rArr; app_ds3231_set_match &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_read_showtime
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_buzzer_set_times
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_buzzer_running
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_match
-<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_set_running
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_read_showtime
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_buzzer_set_times
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_buzzer_running
+<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_match
+<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_refresh_display
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_hv
-<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_info
+<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_show_info
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueCreateMutex
 </UL>
@@ -419,19 +422,19 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cstartup.o(RESET)
 </UL>
-<P><STRONG><a name="[39]"></a>app_buz_task</STRONG> (Thumb, 62 bytes, Stack size 0 bytes, app_buz.o(.text))
+<P><STRONG><a name="[39]"></a>app_buz_task</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, app_buz.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = app_buz_task &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_CtrlPWMOutputs
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[c4]"></a>app_buzzer_running</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, app_buz.o(.text))
+<P><STRONG><a name="[c5]"></a>app_buzzer_running</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, app_buz.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
-<P><STRONG><a name="[c3]"></a>app_buzzer_set_times</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, app_buz.o(.text))
+<P><STRONG><a name="[c4]"></a>app_buzzer_set_times</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, app_buz.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
@@ -492,7 +495,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_init
 </UL>
 
-<P><STRONG><a name="[c2]"></a>app_data_read_showtime</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, app_data.o(.text))
+<P><STRONG><a name="[c3]"></a>app_data_read_showtime</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, app_data.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = app_data_read_showtime
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_get_data
@@ -500,12 +503,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
-<P><STRONG><a name="[c1]"></a>app_data_write_showtime</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, app_data.o(.text))
+<P><STRONG><a name="[c2]"></a>app_data_write_showtime</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, app_data.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = app_data_write_showtime &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_showtime
+<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_showtime
 </UL>
 
 <P><STRONG><a name="[3b]"></a>app_data_store_task</STRONG> (Thumb, 110 bytes, Stack size 0 bytes, app_data.o(.text))
@@ -592,8 +595,8 @@ Global Symbols
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_res
 </UL>
 
@@ -607,11 +610,11 @@ Global Symbols
 <LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_send_ack
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_res
 </UL>
 
-<P><STRONG><a name="[ba]"></a>i2c_bus_write_ds3231</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, i2c_bus.o(.text))
+<P><STRONG><a name="[bb]"></a>i2c_bus_write_ds3231</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, i2c_bus.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = i2c_bus_write_ds3231 &rArr; i2c_bus_write_byte &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
@@ -620,14 +623,14 @@ Global Symbols
 <LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_stop
 <LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_start_ds3231
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_time
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_enable_irq
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_match
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_alarm
+<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_time
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_enable_irq
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_match
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_alarm
 </UL>
 
-<P><STRONG><a name="[b8]"></a>i2c_bus_read_ds3231</STRONG> (Thumb, 106 bytes, Stack size 32 bytes, i2c_bus.o(.text))
+<P><STRONG><a name="[b9]"></a>i2c_bus_read_ds3231</STRONG> (Thumb, 106 bytes, Stack size 32 bytes, i2c_bus.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
@@ -637,12 +640,12 @@ Global Symbols
 <LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_stop
 <LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_start_ds3231
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_enable_irq
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_match
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_alarm
-<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_alarm
+<BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_enable_irq
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_clear_state
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_match
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_alarm
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_alarm
 </UL>
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, cstartup.o(.text))
@@ -1507,8 +1510,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[14d]"></a>vListInsertEnd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, list.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
 <LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskNotifyGiveFromISR
 <LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericNotifyFromISR
 <LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericNotify
@@ -1534,8 +1537,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[154]"></a>uxListRemove</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, list.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
 <LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskNotifyGiveFromISR
 <LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericNotifyFromISR
 <LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericNotify
@@ -1590,7 +1593,7 @@ Global Symbols
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeAll
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspendAll
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_write_showtime
+<BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_write_showtime
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xSerialPutChar
 <LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvInitialiseMutex
 <LI><a href="#[177]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_sem_signal
@@ -1748,7 +1751,7 @@ Global Symbols
 <LI><a href="#[14d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pvPortMalloc
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelayUntil
@@ -1760,7 +1763,7 @@ Global Symbols
 
 <P><STRONG><a name="[13d]"></a>vTaskSuspendAll</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, tasks.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pvPortMalloc
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelayUntil
@@ -1780,7 +1783,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_led_task_blink
 </UL>
 
-<P><STRONG><a name="[9f]"></a>vTaskDelay</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, tasks.o(.text))
+<P><STRONG><a name="[a3]"></a>vTaskDelay</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvAddCurrentTaskToDelayedList
@@ -1824,11 +1827,11 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[6e]"></a>vTaskSwitchContext</STRONG> (Thumb, 76 bytes, Stack size 0 bytes, tasks.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
 <LI><a href="#[8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xPortPendSVHandler
 </UL>
 
-<P><STRONG><a name="[a2]"></a>vTaskSuspend</STRONG> (Thumb, 220 bytes, Stack size 16 bytes, tasks.o(.text))
+<P><STRONG><a name="[a1]"></a>vTaskSuspend</STRONG> (Thumb, 220 bytes, Stack size 16 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = vTaskSuspend
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
@@ -1843,7 +1846,7 @@ Global Symbols
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
-<P><STRONG><a name="[a1]"></a>vTaskResume</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, tasks.o(.text))
+<P><STRONG><a name="[a0]"></a>vTaskResume</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = vTaskResume &rArr; prvTaskIsTaskSuspended
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
@@ -2060,12 +2063,12 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxTaskPriorityGet
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mid_cli_register
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eTaskGetState
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
@@ -2094,12 +2097,12 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxTaskPriorityGet
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mid_cli_register
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eTaskGetState
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_byte
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_byte
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_write_data
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericReceive
@@ -3735,7 +3738,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[216]"></a>LwIPEntry</STRONG> (Thumb, 106 bytes, Stack size 0 bytes, lwipentry.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<BR><BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;netconn_write
 <LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;netconn_recv
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;netconn_new_with_proto_and_callback
@@ -4514,7 +4517,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
 </UL>
 
-<P><STRONG><a name="[a3]"></a>app_display_calc_map</STRONG> (Thumb, 82 bytes, Stack size 20 bytes, app_display.o(.text))
+<P><STRONG><a name="[a2]"></a>app_display_calc_map</STRONG> (Thumb, 82 bytes, Stack size 20 bytes, app_display.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = app_display_calc_map
 </UL>
 <BR>[Called By]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_task
@@ -4538,42 +4541,42 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_sht10_get_info
 </UL>
 
-<P><STRONG><a name="[b6]"></a>rtc_month_days</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[b7]"></a>rtc_month_days</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = rtc_month_days
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_valid_tm
+<BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_valid_tm
 </UL>
 
-<P><STRONG><a name="[bb]"></a>app_ds3231_read_alarm</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, app_ds3231.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<P><STRONG><a name="[bc]"></a>app_ds3231_read_alarm</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, app_ds3231.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 </UL>
 
-<P><STRONG><a name="[bc]"></a>app_ds3231_set_alarm</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, app_ds3231.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<P><STRONG><a name="[bd]"></a>app_ds3231_set_alarm</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, app_ds3231.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 </UL>
 
-<P><STRONG><a name="[bd]"></a>app_ds3231_set_match</STRONG> (Thumb, 150 bytes, Stack size 32 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[be]"></a>app_ds3231_set_match</STRONG> (Thumb, 150 bytes, Stack size 32 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = app_ds3231_set_match &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
-<P><STRONG><a name="[be]"></a>app_ds3231_clear_state</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, app_ds3231.o(.text))
+<P><STRONG><a name="[bf]"></a>app_ds3231_clear_state</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, app_ds3231.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = app_ds3231_clear_state &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_task
 </UL>
 
-<P><STRONG><a name="[bf]"></a>app_ds3231_enable_irq</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, app_ds3231.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<P><STRONG><a name="[c0]"></a>app_ds3231_enable_irq</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, app_ds3231.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 </UL>
 
 <P><STRONG><a name="[ca]"></a>app_cli_register</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, app_cli.o(.text))
@@ -4602,7 +4605,7 @@ Local Symbols
 <P><STRONG><a name="[63]"></a>date_main</STRONG> (Thumb, 68 bytes, Stack size 48 bytes, app_cli.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = date_main &rArr; app_ds3231_read_time &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> app_cli.o(.constdata)
@@ -4610,9 +4613,9 @@ Local Symbols
 <P><STRONG><a name="[64]"></a>sdate_main</STRONG> (Thumb, 190 bytes, Stack size 56 bytes, app_cli.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = sdate_main &rArr; app_ds3231_read_time &rArr; i2c_bus_read_ds3231 &rArr; i2c_bus_read_byte &rArr; i2c_bus_send_ack &rArr; i2c_bus_sda_dir &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_time
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
-<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_valid_tm
+<BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_time
+<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_read_time
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_valid_tm
 <LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcpy
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
@@ -4631,9 +4634,9 @@ Local Symbols
 <P><STRONG><a name="[66]"></a>led_main</STRONG> (Thumb, 86 bytes, Stack size 24 bytes, app_cli.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = led_main &rArr; atoi &rArr; strtol &rArr; _strtoul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
+<BR>[Calls]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
@@ -4646,10 +4649,10 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = lcd_main &rArr; atoi &rArr; strtol &rArr; _strtoul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_set_hv_state
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_display_set_show
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
@@ -4662,7 +4665,7 @@ Local Symbols
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxTaskGetStackHighWaterMark
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcTaskGetName
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eTaskGetState
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main_get_task_handle
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcat
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
@@ -4672,7 +4675,7 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = setlcd_main &rArr; app_ds3231_set_showtime &rArr; app_data_write_showtime &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_get_showtime
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_showtime
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_ds3231_set_showtime
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
@@ -4728,7 +4731,7 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[e6]"></a>app_data_get_data</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, app_data.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_read_showtime
+<BR><BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_data_read_showtime
 </UL>
 
 <P><STRONG><a name="[e9]"></a>bsp_TIM1_CH4_pwm_init</STRONG> (Thumb, 104 bytes, Stack size 40 bytes, bsp.o(.text))
@@ -4841,8 +4844,8 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_sda_dir
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 </UL>
 
 <P><STRONG><a name="[109]"></a>i2c_bus_stop</STRONG> (Thumb, 134 bytes, Stack size 8 bytes, i2c_bus.o(.text))
@@ -4851,8 +4854,8 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_sda_dir
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
+<BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_write_ds3231
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_read_ds3231
 </UL>
 
 <P><STRONG><a name="[10a]"></a>i2c_bus_send_ack</STRONG> (Thumb, 136 bytes, Stack size 16 bytes, i2c_bus.o(.text))
@@ -4980,7 +4983,7 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[155]"></a>prvResetNextTaskUnblockTime</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, tasks.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
+<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
 <LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskIncrementTick
 <LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelete
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeAll
@@ -5002,7 +5005,7 @@ Local Symbols
 <LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsert
 <LI><a href="#[14d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vListInsertEnd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<BR>[Called By]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelayUntil
 <LI><a href="#[167]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskNotifyWait
 <LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulTaskNotifyTake
@@ -5013,7 +5016,7 @@ Local Symbols
 <P><STRONG><a name="[15a]"></a>prvTaskIsTaskSuspended</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, tasks.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = prvTaskIsTaskSuspended
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
+<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume
 <LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeFromISR
 </UL>
 

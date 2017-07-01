@@ -27,6 +27,7 @@ void app_buz_task(void *parame)
 	            TIM_CtrlPWMOutputs(TIM1, DISABLE);
 	            vTaskDelay(mainDELAY_MS(500)); 
 	        }
+			running = FALSE;
 		}
     }
 }
