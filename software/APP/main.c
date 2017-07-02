@@ -149,7 +149,7 @@ int main( void )
 	//vlwIPInit();
 	//LwIP_Init();
 
-	sprintf(cmd_prefix, "%s-%d.%d.%d ", "clock", 0, 0, 1);
+	sprintf(cmd_prefix, "%s-%d.%d.%d ", "clock", PRJ_VER_MAJOR, PRJ_VER_MINOR, PRJ_VER_REVISION);
 	app_cli_init(tskIDLE_PRIORITY + 1, cmd_prefix, &task_handle[TASK_HANDLE_CLI]);
 
 	//sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 250, 5);

@@ -36,7 +36,7 @@ build_var(date, "Read system current time.\r\n", 0);
 /*
  * Example: sdate 16 11 27 7 22 48 50
  */
-build_var(sdate, "Set system current time,format:[sdate year[0,99] month[0,12] mday[1,31] wday[1-7] hour[0-23] min[0-59] sec[0-59]]\r\n", 7);
+build_var(sdate, "Set system current time,format: sdate year[0,99] month[0,12] mday[1,31] wday[1-7] hour[0-23] min[0-59] sec[0-59]\r\n", 7);
 
 /*
  * Example: th
@@ -44,9 +44,9 @@ build_var(sdate, "Set system current time,format:[sdate year[0,99] month[0,12] m
 build_var(th, "Read the ambient temperature(C) and humidity(%).\r\n", 0);
 
 /*
- * Example: led 0
+ * Example: led R 1
  */
-build_var(led, "Turn ON/OFF led blink,format:[led color[R,G,B] state[1:ON,0:OFF]].\r\n", 2);
+build_var(led, "Turn ON/OFF led blink,format: led color[R,G,B] state[1:ON,0:OFF].\r\n", 2);
 
 /*
  * Example: reboot
@@ -54,12 +54,12 @@ build_var(led, "Turn ON/OFF led blink,format:[led color[R,G,B] state[1:ON,0:OFF]
 build_var(reboot, "Reboot system.\r\n", 0);
 
 /*
- * Example: display 1
+ * Example: lcd 1
  */
-build_var(lcd, "Turn ON/OFF lcd display,format:[lcd state(1:ON,0:OFF)].\r\n", 1);
+build_var(lcd, "Turn ON/OFF lcd display,format: lcd state[1:ON,0:OFF].\r\n", 1);
 
 /*
- * Example: task
+ * Example: top
  */
 build_var(top, "List all the tasks state.\r\n", 0);
 
@@ -67,7 +67,7 @@ build_var(top, "List all the tasks state.\r\n", 0);
  * Example set: showtime 800 1930
  * get: showtime on off
  */
-build_var(setlcd, "Time ON/OFF lcd display and led blink,format:[setlcd on(800) off(1930)]\r\n", 2);
+build_var(setlcd, "Time ON/OFF lcd display and led blink,format: setlcd on[800] off[1930]\r\n", 2);
 
 static void app_cli_register(void)
 {

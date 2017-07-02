@@ -1,11 +1,15 @@
 #ifndef __MAIN_H__
 #define	__MAIN_H__
 
-
 #include "queue.h"
 #include "task.h"
 
 #include "bsp.h"
+
+/* 软件版本信息 */
+#define PRJ_VER_MAJOR		1
+#define PRJ_VER_MINOR		0
+#define PRJ_VER_REVISION	0
 
 #define mainDELAY_MS(ms)			( ( TickType_t ) ms / portTICK_PERIOD_MS )
 
