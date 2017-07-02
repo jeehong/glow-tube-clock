@@ -14,6 +14,8 @@
 #include "app_ds3231.h"
 #include "app_sht10.h"
 #include "app_display.h"
+#include "app_led.h"
+
 #include "bsp.h"
 
 /*
@@ -44,7 +46,7 @@ build_var(th, "Read the ambient temperature(C) and humidity(%).\r\n", 0);
 /*
  * Example: led 0
  */
-build_var(led, "Turn ON/OFF led blink,format:[led state(1:ON,0:OFF)].\r\n", 1);
+build_var(led, "Turn ON/OFF led blink,format:[led color[R,G,B] state[1:ON,0:OFF]].\r\n", 2);
 
 /*
  * Example: reboot
@@ -160,7 +162,6 @@ static BaseType_t date_main( char *dest, argv_attribute argv, const char * const
 static BaseType_t sdate_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	struct rtc_time tm;
-	unsigned char result = 0;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
@@ -175,7 +176,7 @@ static BaseType_t sdate_main( char *dest, argv_attribute argv, const char * cons
 	tm.hour = atoi(argv[5]);
 	tm.min = atoi(argv[6]);
 	tm.sec = atoi(argv[7]);
-	if((result == 8) && !rtc_valid_tm(&tm))
+	if(!rtc_valid_tm(&tm))
 	{
 		app_ds3231_set_time(&tm);
 		memset(&tm, 0, sizeof(struct rtc_time));
@@ -195,8 +196,6 @@ static BaseType_t sdate_main( char *dest, argv_attribute argv, const char * cons
 		strcpy(dest, "	Format incorrect,please try again!\r\n");
 	}
 	
-
-
 	/* There is no more data to return after this single string, so return
 	pdFALSE. */
 	return pdFALSE;
@@ -225,7 +224,7 @@ static BaseType_t th_main( char *dest, argv_attribute argv, const char * const h
 static BaseType_t led_main( char *dest, argv_attribute argv, const char * const help_info)
 {
 	TaskHandle_t pled;
-	char state;
+	char state, color;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
@@ -234,14 +233,23 @@ static BaseType_t led_main( char *dest, argv_attribute argv, const char * const 
 	configASSERT(dest);
 	
 	/* Generate a table of task stats. */
-	state = atoi(argv[1]);
-	if((state != 1) && (state != 0))
+	color = *argv[1];
+	state = atoi(argv[2]);
+	if((color != 'R' && color != 'G' && color != 'B') 
+		|| (state != 1 && state != 0))
 	{
 		sprintf(dest, "\tCommand of led control Format incorrect,please try again.\r\n");
 		return pdFALSE;
 	}
 		
 	pled = main_get_task_handle(TASK_HANDLE_LED);
+	switch(color)
+	{
+		case 'R': app_led_set_color(0); break;
+		case 'G': app_led_set_color(1); break;
+		case 'B': app_led_set_color(2); break;
+		default: break;
+	}
 	
 	if(state == 1)
 		vTaskResume(pled);

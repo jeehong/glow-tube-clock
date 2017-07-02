@@ -15,6 +15,7 @@
 #include "app_display.h"
 #include "app_sht10.h"
 
+#define DEFAULT_COLOR_BLUE		1
 
 void app_led_init(void)
 {
@@ -28,20 +29,29 @@ void app_led_init(void)
 	GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
 }
 
+static u8 color = DEFAULT_COLOR_BLUE;
 
 void app_led_task_blink(void *parame)
 {
 	portTickType xLastWakeTime;
-	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_B, LED_PIN_G};
+	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
+	u8 col = color;
 	
 	xLastWakeTime = xTaskGetTickCount();
 	while(1)
 	{
-		LED_PIN_GROUP->BSRR = port_list[2];
+		col = color;
+		LED_PIN_GROUP->BSRR = port_list[col];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(100));	
-		LED_PIN_GROUP->BRR = port_list[2];
+		LED_PIN_GROUP->BRR = port_list[col];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1900));
 	}
 }
 
-
+void app_led_set_color(u8 led)
+{
+	if(led > 2)
+		color = DEFAULT_COLOR_BLUE;
+	else
+		color = led;
+}

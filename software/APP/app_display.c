@@ -202,7 +202,6 @@ void app_display_task(void *parame)
 		    lcd_pixel[4] = start_dis;
 		    lcd_pixel[5] = start_dis;
 		    start_dis ++;
-			
 		}
 		app_display_set_point(lcd_pixel[6]);
 		app_display_calc_map(map, lcd_pixel);
