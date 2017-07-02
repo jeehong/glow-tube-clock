@@ -15,7 +15,7 @@ union {
 } hum, temp;
 
 /* 有效位为0.1 */
-static void app_sht10_calc_th(void)
+static void app_sht10_calc_adjust(void)
 {
 	const int c1 = -4;
 	const float c2 = 0.0405, c3 = -2.8, d1 = -39.63, d2 = 0.01;
@@ -62,14 +62,22 @@ u8 app_sht10_get_res(u16 *p_value, u8 *p_checksum, SHT10_INFO_e mode)
 	return error;
 }
 
-float app_sht10_get_info(unsigned char  type)
+static float app_sht10_calc_th(unsigned char  type)
 {
 	u8 check;
 	
 	app_sht10_get_res(&temp.sval, &check, TEMP);
 	app_sht10_get_res(&hum.sval, &check, HUM);
-	app_sht10_calc_th();
+	app_sht10_calc_adjust();
 
+	if(type == TEMP)
+		return temp.fval;
+	else
+		return hum.fval;
+}
+
+float app_sht10_get_data(unsigned char  type)
+{
 	if(type == TEMP)
 		return temp.fval;
 	else
@@ -81,15 +89,15 @@ static u8 sht_info[7];
 void app_sht10_task(void *parame)
 {
 	float temp, hum;
-    unsigned int temp32;
+	unsigned int temp32;
 	
 	
 	while(1)
 	{
 		vTaskDelay(1000);
 
-		temp = app_sht10_get_info(TEMP);
-		hum = app_sht10_get_info(HUM);
+		temp = app_sht10_calc_th(TEMP);
+		hum = app_sht10_calc_th(HUM);
 	
         temp32 = temp * 10;
 		sht_info[0] = temp32 / 100;

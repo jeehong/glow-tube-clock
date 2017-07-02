@@ -213,8 +213,8 @@ static BaseType_t th_main( char *dest, argv_attribute argv, const char * const h
 	configASSERT(dest);
 
 	/* Generate a table of task stats. */
-	temp = app_sht10_get_info(TEMP);
-	hum = app_sht10_get_info(HUM);
+	temp = app_sht10_get_data(TEMP);
+	hum = app_sht10_get_data(HUM);
 	sprintf(dest, "\tTemperature %.1f(C)  Humidity %.1f(%%)\r\n", temp, hum);
 
 	/* There is no more data to return after this single string, so return

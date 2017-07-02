@@ -12,7 +12,7 @@ typedef enum {
 	TEMP,
 } SHT10_INFO_e;
 
-float app_sht10_get_info(unsigned char type);
+float app_sht10_get_data(unsigned char  type);
 void app_sht10_task(void *parame);
 void app_sht10_refresh_display(void);
 

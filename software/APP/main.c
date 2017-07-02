@@ -146,13 +146,13 @@ int main( void )
 	dbg_string("------Glow tube clock!------\r\n");
 	
 	/* ≥ı ºªØLwIP */
-	vlwIPInit();
+	//vlwIPInit();
 	//LwIP_Init();
 
 	sprintf(cmd_prefix, "%s-%d.%d.%d ", "clock", 0, 0, 1);
 	app_cli_init(tskIDLE_PRIORITY + 1, cmd_prefix, &task_handle[TASK_HANDLE_CLI]);
 
-	/* sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 250, 5); */
+	//sys_thread_new("web_server", LwIPEntry, ( void * )NULL, 250, 5);
 	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, NULL, 3, &task_handle[TASK_HANDLE_DISPLAY]);
 	xTaskCreate((pdTASK_CODE)app_sht10_task, "sht10", 280, NULL, 4, &task_handle[TASK_HANDLE_SHT10]);
 	xTaskCreate((pdTASK_CODE)app_ds3231_task, "ds3231", 280, NULL, 3, &task_handle[TASK_HANDLE_DS3231]);
