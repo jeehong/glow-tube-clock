@@ -12,24 +12,24 @@ static u8 warning_times = 0, running = FALSE;
 
 void app_buz_task(void *parame)
 {
-    int index;
-        
-    while(1)
-    {
+	int index;
+
+	while(1)
+	{
 		if(running == FALSE)
 			vTaskDelay(100);
 		else
 		{
-	        for(index = warning_times; index > 0; index--)
-	        {
-	            TIM_CtrlPWMOutputs(TIM1, ENABLE);
-	            vTaskDelay(mainDELAY_MS(500)); 
-	            TIM_CtrlPWMOutputs(TIM1, DISABLE);
-	            vTaskDelay(mainDELAY_MS(500)); 
-	        }
+			for(index = warning_times; index > 0; index--)
+			{
+				TIM_CtrlPWMOutputs(TIM1, ENABLE);
+				vTaskDelay(mainDELAY_MS(500));
+				TIM_CtrlPWMOutputs(TIM1, DISABLE);
+				vTaskDelay(mainDELAY_MS(500));
+			}
 			running = FALSE;
 		}
-    }
+	}
 }
 
 void app_buzzer_running(u8 state)

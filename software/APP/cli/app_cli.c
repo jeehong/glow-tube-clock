@@ -366,7 +366,6 @@ static BaseType_t setlcd_main( char *dest, argv_attribute argv, const char * con
 {
 	char on_hour, on_min, off_hour, off_min;
 	short on, off;
-	unsigned char result = 0;
 	
 	/* Remove compile time warnings about unused parameters, and check the
 	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
@@ -381,8 +380,8 @@ static BaseType_t setlcd_main( char *dest, argv_attribute argv, const char * con
 	on_min = on % 100;
 	off_hour = off / 100;
 	off_min = off % 100;
-	if((result == 3) 
-		&& on_hour <= 23
+	
+	if(on_hour <= 23
 		&& on_min <= 59
 		&& off_hour <= 23
 		&& off_min <= 59)
