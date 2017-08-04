@@ -45,7 +45,8 @@ static BaseType_t mid_cli_parse_command(const char * const input, char *dest, si
 static const char * const passwd = "jhg";
 static const char * const input_passwd_msg = "Input password: ";
 static const char * const incorrect_passwd_msg = "Password incorrect!\r\n";
-static const char * prefix = NULL;//"<Terminal> "; 
+static const char * def_prefix = "<Terminal> ";
+static const char * prefix = NULL;//"<Terminal> ";
 static const char * const pcNewLine = "\r\n";
 static const char * const backspace = " \b";
 
@@ -55,11 +56,11 @@ static struct _list_command_t cmd_list_head =
 	&help,
 	NULL,
 };
-static enum passwd_state permission = PASSWD_INCORRECT;
-static char cOutputString[cmdMAX_OUTPUT_SIZE];
-static char cInputString[cmdMAX_INPUT_SIZE];
+
 static char vars[cmdMAX_VARS_SIZE][cmdMAX_STRING_SIZE];
 static char *argv[cmdMAX_VARS_SIZE];
+static char cOutputString[cmdMAX_OUTPUT_SIZE];
+static char cInputString[cmdMAX_INPUT_SIZE];
 
 struct _list_command_t *mid_cli_cmd_list_head(void)
 {
@@ -114,7 +115,10 @@ void mid_cli_init(unsigned short usStackSize, UBaseType_t uxPriority, char *t, T
 	{
 		argv[i] = vars[i];
 	}
-	prefix = t;
+	if(t != NULL)
+		prefix = t;
+	else
+		prefix = def_prefix;
 	/* Create that task that handles the console itself. */
 	xTaskCreate(mid_cli_console_task,		/* The task that implements the command console. */
 				"cmd",				/* Text name assigned to the task.  This is just to assist debugging.  The kernel does not use this name itself. */
@@ -126,93 +130,96 @@ void mid_cli_init(unsigned short usStackSize, UBaseType_t uxPriority, char *t, T
 
 static void mid_cli_console_task(void *parame)
 {
-	
+	static enum passwd_state permission = PASSWD_INCORRECT;
 	unsigned char inputIndex = 0;
-	BaseType_t xReturned;
 	unsigned char status = 0;
 	signed char inputChar;
 
 	for(;;)
 	{
-		switch(status)
+		/* 正在组包 */
+		if(status == 0)
 		{
-			case 0:		/* 正在组包 */
-				/* 等待终端输入 */
-				while(hal_cli_data_rx(&inputChar, 0) != pdTRUE) ;
-				
-				/* 输入数据回显 */
-				if(inputChar != cmdASCII_BS || inputIndex)
-					hal_cli_data_tx(&inputChar, 1);
-				
-				if(inputChar == cmdASCII_NEWLINE || inputChar == cmdASCII_HEADLINE)
+			/* 等待终端输入 */
+			while(hal_cli_data_rx(&inputChar, 0) != pdTRUE) ;
+			
+			/* 输入数据回显 */
+			if(inputChar != cmdASCII_BS || inputIndex)
+				hal_cli_data_tx(&inputChar, sizeof(inputChar));
+			
+			if(inputChar == cmdASCII_NEWLINE || inputChar == cmdASCII_HEADLINE)
+			{
+				status = 1;	/* 整包接收完毕，进入权限判定 */
+			}
+			else			/* 组包阶段，且支持backspace回删功能 */
+			{
+				if(inputChar == cmdASCII_BS)
 				{
-					status = 1;	/* 整包接收完毕，进入权限判定 */
-				}
-				else			/* 组包阶段，且支持backspace回删功能 */
-				{
-					if(inputChar == cmdASCII_BS)
+					if(inputIndex > 0)
 					{
-						if(inputIndex > 0)
-						{
-							inputIndex --;
-							cInputString[ inputIndex ] = cmdASCII_STRINGEND;
-							hal_cli_data_tx((signed char *)backspace, strlen(backspace));
-						}
-					}
-					else if((inputChar >= cmdASCII_SPACE) && (inputChar <= cmdASCII_TILDE))
-					{
-						if( inputIndex < cmdMAX_INPUT_SIZE)
-						{
-							cInputString[inputIndex] = inputChar;
-							inputIndex ++;
-						}
+						inputIndex --;
+						cInputString[ inputIndex ] = cmdASCII_STRINGEND;
+						hal_cli_data_tx((signed char *)backspace, strlen(backspace));
 					}
 				}
-				break;
-			case 1:		/* 组包完成，权限判定 */
-				hal_cli_data_tx((signed char *)pcNewLine, strlen(pcNewLine));
-				if(permission == PASSWD_INCORRECT)
-					status = 2;
-				else
-					status = 3;
-				break;
-			case 2:		/* 安全认证 */
-				if(strcmp(passwd, cInputString))
+				else if((inputChar >= cmdASCII_SPACE) && (inputChar <= cmdASCII_TILDE))
 				{
-					if(inputIndex)
+					if( inputIndex < cmdMAX_INPUT_SIZE)
 					{
-						hal_cli_data_tx((signed char *)incorrect_passwd_msg, strlen(incorrect_passwd_msg));
+						cInputString[inputIndex] = inputChar;
+						inputIndex ++;
 					}
-					hal_cli_data_tx((signed char *)input_passwd_msg, strlen(input_passwd_msg));
-					status = 0;
 				}
-				else
+			}
+		}
+		/* 组包完成，权限判定 */
+		if(status == 1)	
+		{
+			hal_cli_data_tx((signed char *)pcNewLine, strlen(pcNewLine));
+			if(permission == PASSWD_INCORRECT)
+				status = 2;
+			else
+				status = 3;
+		}
+		/* 安全认证 */
+		if(status == 2)
+		{
+			if(strcmp(passwd, cInputString))
+			{
+				if(inputIndex)
 				{
-					permission = PASSWD_CORRECT;
-					status = 3;
+					hal_cli_data_tx((signed char *)incorrect_passwd_msg, strlen(incorrect_passwd_msg));
 				}
-				memset(cInputString, 0, cmdMAX_INPUT_SIZE);
-				inputIndex = 0;
-
-				break;
-			case 3:		/* 命令解析 */
-				if(inputIndex != 0)
-				{
-					do
-					{
-						cOutputString[0] = '\0';
-						xReturned = mid_cli_parse_command(cInputString, cOutputString, cmdMAX_OUTPUT_SIZE);
-						hal_cli_data_tx((signed char *)cOutputString, strlen(cOutputString));
-					} while(xReturned != pdFALSE);
-					memset(cInputString, 0, cmdMAX_INPUT_SIZE);
-					memset(vars, 0, sizeof(vars));
-					inputIndex = 0;
-				}
-				hal_cli_data_tx((signed char *)prefix, strlen(prefix));
+				hal_cli_data_tx((signed char *)input_passwd_msg, strlen(input_passwd_msg));
 				status = 0;
-				break;
-			default:
-				break;
+			}
+			else
+			{
+				permission = PASSWD_CORRECT;
+				status = 3;
+			}
+			memset(cInputString, 0, cmdMAX_INPUT_SIZE);
+			inputIndex = 0;
+		}
+		/* 命令解析 */
+		if(status == 3)
+		{
+			if(inputIndex != 0)
+			{
+				BaseType_t xReturned;
+				
+				do
+				{
+					memset(cOutputString, '\0', strlen(cOutputString));
+					xReturned = mid_cli_parse_command(cInputString, cOutputString, cmdMAX_OUTPUT_SIZE);
+					hal_cli_data_tx((signed char *)cOutputString, strlen(cOutputString));
+				} while(xReturned != pdFALSE);
+				memset(cInputString, 0, cmdMAX_INPUT_SIZE);
+				memset(vars, 0, sizeof(vars));
+				inputIndex = 0;
+			}
+			hal_cli_data_tx((signed char *)prefix, strlen(prefix));
+			status = 0;
 		}
 	}
 }
