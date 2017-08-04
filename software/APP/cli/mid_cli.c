@@ -45,8 +45,8 @@ static BaseType_t mid_cli_parse_command(const char * const input, char *dest, si
 static const char * const passwd = "jhg";
 static const char * const input_passwd_msg = "Input password: ";
 static const char * const incorrect_passwd_msg = "Password incorrect!\r\n";
-static const char * def_prefix = "<Terminal> ";
-static const char * prefix = NULL;//"<Terminal> ";
+static const char * def_prefix = "Terminal ";
+static const char * prefix = NULL;
 static const char * const pcNewLine = "\r\n";
 static const char * const backspace = " \b";
 
