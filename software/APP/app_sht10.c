@@ -18,11 +18,34 @@ union {
 static void app_sht10_calc_adjust(void)
 {
 	const int c1 = -4;
-	const float c2 = 0.0405, c3 = -2.8, d1 = -39.63, d2 = 0.01;
+	const float c2 = 0.0405, c3 = -2.8, d1 = -39.6, d2 = 0.01;
 	const float carry = 0.05;  /* 当保留小数点后以为有效时，四舍五入操作 */
 	
 	temp.fval = temp.sval * d2 + d1 + carry;
 	hum.fval = hum.sval * c2 + c3 * hum.sval * hum.sval / 1000000.0 + c1 + carry;	
+}
+
+void calc_sth11(float *p_humidity ,float *p_temperature)
+{
+	const float D1=-39.6;	  // for 12 Bit
+	const float D2=+0.01; 	// for 12 Bit
+	const float C1=-4.0;      // for 12 Bit
+	const float C2=+0.0405;     // for 12 Bit
+	const float C3=-0.0000028;     // for 12 Bit
+	const float T1=+0.01;      // for 14 Bit @ 5V
+	const float T2=+0.00008;     // for 14 Bit @ 5V
+	float rh=*p_humidity;      // rh: Humidity [Ticks] 12 Bit
+	float t=*p_temperature;     // t: Temperature [Ticks] 14 Bit
+	float rh_lin;        // rh_lin: Humidity linear
+	float rh_true;        // rh_true: Temperature compensated humidity
+	float t_C;         // t_C : Temperature
+	t_C=t*D2 + D1;       //calc. temperature from ticks
+	rh_lin=C3*rh*rh + C2*rh + C1;    //calc. humidity from ticks to [%RH]
+	rh_true=(t_C-25)*(T1+T2*rh)+rh_lin;  //calc. temperature compensated humidity [%RH]
+	if(rh_true>100)rh_true=100;    //cut if the value is outside of
+	if(rh_true<0.1)rh_true=0.1;    //the physical possible range
+	*p_temperature=t_C;      //return temperature
+	*p_humidity=rh_true;      //return humidity[%RH]
 }
 
 u8 app_sht10_get_res(u16 *p_value, u8 *p_checksum, SHT10_INFO_e mode)
@@ -68,7 +91,10 @@ static float app_sht10_calc_th(unsigned char  type)
 	
 	app_sht10_get_res(&temp.sval, &check, TEMP);
 	app_sht10_get_res(&hum.sval, &check, HUM);
-	app_sht10_calc_adjust();
+	hum.fval = hum.sval;
+	temp.fval = temp.sval;
+	calc_sth11(&hum.fval, &temp.fval);
+	//app_sht10_calc_adjust();
 
 	if(type == TEMP)
 		return temp.fval;

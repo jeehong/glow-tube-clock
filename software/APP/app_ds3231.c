@@ -1,3 +1,5 @@
+#include "string.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
@@ -55,12 +57,29 @@ struct rtc_wkalrm {
 	struct rtc_time time;	/* time the alarm is set to */
 };
 
+struct event_info
+{
+	struct rtc_time time;
+	void (*functions)(struct rtc_time *);
+};
+
+#define ITEMS_MAX	20
+struct time_event
+{
+	List_t list;
+	u8 valid_num;
+	ListItem_t items[ITEMS_MAX];
+	struct event_info info[ITEMS_MAX];
+};
+
 
 static const unsigned char rtc_days_in_month[] = {
 	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
 static QueueHandle_t timeSync;
 static unsigned short ontime = 0, offtime = 0;
+static struct time_event events;
+
 
 static __inline unsigned char is_leap_year(unsigned int year)
 {
@@ -261,6 +280,127 @@ void app_ds3231_get_showtime(short *on, short *off)
 	*off = offtime;
 }
 
+void app_ds3231_init_event(u8 year, u8 mon, u8 mday, 
+									u8 hour, u8 min, u8 sec, 
+									void (*functions)(struct rtc_time *))
+{
+	if(events.valid_num >= ITEMS_MAX)
+		return;
+	
+	vListInitialiseItem(&events.items[events.valid_num]);
+	events.info[events.valid_num].time.year = year;
+	events.info[events.valid_num].time.mon = mon;
+	events.info[events.valid_num].time.mday = mday;
+	events.info[events.valid_num].time.hour = hour;
+	events.info[events.valid_num].time.min = min;
+	events.info[events.valid_num].time.sec = sec;
+	events.info[events.valid_num].functions = functions;
+	events.items[events.valid_num].pvOwner = &events.info[events.valid_num];
+	events.items[events.valid_num].xItemValue = events.valid_num;
+	
+	events.valid_num ++;
+}
+
+void app_ds3231_insert_event(u8 number)
+{
+	struct event_info *info;
+
+	if(number >= ITEMS_MAX)
+	{
+		return;
+	}
+	
+	if(listIS_CONTAINED_WITHIN(&events.list, &events.items[number]))
+	{
+		return;
+	}
+
+	vListInsert(&events.list, &events.items[number]);
+	
+	return;
+}
+
+void app_ds3231_remove_event(u8 number)
+{
+	if(number >= ITEMS_MAX)
+	{
+		return;
+	}
+	
+	if(!listIS_CONTAINED_WITHIN(&events.list, &events.items[number]))
+	{
+		return;
+	}
+
+	uxListRemove(&events.items[number]);
+}
+
+#define no_match_condition(val1, val2)	if(val1 != val2 && val1 != 0xFF) continue;
+
+static void events_triger_check(struct rtc_time *tm)
+{
+	ListItem_t *p_item = NULL, *p_item_next = NULL;
+	ListItem_t const *p_item_end = NULL;
+	struct event_info *data = NULL;
+	u8 index;
+
+	if(listLIST_IS_EMPTY(&events.list))
+		return;
+
+	for(index = 0; index < ITEMS_MAX || p_item != p_item_end; index ++)
+	{
+		if(index == 0)
+		{
+			p_item = listGET_HEAD_ENTRY(&events.list);
+			p_item_end = listGET_END_MARKER(&events.list);
+			data = (struct event_info *)p_item->pvOwner;
+		}
+		else
+		{
+			p_item_next = listGET_NEXT(p_item);
+			data = (struct event_info *)p_item_next->pvOwner;
+		}
+		
+		no_match_condition(data->time.sec, tm->sec);
+		no_match_condition(data->time.min, tm->min);
+		no_match_condition(data->time.hour, tm->hour);
+		no_match_condition(data->time.mday, tm->mday);
+		no_match_condition(data->time.mon, tm->mon);
+		no_match_condition(data->time.year, tm->year);
+		data->functions(tm);
+	}
+}
+
+void integer_time_beep(struct rtc_time *tm)
+{
+	app_buzzer_set_times(tm->hour);
+}
+
+void display_time(struct rtc_time *tm)
+{
+	u8 info[7];
+	
+	info[0] = tm->hour / 10;
+	info[1] = tm->hour % 10;
+	info[2] = tm->min / 10;
+	info[3] = tm->min % 10;
+	info[4] = tm->sec / 10;
+	info[5] = tm->sec % 10;
+	info[6] = 0x33;
+	app_display_show_info(info);
+}
+
+void display_power_on(struct rtc_time *tm)
+{
+	app_display_set_hv(ON);
+}
+
+void display_power_off(struct rtc_time *tm)
+{
+	app_display_set_hv(OFF);
+}
+
+
 
 void app_ds3231_task(void *parame)
 {
@@ -269,7 +409,11 @@ void app_ds3231_task(void *parame)
     unsigned short temp16;
 	/* SWITCH_STATE_e first_state = ON; */
 	
-
+	vListInitialise(&events.list);
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0, 0, integer_time_beep);
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(ontime >> 8), bin2bcd(ontime & 0xFF), 0xFF, display_power_on);
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(offtime >> 8), bin2bcd(offtime & 0xFF), 0xFF, display_power_off);
 	/* set time */
 	/* time1.sec = 0;
 	time1.min = 1;
@@ -313,9 +457,14 @@ void app_ds3231_task(void *parame)
 		xSemaphoreTake(timeSync, portMAX_DELAY);
 		
 		app_ds3231_read_time(&time2);
-		
+		app_ds3231_clear_state();
+
+		events_triger_check(&time2);
+
+		#if 0
 		if((time2.min == 0) && (time2.sec == 0))
 		{
+			
 			if(time2.hour > 12)
 				app_buzzer_set_times(time2.hour - 12);
 			else
@@ -325,10 +474,8 @@ void app_ds3231_task(void *parame)
 				else
 					app_buzzer_set_times(time2.hour);
 			}
-			
-			app_buzzer_running(ON);
 		}
-		app_ds3231_clear_state();
+		
 
         if(((time2.sec >= 20) && (time2.sec < 25)) || ((time2.sec >= 40) && (time2.sec < 45)))
         {
@@ -360,8 +507,10 @@ void app_ds3231_task(void *parame)
 					app_display_set_hv(OFF);
 			}
 		}
+		#endif
 	}
 }
+
 
 
 void EXTI0_IRQHandler(void)
