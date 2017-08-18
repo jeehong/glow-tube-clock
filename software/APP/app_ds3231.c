@@ -60,7 +60,7 @@ struct rtc_wkalrm {
 struct event_info
 {
 	struct rtc_time time;
-	void (*functions)(struct rtc_time *);
+	void (*functions)(const struct rtc_time *);
 };
 
 #define ITEMS_MAX	20
@@ -280,12 +280,12 @@ void app_ds3231_get_showtime(short *on, short *off)
 	*off = offtime;
 }
 
-void app_ds3231_init_event(u8 year, u8 mon, u8 mday, 
+u8 app_ds3231_init_event(u8 year, u8 mon, u8 mday, 
 									u8 hour, u8 min, u8 sec, 
-									void (*functions)(struct rtc_time *))
+									void (*functions)(const struct rtc_time *))
 {
 	if(events.valid_num >= ITEMS_MAX)
-		return;
+		return events.valid_num - 1;
 	
 	vListInitialiseItem(&events.items[events.valid_num]);
 	events.info[events.valid_num].time.year = year;
@@ -296,9 +296,11 @@ void app_ds3231_init_event(u8 year, u8 mon, u8 mday,
 	events.info[events.valid_num].time.sec = sec;
 	events.info[events.valid_num].functions = functions;
 	events.items[events.valid_num].pvOwner = &events.info[events.valid_num];
-	events.items[events.valid_num].xItemValue = events.valid_num;
+	events.items[events.valid_num].xItemValue = portMAX_DELAY;	/* 对链表的优先级无要求，总是插入链表尾 */
 	
 	events.valid_num ++;
+	
+	return events.valid_num - 1;
 }
 
 void app_ds3231_insert_event(u8 number)
@@ -337,7 +339,7 @@ void app_ds3231_remove_event(u8 number)
 
 #define no_match_condition(val1, val2)	if(val1 != val2 && val1 != 0xFF) continue;
 
-static void events_triger_check(struct rtc_time *tm)
+static void events_triger_check(const struct rtc_time *tm)
 {
 	ListItem_t *p_item = NULL, *p_item_next = NULL;
 	ListItem_t const *p_item_end = NULL;
@@ -390,17 +392,15 @@ void display_time(struct rtc_time *tm)
 	app_display_show_info(info);
 }
 
-void display_power_on(struct rtc_time *tm)
+void display_power_on(const struct rtc_time *tm)
 {
 	app_display_set_hv(ON);
 }
 
-void display_power_off(struct rtc_time *tm)
+void display_power_off(const struct rtc_time *tm)
 {
 	app_display_set_hv(OFF);
 }
-
-
 
 void app_ds3231_task(void *parame)
 {
@@ -410,10 +410,7 @@ void app_ds3231_task(void *parame)
 	/* SWITCH_STATE_e first_state = ON; */
 	
 	vListInitialise(&events.list);
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0, 0, integer_time_beep);
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(ontime >> 8), bin2bcd(ontime & 0xFF), 0xFF, display_power_on);
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(offtime >> 8), bin2bcd(offtime & 0xFF), 0xFF, display_power_off);
+
 	/* set time */
 	/* time1.sec = 0;
 	time1.min = 1;
@@ -452,6 +449,12 @@ void app_ds3231_task(void *parame)
 	dbg_string("mday:0x%x\r\n", alarm2.time.mday); */
 	timeSync = xSemaphoreCreateMutex();
 	app_ds3231_clear_state();
+	
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0, 0, integer_time_beep);
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(ontime >> 8), bin2bcd(ontime & 0xFF), 0xFF, display_power_on);
+	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(offtime >> 8), bin2bcd(offtime & 0xFF), 0xFF, display_power_off);
+
 	while(1)
 	{
 		xSemaphoreTake(timeSync, portMAX_DELAY);
