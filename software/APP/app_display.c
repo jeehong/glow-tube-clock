@@ -170,9 +170,9 @@ static u8 processing = TRUE;
 void app_display_task(void *parame)
 {
 	char map[CHIP595_NUM] = {10};
-	SWITCH_STATE_e hv_bak = ON;
+	SWITCH_STATE_e hv_bak = OFF;
 
-	hv_state = OFF;
+	hv_state = !hv_bak;
 	app_display_set_show(Bit_SET);
 	app_display_set_point(hv_state);
 	while(1)

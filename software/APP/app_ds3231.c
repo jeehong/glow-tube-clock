@@ -3,6 +3,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+#include "timers.h"
 
 #include "misc.h"
 #include "stm32f10x_exti.h"
@@ -79,6 +80,7 @@ static const unsigned char rtc_days_in_month[] = {
 static QueueHandle_t timeSync;
 static unsigned short ontime = 0, offtime = 0;
 static struct time_event events;
+static TimerHandle_t xTimer500ms;
 
 
 static __inline unsigned char is_leap_year(unsigned int year)
@@ -269,9 +271,17 @@ static void app_ds3231_enable_irq(u8 flag)
 
 void app_ds3231_set_showtime(short on, short off)
 {
+	struct event_info *origin;
+	
 	ontime = on;
 	offtime = off;
 	app_data_write_showtime(ontime, offtime);
+	origin = app_ds3231_get_event(TIME_EVENT_DISPLAY_ON1);
+	origin->time.hour = ontime / 100;
+	origin->time.min = ontime % 100;
+	origin = app_ds3231_get_event(TIME_EVENT_DISPLAY_OFF1);
+	origin->time.hour = offtime / 100;
+	origin->time.min = offtime % 100;	
 }
 
 void app_ds3231_get_showtime(short *on, short *off)
@@ -280,33 +290,35 @@ void app_ds3231_get_showtime(short *on, short *off)
 	*off = offtime;
 }
 
-u8 app_ds3231_init_event(u8 year, u8 mon, u8 mday, 
+u8 app_ds3231_init_event(u8 index, 
+									u8 year, u8 mon, u8 mday, 
 									u8 hour, u8 min, u8 sec, 
 									void (*functions)(const struct rtc_time *))
 {
 	if(events.valid_num >= ITEMS_MAX)
-		return events.valid_num - 1;
+		return 0xFF;
+	if(index >= ITEMS_MAX)
+		return index;
 	
-	vListInitialiseItem(&events.items[events.valid_num]);
-	events.info[events.valid_num].time.year = year;
-	events.info[events.valid_num].time.mon = mon;
-	events.info[events.valid_num].time.mday = mday;
-	events.info[events.valid_num].time.hour = hour;
-	events.info[events.valid_num].time.min = min;
-	events.info[events.valid_num].time.sec = sec;
-	events.info[events.valid_num].functions = functions;
-	events.items[events.valid_num].pvOwner = &events.info[events.valid_num];
-	events.items[events.valid_num].xItemValue = portMAX_DELAY;	/* 对链表的优先级无要求，总是插入链表尾 */
+	vListInitialiseItem(&events.items[index]);
+	events.info[index].time.year = year;
+	events.info[index].time.year = year;
+	events.info[index].time.mon = mon;
+	events.info[index].time.mday = mday;
+	events.info[index].time.hour = hour;
+	events.info[index].time.min = min;
+	events.info[index].time.sec = sec;
+	events.info[index].functions = functions;
+	events.items[index].pvOwner = &events.info[index];
+	events.items[index].xItemValue = portMAX_DELAY;	/* 对链表的优先级无要求，总是插入链表尾 */
 	
 	events.valid_num ++;
 	
-	return events.valid_num - 1;
+	return index;
 }
 
 void app_ds3231_insert_event(u8 number)
 {
-	struct event_info *info;
-
 	if(number >= ITEMS_MAX)
 	{
 		return;
@@ -337,32 +349,39 @@ void app_ds3231_remove_event(u8 number)
 	uxListRemove(&events.items[number]);
 }
 
+struct event_info *app_ds3231_get_event(u8 index)
+{
+	if(index >= ITEMS_MAX)
+		return NULL;
+	
+	return &events.info[index];
+}
+
 #define no_match_condition(val1, val2)	if(val1 != val2 && val1 != 0xFF) continue;
 
 static void events_triger_check(const struct rtc_time *tm)
 {
 	ListItem_t *p_item = NULL, *p_item_next = NULL;
-	ListItem_t const *p_item_end = NULL;
+	//ListItem_t const *p_item_end = NULL;
 	struct event_info *data = NULL;
 	u8 index;
 
 	if(listLIST_IS_EMPTY(&events.list))
 		return;
+	//p_item_end = listGET_END_MARKER(&events.list);
 
-	for(index = 0; index < ITEMS_MAX || p_item != p_item_end; index ++)
+	for(index = 0; index < events.valid_num; index ++)
 	{
 		if(index == 0)
 		{
-			p_item = listGET_HEAD_ENTRY(&events.list);
-			p_item_end = listGET_END_MARKER(&events.list);
-			data = (struct event_info *)p_item->pvOwner;
+			p_item_next = listGET_HEAD_ENTRY(&events.list);
 		}
 		else
 		{
-			p_item_next = listGET_NEXT(p_item);
-			data = (struct event_info *)p_item_next->pvOwner;
+			p_item = listGET_NEXT(p_item_next);
+			p_item_next = p_item;
 		}
-		
+		data = (struct event_info *)listGET_LIST_ITEM_OWNER( p_item_next );
 		no_match_condition(data->time.sec, tm->sec);
 		no_match_condition(data->time.min, tm->min);
 		no_match_condition(data->time.hour, tm->hour);
@@ -375,31 +394,72 @@ static void events_triger_check(const struct rtc_time *tm)
 
 void integer_time_beep(struct rtc_time *tm)
 {
-	app_buzzer_set_times(tm->hour);
+	if(tm->hour > 12)
+		app_buzzer_set_times(tm->hour - 12);
+	else
+	{
+		if(tm->hour < 8)	
+			app_buzzer_set_times(0);
+		else
+			app_buzzer_set_times(tm->hour);
+	}
 }
 
 void display_time(struct rtc_time *tm)
 {
 	u8 info[7];
-	
-	info[0] = tm->hour / 10;
-	info[1] = tm->hour % 10;
-	info[2] = tm->min / 10;
-	info[3] = tm->min % 10;
-	info[4] = tm->sec / 10;
-	info[5] = tm->sec % 10;
-	info[6] = 0x33;
-	app_display_show_info(info);
+
+	if((tm->sec > 15 && tm->sec <= 20)
+		|| (tm->sec > 35 && tm->sec <= 40)
+		|| (tm->sec > 55 && tm->sec <= 59))
+	{
+		app_sht10_refresh_display();
+	}
+	else
+	{
+		if(xTimer500ms != NULL)
+		{
+	        xTimerStart(xTimer500ms, 0);
+	    }
+		info[0] = tm->hour / 10;
+		info[1] = tm->hour % 10;
+		info[2] = tm->min / 10;
+		info[3] = tm->min % 10;
+		info[4] = tm->sec / 10;
+		info[5] = tm->sec % 10;
+		info[6] = 0x33;
+		app_display_show_info(info);
+	}
 }
 
 void display_power_on(const struct rtc_time *tm)
 {
+	bsp_set_hv_state(ON);
+	app_display_set_show(Bit_SET);
 	app_display_set_hv(ON);
 }
 
 void display_power_off(const struct rtc_time *tm)
 {
+	bsp_set_hv_state(OFF);
+	app_display_set_show(Bit_RESET);
 	app_display_set_hv(OFF);
+}
+
+void timer_500ms_callback(TimerHandle_t xTimer)
+{
+	struct rtc_time time;
+	u8 info[7];
+	
+	app_ds3231_read_time(&time);
+	info[0] = time.hour / 10;
+	info[1] = time.hour % 10;
+	info[2] = time.min / 10;
+	info[3] = time.min % 10;
+	info[4] = time.sec / 10;
+	info[5] = time.sec % 10;
+	info[6] = 0;
+	app_display_show_info(info);
 }
 
 void app_ds3231_task(void *parame)
@@ -449,11 +509,21 @@ void app_ds3231_task(void *parame)
 	dbg_string("mday:0x%x\r\n", alarm2.time.mday); */
 	timeSync = xSemaphoreCreateMutex();
 	app_ds3231_clear_state();
-	
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0, 0, integer_time_beep);
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(ontime >> 8), bin2bcd(ontime & 0xFF), 0xFF, display_power_on);
-	app_ds3231_init_event(0xFF, 0xFF, 0xFF, bin2bcd(offtime >> 8), bin2bcd(offtime & 0xFF), 0xFF, display_power_off);
+    xTimer500ms = xTimerCreate("Timer500ms", 500, pdFALSE, ( void * ) 0, timer_500ms_callback);
+
+	app_ds3231_init_event(TIME_EVENT_INTEGER_BEEP, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, integer_time_beep);
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_TIME, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON1, 0xFF, 0xFF, 0xFF, ontime / 100, ontime % 100, 0, display_power_on);
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF1, 0xFF, 0xFF, 0xFF, offtime / 100, offtime % 100, 0, display_power_off);
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON1, 0xFF, 0xFF, 0xFF, 7, 0, 0, display_power_on);	/* on 07:00 */
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF1, 0xFF, 0xFF, 0xFF, 8, 40, 0, display_power_off);	/* off 08:40 */
+
+	app_ds3231_insert_event(TIME_EVENT_DISPLAY_ON1);
+	app_ds3231_insert_event(TIME_EVENT_DISPLAY_TIME);
+	app_ds3231_insert_event(TIME_EVENT_INTEGER_BEEP);
+	app_ds3231_insert_event(TIME_EVENT_DISPLAY_OFF1);
+	app_ds3231_insert_event(TIME_EVENT_DISPLAY_ON2);
+	app_ds3231_insert_event(TIME_EVENT_DISPLAY_OFF2);
 
 	while(1)
 	{
@@ -463,54 +533,6 @@ void app_ds3231_task(void *parame)
 		app_ds3231_clear_state();
 
 		events_triger_check(&time2);
-
-		#if 0
-		if((time2.min == 0) && (time2.sec == 0))
-		{
-			
-			if(time2.hour > 12)
-				app_buzzer_set_times(time2.hour - 12);
-			else
-			{
-				if(time2.hour < 8)	
-					app_buzzer_set_times(0);
-				else
-					app_buzzer_set_times(time2.hour);
-			}
-		}
-		
-
-        if(((time2.sec >= 20) && (time2.sec < 25)) || ((time2.sec >= 40) && (time2.sec < 45)))
-        {
-			app_sht10_refresh_display();
-        }
-        else
-		{
-			u8 info[7];
-
-			info[0] = time2.hour / 10;
-			info[1] = time2.hour % 10;
-			info[2] = time2.min / 10;
-			info[3] = time2.min % 10;
-			info[4] = time2.sec / 10;
-			info[5] = time2.sec % 10;
-			
-			info[6] = 0x33;
-			app_display_show_info(info);	
-			vTaskDelay(mainDELAY_MS(490));
-			info[6] = 0;
-			app_display_show_info(info);
-			
-			if(ontime || offtime)
-			{
-				temp16 = (time2.hour * 100) + time2.min;
-				if((temp16 >= ontime) && (temp16 < offtime))
-					app_display_set_hv(ON);
-				else
-					app_display_set_hv(OFF);
-			}
-		}
-		#endif
 	}
 }
 

@@ -31,43 +31,43 @@ build_var(clear, "Clear Terminal.\r\n", 0);
 /*
  * Example: date
  */
-build_var(date, "Read system current time.\r\n", 0);
+build_var(date, "Read system current time.", 0);
 
 /*
  * Example: sdate 16 11 27 7 22 48 50
  */
-build_var(sdate, "Set system current time,format: sdate year[0,99] month[0,12] mday[1,31] wday[1-7] hour[0-23] min[0-59] sec[0-59]\r\n", 7);
+build_var(sdate, "Set system current time,format: sdate year[0,99] month[0,12] mday[1,31] wday[1-7] hour[0-23] min[0-59] sec[0-59]", 7);
 
 /*
  * Example: th
  */
-build_var(th, "Read the ambient temperature(C) and humidity(%).\r\n", 0);
+build_var(th, "Read the ambient temperature(C) and humidity(%).", 0);
 
 /*
  * Example: led R 1
  */
-build_var(led, "Turn ON/OFF led blink,format: led color[R,G,B] state[1:ON,0:OFF].\r\n", 2);
+build_var(led, "Turn ON/OFF led blink,format: led color[R,G,B] state[1:ON,0:OFF].", 2);
 
 /*
  * Example: reboot
  */
-build_var(reboot, "Reboot system.\r\n", 0);
+build_var(reboot, "Reboot system.", 0);
 
 /*
  * Example: lcd 1
  */
-build_var(lcd, "Turn ON/OFF lcd display,format: lcd state[1:ON,0:OFF].\r\n", 1);
+build_var(lcd, "Turn ON/OFF lcd display,format: lcd state[1:ON,0:OFF].", 1);
 
 /*
  * Example: top
  */
-build_var(top, "List all the tasks state.\r\n", 0);
+build_var(top, "List all the tasks state.", 0);
 
 /*
  * Example set: showtime 800 1930
  * get: showtime on off
  */
-build_var(setlcd, "Time ON/OFF lcd display and led blink,format: setlcd on[800] off[1930]\r\n", 2);
+build_var(setlcd, "Time ON/OFF lcd display and led blink,format: setlcd on[800] off[1930]", 2);
 
 static void app_cli_register(void)
 {
@@ -381,10 +381,10 @@ static BaseType_t setlcd_main( char *dest, argv_attribute argv, const char * con
 	off_hour = off / 100;
 	off_min = off % 100;
 	
-	if(on_hour <= 23
-		&& on_min <= 59
-		&& off_hour <= 23
-		&& off_min <= 59)
+	if(on_hour != 0
+		|| on_min != 0
+		|| off_hour != 0
+		|| off_min != 0)
 	{
 		app_ds3231_set_showtime(on, off);
 		/* Generate a table of task stats. */

@@ -50,7 +50,7 @@ static const char * prefix = NULL;
 static const char * const pcNewLine = "\r\n";
 static const char * const backspace = " \b";
 
-build_var(help, "Lists all the registered commands.\r\n", 0);
+build_var(help, "Lists all the registered commands.", 0);
 static struct _list_command_t cmd_list_head = 
 {
 	&help,
@@ -335,6 +335,7 @@ static BaseType_t help_main(char *dest, argv_attribute argv, const char * const 
         strcat(dest, cmd->module->command);
         strcat(dest, ":\t");
         strcat(dest, cmd->module->help_info);
+		strcat(dest, pcNewLine);
 	}
 	cmd = cmd->next;
 	if(cmd == NULL)

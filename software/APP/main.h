@@ -8,7 +8,7 @@
 
 /* 软件版本信息 */
 #define PRJ_VER_MAJOR		1
-#define PRJ_VER_MINOR		1
+#define PRJ_VER_MINOR		2
 #define PRJ_VER_REVISION	0
 
 #define mainDELAY_MS(ms)			( ( TickType_t ) ms / portTICK_PERIOD_MS )
