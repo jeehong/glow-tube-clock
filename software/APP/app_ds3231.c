@@ -515,8 +515,8 @@ void app_ds3231_task(void *parame)
 	app_ds3231_init_event(TIME_EVENT_DISPLAY_TIME, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
 	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON1, 0xFF, 0xFF, 0xFF, ontime / 100, ontime % 100, 0, display_power_on);
 	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF1, 0xFF, 0xFF, 0xFF, offtime / 100, offtime % 100, 0, display_power_off);
-	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON1, 0xFF, 0xFF, 0xFF, 7, 0, 0, display_power_on);	/* on 07:00 */
-	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF1, 0xFF, 0xFF, 0xFF, 8, 40, 0, display_power_off);	/* off 08:40 */
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON2, 0xFF, 0xFF, 0xFF, 7, 0, 0, display_power_on);	/* on 07:00 */
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF2, 0xFF, 0xFF, 0xFF, 8, 40, 0, display_power_off);	/* off 08:40 */
 
 	app_ds3231_insert_event(TIME_EVENT_DISPLAY_ON1);
 	app_ds3231_insert_event(TIME_EVENT_DISPLAY_TIME);
