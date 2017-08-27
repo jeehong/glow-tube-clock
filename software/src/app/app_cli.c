@@ -95,7 +95,6 @@ static BaseType_t info_main( char *dest, argv_attribute argv, const char * const
 	(void) help_info;
 	configASSERT(dest);
 
-    sprintf(dest, "    %s", help_info);
 	for(index = 0; dev_info[index] != NULL; index++)
 	{
 		strcat(dest, dev_info[index]);
