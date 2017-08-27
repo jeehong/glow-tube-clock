@@ -2,11 +2,19 @@
 #define	__APP_DISPLAY_H__
 
 #include "main.h"
+#include "bsp.h"
+#include "app_ds3231.h"
+
+/* …Ë÷√À¯¥Ê∆˜ «∑Ò ‰≥ˆ 1:out */
+__inline app_display_set_show(BitAction act)
+{
+		bsp_74hc595_set_OE((BitAction)!act);
+}
 
 void app_display_task(void *parame);
-void app_display_set_show(BitAction act);
 void app_display_show_info(u8 *src);
-void app_display_set_hv(SWITCH_STATE_e state);
+void app_display_on(const struct rtc_time *tm);
+void app_display_off(const struct rtc_time *tm);
 
 
 #endif 

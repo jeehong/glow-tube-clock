@@ -20,8 +20,8 @@ static void app_display_show_data(void);
 static void app_display_write_data(const char *pdata);
 static void app_display_calc_map(char *desc, const char *src);
 static void app_display_set_point(char src);
+static void app_display_set_hv(SWITCH_STATE_e state);
 
-static char start_dis = 0;
 /*
  * Êµ¼Ê²âÊÔ1us
  */
@@ -56,18 +56,6 @@ static void app_display_show_data(void)
 	bsp_74hc595_set_ST_CP(Bit_SET);	
 	delay50ns();
 	bsp_74hc595_set_ST_CP(Bit_RESET);
-}
-
-/* ÉèÖÃËø´æÆ÷ÊÇ·ñÊä³ö 1:out */
-void app_display_set_show(BitAction act)
-{
-	if(act == Bit_SET)
-	{
-		start_dis = 0;
-		bsp_74hc595_set_OE(Bit_RESET);
-	}
-	else
-		bsp_74hc595_set_OE(Bit_SET);
 }
 
 static void app_display_write_data(const char *pdata)
@@ -164,53 +152,64 @@ static void app_display_set_point(char src)
 
 
 static char lcd_pixel[7];
-static SWITCH_STATE_e hv_state = OFF;
+static SWITCH_STATE_e hv_state = ON;
 static u8 processing = TRUE;
 
 void app_display_task(void *parame)
 {
 	char map[CHIP595_NUM] = {10};
-	SWITCH_STATE_e hv_bak = OFF;
+	u8 state = 0;
+	char start_dis = 0;
 
-	hv_state = !hv_bak;
-	app_display_set_show(Bit_SET);
-	app_display_set_point(hv_state);
 	while(1)
 	{
-		if(hv_bak != hv_state)
+		switch (state)
 		{
-			if(hv_bak == OFF)
-			{
-				start_dis = 0;
-				vTaskResume(main_get_task_handle(TASK_HANDLE_LED));
-			}
-			else
-			{	
-				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
+			case 0:
+				if(hv_state == ON)
+				{
+					bsp_set_hv_state(ON);
+					app_display_set_show(Bit_SET);
+					vTaskResume(main_get_task_handle(TASK_HANDLE_LED));
+					start_dis = 0;
+					state = 1;
+				}
+				break;
+			case 1:
+				start_dis ++;
+				if(start_dis >= 10)
+					state = 2;
+				processing = TRUE;		/* start protecting lcd_pixel */
+				memset(lcd_pixel, start_dis % 10, 6);
+				/* go on */
+			case 2:
+				processing = TRUE;		/* start protecting lcd_pixel */
+				if(hv_state == OFF)
+				{
+					memset(lcd_pixel, 0, 6);
+					GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);
+					state = 3;
+				}
+				app_display_set_point(lcd_pixel[6]);
+				app_display_calc_map(map, lcd_pixel);
+				processing = FALSE;
+				app_display_write_data(map);
+				if(state == 1)
+					vTaskDelay(mainDELAY_MS(600));
+				else
+					vTaskDelay(mainDELAY_MS(100));
+				break;
+			case 3:
+				bsp_set_hv_state(OFF);
+				app_display_set_show(Bit_RESET);
 				vTaskSuspend(main_get_task_handle(TASK_HANDLE_LED));
-			}
-			hv_bak = hv_state;
-			bsp_set_hv_state(hv_state);
+				vTaskSuspend(main_get_task_handle(TASK_HANDLE_DISPLAY));
+				state = 0;
+				break;
+			default:
+				break;
+				
 		}
-		processing = TRUE;
-		if(start_dis <= 9)
-		{
-		    lcd_pixel[0] = start_dis;
-		    lcd_pixel[1] = start_dis;
-		    lcd_pixel[2] = start_dis;
-		    lcd_pixel[3] = start_dis;
-		    lcd_pixel[4] = start_dis;
-		    lcd_pixel[5] = start_dis;
-		    start_dis ++;
-		}
-		app_display_set_point(lcd_pixel[6]);
-		app_display_calc_map(map, lcd_pixel);
-		processing = FALSE;
-		app_display_write_data(map);
-		if(start_dis <= 9)
-			vTaskDelay(mainDELAY_MS(500));
-		else
-			vTaskDelay(mainDELAY_MS(100));
 	}	
 }
 
@@ -220,11 +219,22 @@ void app_display_show_info(u8 *src)
 		return;
 	
 	memcpy(lcd_pixel, src, 7);
-	
 }
 
-void app_display_set_hv(SWITCH_STATE_e state)
+static void app_display_set_hv(SWITCH_STATE_e state)
 {
 	hv_state = state;
 }
+
+void app_display_on(const struct rtc_time *tm)
+{
+	app_display_set_hv(ON);
+	vTaskResume(main_get_task_handle(TASK_HANDLE_DISPLAY));
+}
+
+void app_display_off(const struct rtc_time *tm)
+{
+	app_display_set_hv(OFF);
+}
+
 

@@ -299,15 +299,11 @@ static BaseType_t lcd_main( char *dest, argv_attribute argv, const char * const 
 	
 	if(state == 1)
 	{
-		bsp_set_hv_state(ON);
-		app_display_set_show(Bit_SET);
-		vTaskResume(plcd);
+		app_display_on(NULL);
 	}
 	else
 	{
-		bsp_set_hv_state(OFF);
-		app_display_set_show(Bit_RESET);
-		vTaskSuspend(plcd);
+		app_display_off(NULL);
 	}
 	
 	sprintf(dest, "\tLcd display task is %s\r\n", state ? "working." : "stoped.");

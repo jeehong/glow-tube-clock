@@ -14,17 +14,6 @@ union {
 	float fval;
 } hum, temp;
 
-/* 有效位为0.1 */
-static void app_sht10_calc_adjust(void)
-{
-	const int c1 = -4;
-	const float c2 = 0.0405, c3 = -2.8, d1 = -39.6, d2 = 0.01;
-	const float carry = 0.05;  /* 当保留小数点后以为有效时，四舍五入操作 */
-	
-	temp.fval = temp.sval * d2 + d1 + carry;
-	hum.fval = hum.sval * c2 + c3 * hum.sval * hum.sval / 1000000.0 + c1 + carry;	
-}
-
 void calc_sth11(float *p_humidity ,float *p_temperature)
 {
 	const float D1=-39.6;	  // for 12 Bit
@@ -116,7 +105,6 @@ void app_sht10_task(void *parame)
 {
 	float temp, hum;
 	unsigned int temp32;
-	
 	
 	while(1)
 	{

@@ -11,6 +11,7 @@
 #include "i2c_bus.h"
 
 #include "app_ds3231.h"
+#include "app_display.h"
 #include "app_serial.h"
 #include "app_data.h"
 
@@ -432,20 +433,6 @@ void display_time(struct rtc_time *tm)
 	}
 }
 
-void display_power_on(const struct rtc_time *tm)
-{
-	bsp_set_hv_state(ON);
-	app_display_set_show(Bit_SET);
-	app_display_set_hv(ON);
-}
-
-void display_power_off(const struct rtc_time *tm)
-{
-	bsp_set_hv_state(OFF);
-	app_display_set_show(Bit_RESET);
-	app_display_set_hv(OFF);
-}
-
 void timer_500ms_callback(TimerHandle_t xTimer)
 {
 	struct rtc_time time;
@@ -513,10 +500,10 @@ void app_ds3231_task(void *parame)
 
 	app_ds3231_init_event(TIME_EVENT_INTEGER_BEEP, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, integer_time_beep);
 	app_ds3231_init_event(TIME_EVENT_DISPLAY_TIME, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
-	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON1, 0xFF, 0xFF, 0xFF, ontime / 100, ontime % 100, 0, display_power_on);
-	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF1, 0xFF, 0xFF, 0xFF, offtime / 100, offtime % 100, 0, display_power_off);
-	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON2, 0xFF, 0xFF, 0xFF, 7, 0, 0, display_power_on);	/* on 07:00 */
-	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF2, 0xFF, 0xFF, 0xFF, 8, 40, 0, display_power_off);	/* off 08:40 */
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON1, 0xFF, 0xFF, 0xFF, ontime / 100, ontime % 100, 0, app_display_on);
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF1, 0xFF, 0xFF, 0xFF, offtime / 100, offtime % 100, 0, app_display_off);
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_ON2, 0xFF, 0xFF, 0xFF, 7, 0, 0, app_display_on);	/* on 07:00 */
+	app_ds3231_init_event(TIME_EVENT_DISPLAY_OFF2, 0xFF, 0xFF, 0xFF, 8, 40, 0, app_display_off);	/* off 08:40 */
 
 	app_ds3231_insert_event(TIME_EVENT_DISPLAY_ON1);
 	app_ds3231_insert_event(TIME_EVENT_DISPLAY_TIME);
