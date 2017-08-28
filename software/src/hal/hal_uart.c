@@ -40,8 +40,6 @@ don't have to block to send. */
 /* The queue used to hold received characters. */
 static QueueHandle_t xRxedChars; 
 static QueueHandle_t xCharsForTx;
-static QueueHandle_t rcv_flag;
-
 
 xComPortHandle hal_uart_init(U32 ulWantedBaud)
 {
@@ -54,7 +52,6 @@ xComPortHandle hal_uart_init(U32 ulWantedBaud)
 	/* Create the queues used to hold Rx/Tx characters. */
 	xRxedChars = xQueueCreate(configCOMMAND_INT_MAX_OUTPUT_SIZE, (unsigned portBASE_TYPE)sizeof(S8)); 
 	xCharsForTx = xQueueCreate(configCOMMAND_INT_MAX_OUTPUT_SIZE, (unsigned portBASE_TYPE)sizeof(S8));
-	rcv_flag = xSemaphoreCreateMutex();
 	/* If the queue/semaphore was created correctly then setup the serial port
 	hardware. */
 	if(( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
@@ -111,8 +108,6 @@ xComPortHandle hal_uart_init(U32 ulWantedBaud)
 signed portBASE_TYPE hal_uart_get_char( xComPortHandle pxPort, char *pcRxedChar, TickType_t xBlockTime )
 {
 	( void ) pxPort;
-
-	xSemaphoreTake(rcv_flag, portMAX_DELAY);
 
 	if( xQueueReceive( xRxedChars, pcRxedChar, xBlockTime ) )
 		return pdTRUE;
@@ -173,7 +168,6 @@ void USART1_IRQHandler( void )
 	{
 		cChar = USART_ReceiveData( USART1 );
 		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );
-		xSemaphoreGiveFromISR(rcv_flag, &xHigherPriorityTaskWoken);
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
 	} 	
 	

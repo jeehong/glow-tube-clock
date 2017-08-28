@@ -11,6 +11,6 @@ portBASE_TYPE hal_cli_data_tx(char *data, U16 len)
 
 portBASE_TYPE hal_cli_data_rx(char *data, U16 len)
 {
-	return hal_uart_get_char(MID_DBG_PORT, data, 10);
+	return hal_uart_get_char(MID_DBG_PORT, data, portMAX_DELAY);
 }
 
