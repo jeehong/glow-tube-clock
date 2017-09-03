@@ -178,7 +178,9 @@ static BaseType_t th_main( char *dest, argv_attribute argv, const char * const h
 	(void) help_info;
 	configASSERT(dest);
 
-	if(mid_th_get_data(&th_data) == STATUS_NORMAL)
+	th_data.temp = app_th_get_data(TEMP);
+	th_data.hum = app_th_get_data(HUM);
+	if(th_data.temp != 0 || th_data.hum != 0)
 		sprintf(dest, "\tTemperature %.1f(C)  Humidity %.1f(%%)\r\n", th_data.temp, th_data.hum);
 	else
 		sprintf(dest, "\tError: read temperature and humidity timeout!\r\n");
