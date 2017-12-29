@@ -154,14 +154,15 @@ static void events_triger_check(rtc_time_attribute *tm)
 static void integer_time_beep(rtc_time_attribute *tm)
 {
 	if(tm->hour > 12)
-		app_buzzer_set_times(tm->hour - 12);
-	else
 	{
-		if(tm->hour < 8)	
-			app_buzzer_set_times(0);
-		else
-			app_buzzer_set_times(tm->hour);
+		app_buzzer_set_times(tm->hour - 12);
 	}
+	else if(tm->hour > 8)
+	{
+		app_buzzer_set_times(tm->hour);
+	}
+	else
+	{}
 }
 
 static void display_time(rtc_time_attribute *tm)

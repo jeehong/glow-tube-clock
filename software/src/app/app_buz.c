@@ -5,15 +5,13 @@
 #include "app_inc.h"
 
 
-static U8 warning_times = 0;
+static U32 warning_times = 0;
 
 void app_buz_task(void *parame)
 {
-	U32 index;
-
 	while(1)
 	{
-		for(index = warning_times; index > 0; index--)
+		for(; warning_times > 0; warning_times--)
 		{
 			TIM_CtrlPWMOutputs(TIM1, ENABLE);
 			vTaskDelay(mainDELAY_MS(500));
@@ -26,5 +24,5 @@ void app_buz_task(void *parame)
 
 void app_buzzer_set_times(U8 times)
 {
-	warning_times = times;
+	warning_times += times;
 }

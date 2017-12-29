@@ -181,7 +181,6 @@ void app_display_task(void *parame)
 				if(hv_state == OFF)
 				{
 					memset(lcd_pixel, 0, 6);
-					GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);
 					state = 3;
 				}
 				app_display_set_point(lcd_pixel[6]);
@@ -196,6 +195,7 @@ void app_display_task(void *parame)
 			case 3:
 				bsp_set_hv_state(OFF);
 				app_display_set_show(Bit_RESET);
+				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);
 				vTaskSuspend(main_get_task_handle(TASK_HANDLE_LED));
 				vTaskSuspend(main_get_task_handle(TASK_HANDLE_DISPLAY));
 				state = 0;
@@ -210,8 +210,9 @@ void app_display_show_info(U8 *src)
 {
 	if(processing == TRUE)
 		return;
-	
+	taskENTER_CRITICAL();
 	memcpy(lcd_pixel, src, 7);
+	taskEXIT_CRITICAL();
 }
 
 static void app_display_set_hv(SWITCH_STATE_e state)

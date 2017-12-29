@@ -1,3 +1,5 @@
+#ifndef __APP_INC_H__
+#define __APP_INC_H__
 
 #include "app_time.h"
 #include "app_th.h"
@@ -10,4 +12,4 @@
 
 #include "main.h"
 
-
+#endif

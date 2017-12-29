@@ -149,7 +149,7 @@ static BaseType_t sdate_main( char *dest, argv_attribute argv, const char * cons
 	tm.hour = atoi(argv[5]);
 	tm.min = atoi(argv[6]);
 	tm.sec = atoi(argv[7]);
-	if(!rtc_valid_tm(&tm))
+	if(rtc_valid_tm(&tm))
 	{
 		mid_rtc_set_time(&tm);
 		memset(&tm, 0, sizeof(struct rtc_time));
