@@ -14,14 +14,14 @@ static DATA_MAP_t mData;
 static QueueHandle_t dataSync;
 
 
-static void app_data_load_from_flash(DATA_MAP_t *pdata);
+static void app_data_load_data(DATA_MAP_t *pdata);
 
 /*
  * 上电即读取flash信息
  */
 void app_data_init(void)
 {
-	app_data_load_from_flash(&mData);
+	app_data_load_data(&mData);
 	dataSync = xSemaphoreCreateMutex();
 	xSemaphoreTake(dataSync, portMAX_DELAY);
 }
@@ -29,18 +29,19 @@ void app_data_init(void)
 /*
  * 加载flash数据
  */
-static void app_data_load_from_flash(DATA_MAP_t *pdata)
+static void app_data_load_data(DATA_MAP_t *pdata)
 {
 	U16 index, 
-				length = sizeof(DATA_MAP_t) / sizeof(U16), 
-				*pbuff = (U16 *)pdata;
+		length = (sizeof(DATA_MAP_t) + sizeof(U32) - 1) / sizeof(U32), 
+		*pbuff = (U16 *)pdata;
 	
 	FLASH_Unlock();
 	FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);
 	while(FLASH_GetFlagStatus(FLASH_FLAG_BSY)==1) ;
 	for(index = 0; index < length; index++)
-		*(U16 *)(pbuff + index) = *(U16 *)(DATA_START_ADDRESS + index * 2);
-	
+	{
+		*((U32 *)(pbuff) + index) = *((U32 *)(DATA_START_ADDRESS) + index);
+	}
 	FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);
 	FLASH_Lock();	
 }
@@ -69,11 +70,27 @@ void app_data_write_showtime(U16 on, U16 off)
 	xSemaphoreGive(dataSync);
 }
 
-void app_data_store_task(void *parame)
+void app_data_read_led_color(U16 *color)
+{
+	DATA_MAP_t	*sData = NULL;
+	sData = app_data_get_data();
+	if (sData == NULL)
+		return;
+	
+	*color = sData->led_color;
+}
 
-{	
-	const U8 unit = sizeof(U8);
-	U16 length = sizeof(DATA_MAP_t) / unit;
+void app_data_write_led_color(U16 color)
+{
+	mData.led_color = color;
+	
+	xSemaphoreGive(dataSync);
+}
+
+void app_data_store_task(void *parame)
+{
+	U8 unit = sizeof(U32);
+	U16 length = (sizeof(DATA_MAP_t) + unit - 1) / unit;
 	U8 index;
 
 	while(1)
@@ -89,7 +106,7 @@ void app_data_store_task(void *parame)
 		taskENTER_CRITICAL();
 		for(index = 0; index < length; index++)
 		{
-			FLASH_ProgramWord(DATA_START_ADDRESS + index * unit, *(U32 *)(&mData + index * unit));
+			FLASH_ProgramWord(DATA_START_ADDRESS + index * unit, *((U32 *)&mData + index));
 		}
 		taskEXIT_CRITICAL();
 		FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|FLASH_FLAG_PGERR|FLASH_FLAG_WRPRTERR);

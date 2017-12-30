@@ -8,6 +8,7 @@
 #include "app_inc.h"
 
 #define DEFAULT_COLOR_BLUE		1
+#define MAX_TYPES_COLOR			3
 
 void app_led_init(void)
 {
@@ -21,29 +22,37 @@ void app_led_init(void)
 	GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);	
 }
 
-static U8 color = DEFAULT_COLOR_BLUE;
+static U16 led_color = DEFAULT_COLOR_BLUE;
+const uint16_t port_list[MAX_TYPES_COLOR] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
 
 void app_led_task_blink(void *parame)
 {
 	portTickType xLastWakeTime;
-	uint16_t port_list[3] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
-	U8 col = color;
 	
+	app_data_read_led_color(&led_color);
+	if(led_color >= MAX_TYPES_COLOR)
+	{
+		led_color = DEFAULT_COLOR_BLUE;
+	}
 	xLastWakeTime = xTaskGetTickCount();
 	while(1)
 	{
-		col = color;
-		LED_PIN_GROUP->BSRR = port_list[col];
+		LED_PIN_GROUP->BSRR = port_list[led_color];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(100));	
-		LED_PIN_GROUP->BRR = port_list[col];
+		LED_PIN_GROUP->BRR = port_list[led_color];
 		vTaskDelayUntil(&xLastWakeTime, mainDELAY_MS(1900));
 	}
 }
 
-void app_led_set_color(U8 led)
+void app_led_set_color(U8 color)
 {
-	if(led > 2)
-		color = DEFAULT_COLOR_BLUE;
+	if(color >= MAX_TYPES_COLOR)
+	{
+		led_color = DEFAULT_COLOR_BLUE;
+	}
 	else
-		color = led;
+	{
+		led_color = color;
+	}
+	app_data_write_led_color(led_color);
 }
