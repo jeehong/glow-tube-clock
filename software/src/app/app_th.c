@@ -1,18 +1,26 @@
 #include "os_inc.h"
 #include "common_type.h"
 #include "mid_th.h"
+#include "mid_kalman.h"
 #include "mid_dbg.h"
 #include "app_inc.h"
 
 static struct _mid_th_data_t th_data;
+static struct _kalman1_state_t temp_state;
 
 void app_th_task(void *parame)
 {
+	kalman1_init(&temp_state, 15, 0.01);
+	
 	while(1)
 	{
 		vTaskDelay(1000);
 
-		if(mid_th_get_data(&th_data) != STATUS_NORMAL)
+		if(mid_th_get_data(&th_data) == STATUS_NORMAL)
+		{
+			dbg_string("%f %f\r\n", th_data.temp, kalman1_filter(&temp_state, th_data.temp));
+		}
+		else
 		{
 			dbg_string("Error: Read Temperature&Humidity faild!\r\n");
 		}

@@ -469,6 +469,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\mid\mid_rtc.c</FilePath>
             </File>
+            <File>
+              <FileName>mid_kalman.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\mid\mid_kalman.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

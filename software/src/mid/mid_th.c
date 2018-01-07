@@ -8,22 +8,24 @@ ERROR_CODE mid_th_get_data(struct _mid_th_data_t *p)
 	if(p == NULL)
 	{
 		err = ERR_POINTER_0;
-		goto exit;
 	}
-	dt.temp = hal_sht10_get_data(TEMP);
-	if(dt.temp < 0)
+	if(err == STATUS_NORMAL)
 	{
-		err = ERR_TIMEOUT;
-		goto exit;
+		dt.temp = hal_sht10_get_data(TEMP);
+		if(dt.temp < 0)
+		{
+			err = ERR_TIMEOUT;
+		}
 	}
-	dt.hum = hal_sht10_get_data(HUM);
-	if(dt.hum < 0)
+	if(err == STATUS_NORMAL)
 	{
-		err = ERR_TIMEOUT;
-		goto exit;
+		dt.hum = hal_sht10_get_data(HUM);
+		if(dt.hum < 0)
+		{
+			err = ERR_TIMEOUT;
+		}
+		memcpy(p, &dt, sizeof(struct _mid_th_data_t));
 	}
-	memcpy(p, &dt, sizeof(struct _mid_th_data_t));
-	exit:
 	return err;
 }
 
