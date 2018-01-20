@@ -2,9 +2,6 @@
 #include <string.h>
 #include <stdint.h>
 
-/* FreeRTOS includes. */
-#include "os_inc.h"
-
 /* Utils includes. */
 #include "hal_cli.h"
 #include "mid_cli.h"
@@ -14,6 +11,10 @@ typedef struct _list_command_t
 	const struct _command_t *module;	/**< ab*/
 	struct _list_command_t *next;
 } list_command_t;
+
+#define CLI_VERSION_MAJOR		(0)		/* 主版本号 */
+#define CLI_VERSION_MINOR		(1)		/* 次版本号 */
+
 
 /* Dimensions the buffer into which input characters are placed. */
 #define cmdMAX_INPUT_SIZE		256
@@ -38,10 +39,11 @@ static int8_t mid_cli_string_split(char **dest, const char *commandString);
 static void mid_cli_console_task(void *pvParameters);
 static BaseType_t mid_cli_parse_command(const char * const input, char *dest, size_t len);
 
-
+#ifdef CLI_SUPPORT_PASSWD
 static const char * const passwd = "jhg";
 static const char * const input_passwd_msg = "Input password: ";
 static const char * const incorrect_passwd_msg = "Password incorrect!\r\n";
+#endif
 static const char * def_prefix = "Terminal ";
 static const char * prefix = NULL;
 static const char * const pcNewLine = "\r\n";
@@ -60,11 +62,6 @@ static char *argv[cmdMAX_VARS_SIZE];
 static char cOutputString[cmdMAX_OUTPUT_SIZE];
 static char cInputString[cmdMAX_INPUT_SIZE];
 
-struct _list_command_t *mid_cli_cmd_list_head(void)
-{
-    return &cmd_list_head;
-}
-
 /*
  * 命令注册函数
  */
@@ -78,7 +75,7 @@ BaseType_t mid_cli_register(const struct _command_t * const p)
 	configASSERT(p);
 
 	/* 创建链表节点链接给新命令 */
-	pxNewListItem = (list_command_t *) pvPortMalloc(sizeof(list_command_t));
+	pxNewListItem = (list_command_t *) cli_malloc(sizeof(list_command_t));
 	configASSERT(pxNewListItem);
 
 	if( pxNewListItem != NULL )
@@ -128,7 +125,9 @@ void mid_cli_init(U16 usStackSize, UBaseType_t uxPriority, char *t, TaskHandle_t
 
 static void mid_cli_console_task(void *parame)
 {
+	#ifdef CLI_SUPPORT_PASSWD
 	static enum passwd_state permission = PASSWD_INCORRECT;
+	#endif
 	U8 inputIndex = 0;
 	U8 status = 0;
 	char inputChar;
@@ -143,11 +142,25 @@ static void mid_cli_console_task(void *parame)
 			
 			/* 输入数据回显 */
 			if(inputChar != cmdASCII_BS || inputIndex)
+			{
+				#ifdef CLI_SUPPORT_PASSWD
+				if(permission != PASSWD_INCORRECT)
+				{
+					hal_cli_data_tx(&inputChar, sizeof(inputChar));
+				}
+				#else
 				hal_cli_data_tx(&inputChar, sizeof(inputChar));
+				#endif
+			}
 			
 			if(inputChar == cmdASCII_NEWLINE || inputChar == cmdASCII_HEADLINE)
 			{
-				status = 1;	/* 整包接收完毕，进入权限判定 */
+				#ifdef CLI_SUPPORT_PASSWD
+				status = 1; /* 整包接收完毕，进入权限判定 */
+				#else
+				status = 3; /* 直接解析命令，无需权限判定 */
+				#endif
+				hal_cli_data_tx((char *)pcNewLine, strlen(pcNewLine));
 			}
 			else			/* 组包阶段，且支持backspace回删功能 */
 			{
@@ -170,10 +183,10 @@ static void mid_cli_console_task(void *parame)
 				}
 			}
 		}
+		#ifdef CLI_SUPPORT_PASSWD
 		/* 组包完成，权限判定 */
 		if(status == 1)	
 		{
-			hal_cli_data_tx((char *)pcNewLine, strlen(pcNewLine));
 			if(permission == PASSWD_INCORRECT)
 				status = 2;
 			else
@@ -199,6 +212,7 @@ static void mid_cli_console_task(void *parame)
 			memset(cInputString, 0, cmdMAX_INPUT_SIZE);
 			inputIndex = 0;
 		}
+		#endif
 		/* 命令解析 */
 		if(status == 3)
 		{
@@ -290,15 +304,13 @@ static int8_t mid_cli_string_split(char **dest, const char *commandString)
 
 	while(*commandString != cmdASCII_STRINGEND)
 	{
-		if((*commandString) == cmdASCII_SPACE)
+		if(*commandString == cmdASCII_SPACE
+			&& wasSpace == pdFALSE)
 		{
-			if(wasSpace == pdFALSE)
-			{
-				dest[num][index] = cmdASCII_STRINGEND;
-				num++;
-				index = 0;
-				wasSpace = pdTRUE;
-			}
+			dest[num][index] = cmdASCII_STRINGEND;
+			num++;
+			index = 0;
+			wasSpace = pdTRUE;
 		}
 		else
 		{
@@ -320,17 +332,19 @@ static BaseType_t help_main(char *dest, argv_attribute argv, const char * const 
 
 	if(cmd == NULL)
 	{
-		cmd = mid_cli_cmd_list_head();
+		cmd = &cmd_list_head;
+		sprintf(dest, "\033[32;49;7m        COMMAND HELP                        VER:%d.%d      \033[32;49;0m\r\n", CLI_VERSION_MAJOR, CLI_VERSION_MINOR);
 	}
 	else
 	{
-        strcat(dest, "\t");
-        strcat(dest, cmd->module->command);
-        strcat(dest, ":\t");
+	    strcat(dest, "\t\033[32;49;1m");	    
+		strcat(dest, cmd->module->command);	    
+		strcat(dest, "\033[32;49;0m:\t");
         strcat(dest, cmd->module->help_info);
 		strcat(dest, pcNewLine);
+		cmd = cmd->next;
 	}
-	cmd = cmd->next;
+
 	if(cmd == NULL)
 		return pdFALSE;		/* 所有信息发送完毕 */
 	else

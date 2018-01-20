@@ -25,7 +25,6 @@
 ---------- | --------- | -------------
 2017/04/25 | 姬宏光    |创建
 
-* Copyright (c), 2017, AutoIO Co., Ltd. 
 */
 
 /** @defgroup Mid_cli 串口命令行功能
@@ -34,6 +33,12 @@
 #define __MID_CLI_H__
 
 #include "common_type.h"
+/* FreeRTOS includes. */
+#include "os_inc.h"
+
+#ifndef CLI_SUPPORT_PASSWD
+	#define CLI_SUPPORT_PASSWD
+#endif
 
 /** @breif 定义每个参数最大字符长度为19个+'\0'*/
 #define	cmdMAX_STRING_SIZE		20
@@ -70,6 +75,8 @@ typedef struct _command_t
 #define	build_var(var, help, want) 			\
 static BaseType_t var##_main(char* /*dest*/, argv_attribute /*argv*/, const char* /*help_info*/);		\
 static const struct _command_t var =	{	#var, help, var##_main, want	}
+
+#define cli_malloc(size)	pvPortMalloc(size)
 
 /** @ingroup Mid_cli
 *

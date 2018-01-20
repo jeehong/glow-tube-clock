@@ -14,56 +14,19 @@
 
 #include "bsp.h"
 
-/*
- * Example: info
- */
+
 build_var(info, "Device information.", 0);
-
-/*
- * Example: clear
- */
 build_var(clear, "Clear Terminal.", 0);
-
-/*
- * Example: date
- */
 build_var(date, "Read system current time.", 0);
-
-/*
- * Example: sdate 16 11 27 7 22 48 50
- */
-build_var(sdate, "Set system current time,format: sdate year[0,99] month[0,12] mday[1,31] wday[1-7] hour[0-23] min[0-59] sec[0-59]", 7);
-
-/*
- * Example: th
- */
+build_var(sdate, "Set system current time,\r\n		format: sdate Y[0,99] M[0,12] D[1,31] W[1-7] H[0-23] M[0-59] S[0-59]", 7);
 build_var(th, "Read the ambient temperature(C) and humidity(%).", 0);
-
-/*
- * Example: led R 1
- */
-build_var(led, "Turn ON/OFF led blink,format: led color[R,G,B] state[1:ON,0:OFF].", 2);
-
-/*
- * Example: reboot
- */
+build_var(led, "Turn ON/OFF led blink,\r\n		format: led color[R,G,B] state[1:ON,0:OFF].", 2);
 build_var(reboot, "Reboot system.", 0);
-
-/*
- * Example: lcd 1
- */
-build_var(lcd, "Turn ON/OFF lcd display,format: lcd state[1:ON,0:OFF].", 1);
-
-/*
- * Example: top
- */
+build_var(lcd, "Turn ON/OFF lcd display,\r\n		format: lcd state[1:ON,0:OFF].", 1);
+#if ( configUSE_TRACE_FACILITY == 1 )
 build_var(top, "List all the tasks state.", 0);
-
-/*
- * Example set: showtime 800 1930
- * get: showtime on off
- */
-build_var(setlcd, "Time ON/OFF lcd display and led blink,format: setlcd on[800] off[1930]", 2);
+#endif
+build_var(setlcd, "Time ON/OFF lcd display and led blink,\r\n		format: setlcd on[800] off[1930]", 2);
 
 static void app_cli_register(void)
 {
@@ -75,8 +38,10 @@ static void app_cli_register(void)
 	mid_cli_register(&led);
 	mid_cli_register(&reboot);
 	mid_cli_register(&lcd);
-	mid_cli_register(&top);
 	mid_cli_register(&setlcd);
+	#if ( configUSE_TRACE_FACILITY == 1 )
+	mid_cli_register(&top);
+	#endif
 }
 
 static BaseType_t info_main( char *dest, argv_attribute argv, const char * const help_info)
@@ -263,41 +228,57 @@ static BaseType_t lcd_main( char *dest, argv_attribute argv, const char * const 
 
 static BaseType_t top_main( char *dest, argv_attribute argv, const char * const help_info)
 {
-	TaskHandle_t ptask;
-	U8 list = 0;
-	char string[15];
-	
+#if ( configUSE_TRACE_FACILITY == 1 )
+	#define MAX_TASKS 	(30)
+
+	static U8 curr_task = 0;
+	static TaskStatus_t ptasks[MAX_TASKS];
+	TimeOut_t running_time;
+	TaskStatus_t *p;
+	U32 run_time;
+	U8 num_of_tasks = uxTaskGetNumberOfTasks();
+	char temp_str[30];
+
 	(void) help_info;
 	configASSERT(dest);
-
-	sprintf(dest, "\tPri\tName\tState\tMem(B)\r\n");
-	
-	for(list = 0; list < TASK_HANDLE_ALL; list++)
+	vTaskDelay(10);
+	if(curr_task == 0)
 	{
-		ptask = main_get_task_handle(list);
-		strcat(dest, "\t");
-		sprintf(string, "%d", uxTaskPriorityGet(ptask));
-		strcat(dest, string);
-		strcat(dest, "\t");
-		strcat(dest, pcTaskGetName(ptask));
-		strcat(dest, "\t");
-		switch(eTaskGetState(ptask))
+		vTaskSetTimeOutState(&running_time);
+		if(num_of_tasks > MAX_TASKS)
 		{
-			case eRunning: strcat(dest, "run"); break;
-			case eReady: strcat(dest, "ready"); break;
-			case eBlocked: strcat(dest, "block"); break;
-			case eSuspended: strcat(dest, "suspend"); break;
-			case eDeleted: strcat(dest, "delet"); break;
-			case eInvalid: strcat(dest, "invalid"); break;
-			default: strcat(dest, "NULL"); break;
+			sprintf(dest, "Error: real num(%d) of tasks more than defines(%d)!\r\n", num_of_tasks, MAX_TASKS);
 		}
-		strcat(dest, "\t");
-		sprintf(string, "%d", uxTaskGetStackHighWaterMark(ptask));
-		strcat(dest, string);
-		strcat(dest, "\r\n");
+		uxTaskGetSystemState(ptasks, MAX_TASKS, NULL);
+		sprintf(dest, "\033[32;49;7m        PRI     STATE   MEM(W)  %%TIME   NAME            \033[32;49;0m\r\n");
 	}
-	
-	return pdFALSE;
+	p = &ptasks[curr_task];
+	sprintf(temp_str, "\t%d\t", p->uxCurrentPriority);
+	strcat(dest, temp_str);
+	switch(p->eCurrentState)
+	{
+		case eRunning: strcat(dest, "run"); break;
+		case eReady: strcat(dest, "ready"); break;
+		case eBlocked: strcat(dest, "block"); break;
+		case eSuspended: strcat(dest, "suspend"); break;
+		case eDeleted: strcat(dest, "deleted"); break;
+		case eInvalid: strcat(dest, "invalid"); break;
+		default: strcat(dest, "null"); break;
+	}
+	run_time = (float)p->ulRunTimeCounter / (float)running_time.xTimeOnEntering * 1000;
+	sprintf(temp_str, "\t%d\t%c%d\t", p->usStackHighWaterMark, run_time < 10 ? '<' : ' ', run_time < 10 ? 1 : run_time / 10);
+	strcat(dest, temp_str);
+	strcat(dest, p->pcTaskName);
+	strcat(dest, "\r\n");
+	curr_task ++;
+	if(curr_task == num_of_tasks)
+	{
+		curr_task = 0;
+		return pdFALSE;
+	}
+	else
+		return pdTRUE;
+#endif
 }
 
 static BaseType_t setlcd_main( char *dest, argv_attribute argv, const char * const help_info)

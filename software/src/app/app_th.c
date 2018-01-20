@@ -16,14 +16,11 @@ void app_th_task(void *parame)
 	{
 		vTaskDelay(1000);
 
-		if(mid_th_get_data(&th_data) == STATUS_NORMAL)
-		{
-			dbg_string("%f %f\r\n", th_data.temp, kalman1_filter(&temp_state, th_data.temp));
-		}
-		else
+		if(mid_th_get_data(&th_data) != STATUS_NORMAL)
 		{
 			dbg_string("Error: Read Temperature&Humidity faild!\r\n");
 		}
+		//dbg_string("%f %f\r\n", th_data.temp, kalman1_filter(&temp_state, th_data.temp));
 	}
 }
 
