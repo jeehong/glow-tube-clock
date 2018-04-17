@@ -44,9 +44,10 @@ static void app_cli_register(void)
 	#endif
 }
 
-static BaseType_t info_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(info)
 {
 	U8 index;
+	
 	const static char *dev_info[] =
 	{
 		" 	Dev:	STM32F103RCT6 \r\n",
@@ -58,6 +59,7 @@ static BaseType_t info_main( char *dest, argv_attribute argv, const char * const
 	};
 
 	(void) help_info;
+	(void) argv;
 	configASSERT(dest);
 
 	for(index = 0; dev_info[index] != NULL; index++)
@@ -68,23 +70,25 @@ static BaseType_t info_main( char *dest, argv_attribute argv, const char * const
 	return pdFALSE;
 }
 
-static BaseType_t clear_main(char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(clear)
 {
-	const static char *string = "\033[H\033[J";
+	const static char *clear_string = "\033[H\033[J";
 
 	(void) help_info;
+	(void) argv;
 	configASSERT(dest);
 
-	strcpy(dest, string);
+	strcpy(dest, clear_string);
 
 	return pdFALSE;
 }
 
-static BaseType_t date_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(date)
 {
 	struct rtc_time tm;
 
 	(void) help_info;
+	(void) argv;
 	configASSERT(dest);
 
 	mid_rtc_get_time(&tm);
@@ -100,7 +104,7 @@ static BaseType_t date_main( char *dest, argv_attribute argv, const char * const
 	return pdFALSE;
 }
 
-static BaseType_t sdate_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(sdate)
 {
 	struct rtc_time tm;
 
@@ -136,27 +140,31 @@ static BaseType_t sdate_main( char *dest, argv_attribute argv, const char * cons
 	return pdFALSE;
 }
 
-static BaseType_t th_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(th)
 {
-	struct _mid_th_data_t th_data;
+	struct _mid_th_data_t xp_th;
 	
 	(void) help_info;
+	(void) argv;
 	configASSERT(dest);
 
-	th_data.temp = app_th_get_data(TEMP);
-	th_data.hum = app_th_get_data(HUM);
-	if(th_data.temp != 0 || th_data.hum != 0)
-		sprintf(dest, "\tTemperature %.1f(C)  Humidity %.1f(%%)\r\n", th_data.temp, th_data.hum);
+	xp_th.temperature = app_th_get_data(TEMP);
+	xp_th.humidity = app_th_get_data(HUM);
+	if(xp_th.temperature != 0 || xp_th.humidity != 0)
+	{
+		sprintf(dest, "\tTemperature %.1f(C)  Humidity %.1f(%%)\r\n", xp_th.temperature, xp_th.humidity);
+	}
 	else
+	{
 		sprintf(dest, "\tError: read temperature and humidity timeout!\r\n");
-	
+	}
 	return pdFALSE;
 }
 
-static BaseType_t led_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(led)
 {
 	TaskHandle_t pled;
-	char state, color;
+	char state, color, ret = pdTRUE;
 	
 	(void) help_info;
 	configASSERT(dest);
@@ -167,28 +175,34 @@ static BaseType_t led_main( char *dest, argv_attribute argv, const char * const 
 		|| (state != 1 && state != 0))
 	{
 		sprintf(dest, "\tCommand of led control Format incorrect,please try again.\r\n");
-		return pdFALSE;
+		ret = pdFALSE;
 	}
-		
-	pled = main_get_task_handle(TASK_HANDLE_LED);
-	switch(color)
-	{
-		case 'R': app_led_set_color(0); break;
-		case 'G': app_led_set_color(1); break;
-		case 'B': app_led_set_color(2); break;
-		default: break;
-	}
-	
-	if(state == 1)
-		vTaskResume(pled);
-	else
-		vTaskSuspend(pled);
-	sprintf(dest, "\tLed task is %s\r\n", state ? "working." : "stoped.");
 
-	return pdFALSE;
+	if(ret == pdTRUE)
+	{
+		pled = main_get_task_handle(TASK_HANDLE_LED);
+		switch(color)
+		{
+			case 'R': app_led_set_color(0); break;
+			case 'G': app_led_set_color(1); break;
+			case 'B': app_led_set_color(2); break;
+			default: break;
+		}
+		
+		if(state == 1)
+		{
+			vTaskResume(pled);
+		}
+		else
+		{
+			vTaskSuspend(pled);
+		}
+		sprintf(dest, "\tLed task is %s\r\n", state ? "working." : "stoped.");
+	}
+	return ret;
 }
 
-static BaseType_t reboot_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(reboot)
 {
 	(void) help_info;
 	configASSERT(dest);
@@ -198,35 +212,37 @@ static BaseType_t reboot_main( char *dest, argv_attribute argv, const char * con
 	return pdFALSE;
 }
 
-static BaseType_t lcd_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(lcd)
 {
-	char state;
+	char state, ret = pdTRUE;
 	
 	(void) help_info;
+	(void) argv;
 	configASSERT(dest);
 	
 	state = atoi(argv[1]);
 	if((state != 1) && (state != 0))
 	{
 		sprintf(dest, "\tCommand of lcd control Format incorrect,please try again.\r\n");
-		return pdFALSE;
+		ret = pdFALSE;
 	}
-	
-	if(state == 1)
-	{
-		app_display_on(NULL);
-	}
-	else
-	{
-		app_display_off(NULL);
-	}
-	
-	sprintf(dest, "\tLcd display task is %s\r\n", state ? "working." : "stoped.");
 
+	if(ret == pdTRUE)
+	{
+		if(state == 1)
+		{
+			app_display_on(NULL);
+		}
+		else
+		{
+			app_display_off(NULL);
+		}
+		sprintf(dest, "\tLcd display task is %s\r\n", state ? "working." : "stoped.");
+	}
 	return pdFALSE;
 }
 
-static BaseType_t top_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(top)
 {
 #if ( configUSE_TRACE_FACILITY == 1 )
 	#define MAX_TASKS 	(30)
@@ -240,6 +256,7 @@ static BaseType_t top_main( char *dest, argv_attribute argv, const char * const 
 	char temp_str[30];
 
 	(void) help_info;
+	(void) argv;
 	configASSERT(dest);
 	vTaskDelay(10);
 	if(curr_task == 0)
@@ -281,7 +298,7 @@ static BaseType_t top_main( char *dest, argv_attribute argv, const char * const 
 #endif
 }
 
-static BaseType_t setlcd_main( char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(setlcd)
 {
 	U16 on_hour, on_min, off_hour, off_min;
 	U16 on, off;

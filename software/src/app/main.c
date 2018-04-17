@@ -42,7 +42,7 @@ int main( void )
 	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, NULL, 3, &task_handle[TASK_HANDLE_DISPLAY]);
 	xTaskCreate((pdTASK_CODE)app_th_task, "sht10", 280, NULL, 3, &task_handle[TASK_HANDLE_SHT10]);
 	xTaskCreate((pdTASK_CODE)app_time_task, "time", 280, NULL, 4, &task_handle[TASK_HANDLE_DS3231]);
-	xTaskCreate((pdTASK_CODE)app_buz_task, "buz", 290, NULL, 3, &task_handle[TASK_HANDLE_BUZ]);
+	xTaskCreate((pdTASK_CODE)app_buzzer_task, "buz", 290, NULL, 3, &task_handle[TASK_HANDLE_BUZ]);
 	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, NULL, 2, &task_handle[TASK_HANDLE_LED]);
 	xTaskCreate((pdTASK_CODE)app_data_store_task, "data", 200, NULL, 3, &task_handle[TASK_HANDLE_DATA]);
 		

@@ -2,13 +2,15 @@
 
 #include "stm32f10x_tim.h"
 
-#include "app_inc.h"
+#include "app_buz.h"
 
 
 static U32 warning_times = 0;
 
-void app_buz_task(void *parame)
+void app_buzzer_task(void *parame)
 {
+	warning_times = 0;
+	(void) parame;
 	while(1)
 	{
 		for(; warning_times > 0; warning_times--)

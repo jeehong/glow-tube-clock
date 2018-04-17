@@ -58,7 +58,7 @@ static struct _list_command_t cmd_list_head =
 };
 
 static char vars[cmdMAX_VARS_SIZE][cmdMAX_STRING_SIZE];
-static char *argv[cmdMAX_VARS_SIZE];
+static char *xargv[cmdMAX_VARS_SIZE];
 static char cOutputString[cmdMAX_OUTPUT_SIZE];
 static char cInputString[cmdMAX_INPUT_SIZE];
 
@@ -108,7 +108,7 @@ void mid_cli_init(U16 usStackSize, UBaseType_t uxPriority, char *t, TaskHandle_t
 
 	for(i = 0; i < cmdMAX_VARS_SIZE; i ++)
 	{
-		argv[i] = vars[i];
+		xargv[i] = vars[i];
 	}
 	if(t != NULL)
 		prefix = t;
@@ -256,7 +256,7 @@ static BaseType_t mid_cli_parse_command(const char * const input, char *dest, si
 				if(strncmp(input, cmdString, cmdStringLen) == 0)
 				{
 					/* 如果输入的命令参数不符合设定的个数，则认为命令无效 */
-					if(mid_cli_string_split(argv, input) != cmd->module->expect_parame_num)
+					if(mid_cli_string_split(xargv, input) != cmd->module->expect_parame_num)
 					{
 						xReturn = pdFALSE;
 					}
@@ -276,7 +276,7 @@ static BaseType_t mid_cli_parse_command(const char * const input, char *dest, si
 	{
 		memset(dest, cmdASCII_STRINGEND, sizeof(U8) * cmdMAX_OUTPUT_SIZE);
 		/* 执行注册命令的回调函数 */
-		xReturn = cmd->module->handle(dest, argv, cmd->module->help_info);
+		xReturn = cmd->module->handle(dest, xargv, cmd->module->help_info);
 
 		/* 如果返回时 pdFALSE，表明命令函数返回信息已完毕，准备解析下一个命令 */
 		if(xReturn == pdFALSE)
@@ -322,7 +322,7 @@ static int8_t mid_cli_string_split(char **dest, const char *commandString)
 	return num;
 }
 
-static BaseType_t help_main(char *dest, argv_attribute argv, const char * const help_info)
+cmd_handle(help)
 {
 	static struct _list_command_t *cmd = NULL;
 	

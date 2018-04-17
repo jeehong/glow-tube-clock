@@ -49,7 +49,7 @@
 typedef char** const argv_attribute;
 
 /** @breif 命令触发回调函数结构类型*/
-typedef BaseType_t (*module_func_handle)(char * /*dest*/, argv_attribute /*argv*/, const char * const /*help_info*/);
+typedef BaseType_t (*module_func_handle)(char * dest, argv_attribute argv, const char * const help_info);
 
 /** @breif 命令参数结构体*/
 typedef struct _command_t
@@ -59,6 +59,22 @@ typedef struct _command_t
 	const module_func_handle handle;	/**< 执行函数*/
 	U8 expect_parame_num;	/**< 期望输入的参数个数，不包含命令本身*/
 } command_t;
+
+/** @ingroup Mid_cli
+*
+* 为新的命令创建一个回调
+* 
+* @param dest 目的内存地址，将输出信息传入该地址
+* 
+* @param argv 终端输入的命令信息，每个空格切断的字符串放入每一个结构体数组
+*
+* @param help_info 该命令所对应的帮助信息首地址
+*
+* @return 
+*	pdTRUE: 退出该函数后，会继续在此进入，该回调函数
+*	pdFALSE: 退出后结束该回调调用
+*/
+#define cmd_handle(cmd) static BaseType_t cmd##_main(char *dest, argv_attribute argv, const char * const help_info)
 
 /** @ingroup Mid_cli
 *
@@ -73,8 +89,8 @@ typedef struct _command_t
 * @return 无返回值
 */
 #define	build_var(var, help, want) 			\
-static BaseType_t var##_main(char* /*dest*/, argv_attribute /*argv*/, const char* /*help_info*/);		\
-static const struct _command_t var =	{	#var, help, var##_main, want	}
+cmd_handle(var);		\
+static const struct _command_t var =	{	#var, (help), var##_main, (want)	}
 
 #define cli_malloc(size)	pvPortMalloc(size)
 

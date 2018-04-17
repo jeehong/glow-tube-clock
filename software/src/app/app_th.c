@@ -29,12 +29,12 @@ void app_th_refresh_display(void)
 	U8 sht_info[7];
 	U32 temp32;
 	
-	temp32 = th_data.temp * 10;
+	temp32 = th_data.temperature * 10;
 	sht_info[0] = temp32 / 100;
 	sht_info[1] = temp32 % 100 /10;
 	sht_info[2] = temp32 % 10;
 	sht_info[3] = 0;
-	temp32 = th_data.hum;
+	temp32 = th_data.humidity;
 	sht_info[4] = temp32 / 10;
 	sht_info[5] = temp32 % 10;
 	sht_info[6] = 0x11;
@@ -46,9 +46,9 @@ float app_th_get_data(SHT10_INFO_e element)
 	switch (element)
 	{
 		case TEMP:
-			return th_data.temp;
+			return th_data.temperature;
 		case HUM:
-			return th_data.hum;
+			return th_data.humidity;
 		default: return 0;
 	}
 }

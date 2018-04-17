@@ -5,7 +5,7 @@
 
 #include "main.h"
 
-void app_buz_task(void *parame);
+void app_buzzer_task(void *parame);
 void app_buzzer_set_times(U8 times);
 
 #endif 
