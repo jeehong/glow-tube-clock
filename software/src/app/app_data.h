@@ -13,7 +13,8 @@ typedef struct _data_map
 {
 	U16 showon;
 	U16 showoff;
-	U32 led_color;		/* 0:R 1:G 2:B */
+	U16 led_color;		/* 0:R 1:G 2:B */
+	U16 led_status;		/* LED:1(ON) 0(OFF) */
 }	DATA_MAP_t;
 #pragma pack()
 
@@ -23,5 +24,7 @@ void app_data_write_showtime(U16 on, U16 off);
 void app_data_store_task(void *parame);
 void app_data_read_led_color(U16 *color);
 void app_data_write_led_color(U16 color);
+void app_data_read_led_status(U16 *status);
+void app_data_write_led_status(U16 status);
 
 #endif

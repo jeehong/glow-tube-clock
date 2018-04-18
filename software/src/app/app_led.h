@@ -16,6 +16,7 @@
 void app_led_init(void);	 
 void app_led_task_blink(void *parame);
 void app_led_set_color(u8 color);
-
+void app_led_set_status(U16 status);
+void app_led_set_running(U16 status);
 
 #endif

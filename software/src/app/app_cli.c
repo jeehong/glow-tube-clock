@@ -163,8 +163,7 @@ cmd_handle(th)
 
 cmd_handle(led)
 {
-	TaskHandle_t pled;
-	char state, color, ret = pdTRUE;
+	char state, color;
 	
 	(void) help_info;
 	configASSERT(dest);
@@ -175,12 +174,9 @@ cmd_handle(led)
 		|| (state != 1 && state != 0))
 	{
 		sprintf(dest, "\tCommand of led control Format incorrect,please try again.\r\n");
-		ret = pdFALSE;
 	}
-
-	if(ret == pdTRUE)
+	else
 	{
-		pled = main_get_task_handle(TASK_HANDLE_LED);
 		switch(color)
 		{
 			case 'R': app_led_set_color(0); break;
@@ -188,18 +184,10 @@ cmd_handle(led)
 			case 'B': app_led_set_color(2); break;
 			default: break;
 		}
-		
-		if(state == 1)
-		{
-			vTaskResume(pled);
-		}
-		else
-		{
-			vTaskSuspend(pled);
-		}
+		app_led_set_status(state);
 		sprintf(dest, "\tLed task is %s\r\n", state ? "working." : "stoped.");
 	}
-	return ret;
+	return pdFALSE;
 }
 
 cmd_handle(reboot)
@@ -214,7 +202,7 @@ cmd_handle(reboot)
 
 cmd_handle(lcd)
 {
-	char state, ret = pdTRUE;
+	char state;
 	
 	(void) help_info;
 	(void) argv;
@@ -224,10 +212,8 @@ cmd_handle(lcd)
 	if((state != 1) && (state != 0))
 	{
 		sprintf(dest, "\tCommand of lcd control Format incorrect,please try again.\r\n");
-		ret = pdFALSE;
 	}
-
-	if(ret == pdTRUE)
+	else
 	{
 		if(state == 1)
 		{

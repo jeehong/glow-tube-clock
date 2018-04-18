@@ -13,7 +13,7 @@ typedef struct _list_command_t
 } list_command_t;
 
 #define CLI_VERSION_MAJOR		(0)		/* 主版本号 */
-#define CLI_VERSION_MINOR		(1)		/* 次版本号 */
+#define CLI_VERSION_MINOR		(2)		/* 次版本号 */
 
 
 /* Dimensions the buffer into which input characters are placed. */
@@ -48,7 +48,7 @@ static const char * def_prefix = "Terminal ";
 static const char * prefix = NULL;
 static const char * const pcNewLine = "\r\n";
 static const char * const backspace = " \b";
-static const char * err_remind = " not recognised. Input 'help' to view available commands.\r\n";
+static const char * err_remind = " is not recognised. Enter 'help' to check available commands.\r\n";
 
 build_var(help, "Lists all the registered commands.", 0);
 static struct _list_command_t cmd_list_head = 

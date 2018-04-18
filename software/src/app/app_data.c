@@ -87,6 +87,22 @@ void app_data_write_led_color(U16 color)
 	xSemaphoreGive(dataSync);
 }
 
+void app_data_read_led_status(U16 *status)
+{
+	DATA_MAP_t	*sData = NULL;
+	sData = app_data_get_data();
+	if (sData == NULL)
+		return;
+	
+	*status = sData->led_status;
+}
+
+void app_data_write_led_status(U16 status)
+{
+	mData.led_status = status;
+	xSemaphoreGive(dataSync);
+}
+
 void app_data_store_task(void *parame)
 {
 	U8 unit = sizeof(U32);

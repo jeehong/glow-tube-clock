@@ -23,6 +23,7 @@ void app_led_init(void)
 }
 
 static U16 led_color = DEFAULT_COLOR_BLUE;
+static U16 led_status = ON;
 const uint16_t port_list[MAX_TYPES_COLOR] = {LED_PIN_R, LED_PIN_G, LED_PIN_B};
 
 void app_led_task_blink(void *parame)
@@ -30,10 +31,12 @@ void app_led_task_blink(void *parame)
 	portTickType xLastWakeTime;
 	
 	app_data_read_led_color(&led_color);
+	app_data_read_led_status(&led_status);
 	if(led_color >= MAX_TYPES_COLOR)
 	{
 		led_color = DEFAULT_COLOR_BLUE;
 	}
+	app_led_set_running(led_status);
 	xLastWakeTime = xTaskGetTickCount();
 	while(1)
 	{
@@ -55,4 +58,26 @@ void app_led_set_color(U8 color)
 		led_color = color;
 	}
 	app_data_write_led_color(led_color);
+}
+
+void app_led_set_status(U16 status)
+{
+	led_status = status & 0x1;
+	app_led_set_running(led_status);
+	app_data_write_led_status(led_status);
+}
+
+void app_led_set_running(U16 status)
+{
+	TaskHandle_t pled = main_get_task_handle(TASK_HANDLE_LED);
+	
+	if(status & led_status)
+	{
+		vTaskResume(pled);
+	}
+	else
+	{
+		GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);
+		vTaskSuspend(pled);
+	}
 }

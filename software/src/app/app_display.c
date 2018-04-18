@@ -164,7 +164,7 @@ void app_display_task(void *parame)
 				{
 					bsp_set_hv_state(ON);
 					app_display_set_show(Bit_SET);
-					vTaskResume(main_get_task_handle(TASK_HANDLE_LED));
+					app_led_set_running(ON);
 					start_dis = 0;
 					state = 1;
 				}
@@ -195,8 +195,7 @@ void app_display_task(void *parame)
 			case 3:
 				bsp_set_hv_state(OFF);
 				app_display_set_show(Bit_RESET);
-				GPIO_ResetBits(LED_PIN_GROUP, LED_PIN_R | LED_PIN_G | LED_PIN_B);
-				vTaskSuspend(main_get_task_handle(TASK_HANDLE_LED));
+				app_led_set_running(OFF);
 				vTaskSuspend(main_get_task_handle(TASK_HANDLE_DISPLAY));
 				state = 0;
 				break;
