@@ -4,9 +4,6 @@
 #ifndef _DM9000X_H_
 #define _DM9000X_H_
 
-#include "stdint.h"
-
-
 #define DM9000_ID		    0x90000A46
 
 /* although the registers are 16 bit, they are 32-bit aligned.
@@ -120,8 +117,8 @@
 #define WCR_SAMPLEST		(1 << 1)
 #define WCR_MAGICST		    (1 << 0)
 
-#define FCTR_HWOT(ot)	    ((ot & 0xf) << 4)
-#define FCTR_LWOT(ot)	    (ot & 0xf)
+#define FCTR_HWOT(ot)	    (( ot & 0xf ) << 4 )
+#define FCTR_LWOT(ot)	    ( ot & 0xf )
 
 #define IMR_PAR             (1<<7)
 #define IMR_ROOM            (1<<3)
@@ -172,7 +169,7 @@
 #define ISR_UNDERRUN		(1<<4)
 
 void dm9000x_gpio_inital(void);
-void dm9000x_inital(void);
+void dm9000x_inital(uint8_t *macaddr);
 unsigned int dm9000x_read_id(void);
 void dm9000x_sendpacket( uint8_t* packet, uint16_t len);
 uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen);

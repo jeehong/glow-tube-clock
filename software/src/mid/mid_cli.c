@@ -115,12 +115,12 @@ void mid_cli_init(U16 usStackSize, UBaseType_t uxPriority, char *t, TaskHandle_t
 	else
 		prefix = def_prefix;
 	/* Create that task that handles the console itself. */
-	xTaskCreate(mid_cli_console_task,		/* The task that implements the command console. */
-				"cmd",				/* Text name assigned to the task.  This is just to assist debugging.  The kernel does not use this name itself. */
-				usStackSize,				/* The size of the stack allocated to the task. */
-				NULL,						/* The parameter is not used, so NULL is passed. */
-				uxPriority,					/* The priority allocated to the task. */
-				h);							/* A handle is not required, so just pass NULL. */
+	xTaskCreate(mid_cli_console_task,	/* The task that implements the command console. */
+				"cmd",					/* Text name assigned to the task.  This is just to assist debugging.  The kernel does not use this name itself. */
+				usStackSize,			/* The size of the stack allocated to the task. */
+				NULL,					/* The parameter is not used, so NULL is passed. */
+				uxPriority,				/* The priority allocated to the task. */
+				h);						/* A handle is not required, so just pass NULL. */
 }
 
 static void mid_cli_console_task(void *parame)

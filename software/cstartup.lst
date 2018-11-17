@@ -437,10 +437,14 @@ ARM Macro Assembler    Page 7
   291 00000018         
   292 00000018                 END
               00000000 
-Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=.\obj\cs
-tartup.d -o.\obj\cstartup.o -Id:\Keil_v5\ARM\RV31\INC -Id:\Keil_v5\ARM\PACK\ARM
-\CMSIS\3.20.4\CMSIS\Include -Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0 --pr
-edefine="__MICROLIB SETA 1" --list=.\cstartup.lst src\STMLIB\startup\cstartup.s
+
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\obj\cstartup.d -o.\obj\cstartup.o -I.\RTE\_FreeRTOS -Ie:\Keil_v5
+26\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include -Ie:\Keil_v526\ARM\PACK\Keil\STM32F1x
+x_DFP\2.2.0\Device\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISI
+ON_VERSION SETA 526" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_HD SETA 
+1" --list=.\cstartup.lst src\STMLIB\startup\cstartup.s
+
 
 
 
@@ -1142,4 +1146,4 @@ Symbol: xPortSysTickHandler
       At line 64 in file src\STMLIB\startup\cstartup.s
 Comment: xPortSysTickHandler used once
 4 symbols
-403 symbols in table
+406 symbols in table

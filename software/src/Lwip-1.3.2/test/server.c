@@ -35,9 +35,9 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-void udp_server_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port);
-err_t tcp_server_accept(void *arg, struct tcp_pcb *pcb, err_t err);
-static err_t tcp_server_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err);
+static void udp_server_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port);
+static err_t tcp_server_accept(void *arg, struct tcp_pcb *pcb, err_t err);
+static static err_t tcp_server_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -48,30 +48,30 @@ static err_t tcp_server_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err
   */
 void server_init(void)
 {
-  struct tcp_pcb *tpcb;    
+	struct tcp_pcb *tpcb;    
 	struct udp_pcb *upcb;  	 
- 
+
 	/* Create a new TCP control block  */
 	tpcb = tcp_new();
-	
+
 	/* Assign to the new pcb a local IP address and a port number */
 	/* Using IP_ADDR_ANY allow the pcb to be used by any local interface */
 	tcp_bind(tpcb, IP_ADDR_ANY, TCP_SERVER_PORT);
-	
+
 	/* Set the connection to the LISTEN state */
 	tpcb = tcp_listen(tpcb);
 
 	/* Specify the function to be called when a connection is established */	
 	tcp_accept(tpcb, tcp_server_accept);	
-	
-  /* Create a new UDP control block  */
-  upcb = udp_new();
-  
-  /* Bind the upcb to the UDP_PORT port */
-  /* Using IP_ADDR_ANY allow the upcb to be used by any local interface */
-  udp_bind(upcb, IP_ADDR_ANY, UDP_SERVER_PORT);
-  
-  /* Set a receive callback for the upcb */
+
+	/* Create a new UDP control block  */
+	upcb = udp_new();
+
+	/* Bind the upcb to the UDP_PORT port */
+	/* Using IP_ADDR_ANY allow the upcb to be used by any local interface */
+	udp_bind(upcb, IP_ADDR_ANY, UDP_SERVER_PORT);
+
+	/* Set a receive callback for the upcb */
   udp_recv(upcb, udp_server_callback, NULL);  
 }
 
@@ -84,68 +84,67 @@ void server_init(void)
   * @param port the remote port from which the packet was received
   * @retval None
   */
-void udp_server_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
+static void udp_server_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
 {
-  struct tcp_pcb *pcb;
-  uint8_t iptab[4];
-  uint8_t iptxt[20];
-  
-  /* We have received the UDP Echo from a client */
-  /* read its IP address */
-  iptab[0] = (uint8_t)((uint32_t)(addr->addr) >> 24);
-  iptab[1] = (uint8_t)((uint32_t)(addr->addr) >> 16);
-  iptab[2] = (uint8_t)((uint32_t)(addr->addr) >> 8);
-  iptab[3] = (uint8_t)((uint32_t)(addr->addr));
+	struct tcp_pcb *pcb;
+	uint8_t iptab[4];
+	uint8_t iptxt[20];
 
-  sprintf((char*)iptxt, "is: %d.%d.%d.%d     ", iptab[3], iptab[2], iptab[1], iptab[0]);
-  
-  printf( "is: %d.%d.%d.%d     ", iptab[3], iptab[2], iptab[1], iptab[0]);	                           	                             
- 
-  /* Connect to the remote client */
-  udp_connect(upcb, addr, UDP_CLIENT_PORT);
-    
-  /* Tell the client that we have accepted it */
+	/* We have received the UDP Echo from a client */
+	/* read its IP address */
+	iptab[0] = (uint8_t)((uint32_t)(addr->addr) >> 24);
+	iptab[1] = (uint8_t)((uint32_t)(addr->addr) >> 16);
+	iptab[2] = (uint8_t)((uint32_t)(addr->addr) >> 8);
+	iptab[3] = (uint8_t)((uint32_t)(addr->addr));
+
+	sprintf((char*)iptxt, "is: %d.%d.%d.%d     ", iptab[3], iptab[2], iptab[1], iptab[0]);
+
+	dbg_string( "is: %d.%d.%d.%d     ", iptab[3], iptab[2], iptab[1], iptab[0]);	                           	                             
+
+	/* Connect to the remote client */
+	udp_connect(upcb, addr, UDP_CLIENT_PORT);
+
+	/* Tell the client that we have accepted it */
 	udp_send(upcb,p);
 
-  /* free the UDP connection, so we can accept new clients */
-  udp_disconnect(upcb);
-	
-  /* Bind the upcb to IP_ADDR_ANY address and the UDP_PORT port*/
-  /* Be ready to get a new request from another client */  
-  udp_bind(upcb, IP_ADDR_ANY, UDP_SERVER_PORT);
-	
-  /* Set a receive callback for the upcb */
-  udp_recv(upcb, udp_server_callback, NULL);    	
-	
-  /* Create a new TCP control block  */
-  pcb = tcp_new();
-	
-  if(pcb !=NULL)
-  {
-    err_t err;	  
-	      
-    /* Assign to the new pcb a local IP address and a port number */
-    err = tcp_bind(pcb, addr, TCP_SERVER_PORT);
-	  
-	if(err != ERR_USE)
-	{
-	  /* Set the connection to the LISTEN state */
-      pcb = tcp_listen(pcb);
-    
-      /* Specify the function to be called when a connection is established */
-      tcp_accept(pcb, tcp_server_accept);
-	}
-	else
-	{
-	  /* We enter here if a conection to the addr IP address already exists */
-	  /* so we don't need to establish a new one */
-	  tcp_close(pcb);
-	}            
-  }
+	/* free the UDP connection, so we can accept new clients */
+	udp_disconnect(upcb);
 
-  /* Free the p buffer */
-  pbuf_free(p);
-   
+	/* Bind the upcb to IP_ADDR_ANY address and the UDP_PORT port*/
+	/* Be ready to get a new request from another client */  
+	udp_bind(upcb, IP_ADDR_ANY, UDP_SERVER_PORT);
+
+	/* Set a receive callback for the upcb */
+	udp_recv(upcb, udp_server_callback, NULL);    	
+
+	/* Create a new TCP control block  */
+	pcb = tcp_new();
+
+	if(pcb !=NULL)
+	{
+		err_t err;	  
+
+		/* Assign to the new pcb a local IP address and a port number */
+		err = tcp_bind(pcb, addr, TCP_SERVER_PORT);
+
+		if(err != ERR_USE)
+		{
+			/* Set the connection to the LISTEN state */
+			pcb = tcp_listen(pcb);
+
+			/* Specify the function to be called when a connection is established */
+			tcp_accept(pcb, tcp_server_accept);
+		}
+		else
+		{
+			/* We enter here if a conection to the addr IP address already exists */
+			/* so we don't need to establish a new one */
+			tcp_close(pcb);
+		}            
+	}
+
+	/* Free the p buffer */
+	pbuf_free(p);
 }
 
 /**
@@ -155,7 +154,7 @@ void udp_server_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct
   * @param  err error value
   * @retval ERR_OK
   */
-err_t tcp_server_accept(void *arg, struct tcp_pcb *pcb, err_t err)
+static err_t tcp_server_accept(void *arg, struct tcp_pcb *pcb, err_t err)
 { 
   /* Specify the function that should be called when the TCP connection receives data */
   tcp_recv(pcb, tcp_server_recv);
@@ -174,41 +173,37 @@ err_t tcp_server_accept(void *arg, struct tcp_pcb *pcb, err_t err)
   */
 static err_t tcp_server_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
 {
-  //char data;
+	struct pbuf *tcp_send_pbuf;
+	struct name *name = (struct name *)arg;
 
-  /* Read the led number */
-  //data = *(((char *)p->payload));  
+	if (p != NULL)
+	{
+		/* 扩大收发数据的窗口 */
+		tcp_recved(pcb, p->tot_len);
 
-  /* Toggle the specified led */
+		if (!name)
+		{
+				pbuf_free(p);
+				return ERR_ARG;
+		}
 
-  /*
-  switch (data)
-  {
-  	case LED1:
-	    STM_EVAL_LEDToggle(LED1);
-		break;
-	
-	case LED2:
-	    STM_EVAL_LEDToggle(LED2);
-		break;
-	
-	case LED3:
-	    STM_EVAL_LEDToggle(LED3);
-		break;
-	
-	case LED4:
-	    STM_EVAL_LEDToggle(LED4);
-		break;
-	
-	default:
-		break;
-  }
-	*/
+		/* 将接收的数据拷贝给发送结构体 */
+		tcp_send_pbuf = p;
 
-  /* Free the p buffer */
-  pbuf_free(p);
+		/* 换行 */
+		tcp_write(pcb, "\r\n", strlen("\r\n"), 1);
 
-  return ERR_OK;
+		tcp_write(pcb, tcp_send_pbuf->payload, tcp_send_pbuf->len, 1);
+
+		pbuf_free(p);
+	}
+	else if (err == ERR_OK)
+	{
+		mem_free(name);
+		return tcp_close(pcb);
+	}
+
+	return ERR_OK;
 }
 
 /******************* (C) COPYRIGHT 2009 STMicroelectronics *****END OF FILE****/

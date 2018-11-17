@@ -10,6 +10,8 @@
 
 #include "app_inc.h"
 
+
+
 /* The check task uses the sprintf function so requires a little more stack. */
 #define mainLED_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE + 50 )
 	
@@ -38,6 +40,9 @@ int main( void )
 
 	sprintf(cmd_prefix, "%s-%d.%d.%d ", "clock", PRJ_VER_MAJOR, PRJ_VER_MINOR, PRJ_VER_REVISION);
 	app_cli_init(tskIDLE_PRIORITY + 1, cmd_prefix, &task_handle[TASK_HANDLE_CLI]);
+
+	/* establish lwip, and create udp and tcp server */
+	LwIP_Init();
 
 	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, NULL, 3, &task_handle[TASK_HANDLE_DISPLAY]);
 	xTaskCreate((pdTASK_CODE)app_th_task, "sht10", 280, NULL, 3, &task_handle[TASK_HANDLE_SHT10]);

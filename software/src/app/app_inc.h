@@ -9,6 +9,7 @@
 #include "app_buz.h"
 #include "app_data.h"
 #include "app_led.h"
+#include "netconfig.h"
 
 #include "main.h"
 

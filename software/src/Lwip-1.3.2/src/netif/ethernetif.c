@@ -50,22 +50,18 @@
 #define IFNAME0 'S'
 #define IFNAME1 'T'
 
-static unsigned char Rx_Data_Buf[1516];	    /* ´æ·Å½ÓÊÕÊý¾Ý»º³åÆ÷ */
-static unsigned char Tx_Data_Buf[1516]; /* ´æ·Å·¢ËÍÊý¾Ý»º³åÆ÷ */
-
-err_t  ethernetif_input(struct netif *netif);
+static unsigned char Rx_Data_Buf[1516];
+static unsigned char Tx_Data_Buf[1516];
 
 struct ethernetif
 {
 	struct eth_addr *ethaddr;
 };
 
-static void low_level_init( struct netif *netif )	  /* µ×²ãÓ²¼þÇý¶¯Íø¿¨³õÊ¼»¯º¯Êý */
+static void low_level_init( struct netif *netif )
 {
-	//unsigned portBASE_TYPE uxPriority;
-		
-	netif->mtu = 1500;		            /* ×î´ó´«Êäµ¥Ôª */
-		
+	netif->mtu = 1500;
+
 	/* broadcast capability */
 	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP;
 
@@ -74,10 +70,7 @@ static void low_level_init( struct netif *netif )	  /* µ×²ãÓ²¼þÇý¶¯Íø¿¨³õÊ¼»¯º¯Ê
 	time.  To prevent this starving lower priority tasks of processing time we
 	lower our priority prior to the call, then raise it back again once the
 	initialisation is complete. */
-	dm9000x_inital();     
-
-	/* Create the task that handles the EMAC. */
-	xTaskCreate( (pdTASK_CODE)ethernetif_input, "net_phy", netifINTERFACE_TASK_STACK_SIZE, netif, 3, NULL);
+	dm9000x_inital(netif->hwaddr);
 }		   
 /*-----------------------------------------------------------*/
 
@@ -149,8 +142,6 @@ err_t  ethernetif_input(struct netif *netif)
 	
 	for(;;)
 	{
-		/* xSemaphoreTake(*dm9000x_get_semap(), portMAX_DELAY); */
-		
 		p = low_level_input(netif);
 
 		if (p == NULL) { continue;}
@@ -162,6 +153,7 @@ err_t  ethernetif_input(struct netif *netif)
 			pbuf_free(p);
 			p = NULL;
 		}
+		vTaskDelay(5);
   	}
 }
 
@@ -179,27 +171,17 @@ err_t  ethernetif_input(struct netif *netif)
  */
 err_t ethernetif_init( struct netif *netif )
 {
-	struct ethernetif   *ethernetif;
-
-	ethernetif = mem_malloc( sizeof(struct ethernetif) );
-
-	if( ethernetif == NULL )
-	{
-		LWIP_DEBUGF( NETIF_DEBUG, ("ethernetif_init: out of memory\n\r") );
-		return ERR_MEM;
-	}
-
-	netif->state = ethernetif;
 	netif->name[0] = IFNAME0;
 	netif->name[1] = IFNAME1;
 
 	netif->output = etharp_output;
-
 	netif->linkoutput = low_level_output;
-	ethernetif->ethaddr = ( struct eth_addr * ) &( netif->hwaddr[0] );
 
 	low_level_init( netif );
-	
+
+	/* Create the task that handles the EMAC. */
+	xTaskCreate( (pdTASK_CODE)ethernetif_input, "net_phy", netifINTERFACE_TASK_STACK_SIZE, netif, 1, NULL);
+
 	return ERR_OK;
 }
 /*************************************************************************************************************/
