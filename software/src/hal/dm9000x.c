@@ -4,6 +4,8 @@
 #include "DM9000x.h"
 #include "netif.h"
 
+#include "mid_dbg.h"
+
 #define  EXINIT                    GPIO_Pin_0    // PB0
 #define  CMD                       GPIO_Pin_3 	 // 
 #define	 CS                        GPIO_Pin_4	 // 
@@ -214,7 +216,7 @@ void dm9000x_sendpacket( uint8_t* packet, uint16_t len)
 		{
 			iow(DM9000_MWCMD, *(packet++));
 		}
-		printf("dm9000x_sendpacket:dm9000 io mode is 8bit.....!\n");
+		dbg_string("dm9000x_sendpacket:dm9000 io mode is 8bit.....!\r\n");
 	}
     else 
 	{
@@ -223,18 +225,16 @@ void dm9000x_sendpacket( uint8_t* packet, uint16_t len)
 			Temp = packet[i]|( packet[i+1]<< 8);
 			iow(DM9000_MWCMD, Temp);	
 		}
-//		printf("dm9000x_sendpacket:dm9000 io mode is 16bit.....!\n");
+		//dbg_string("dm9000x_sendpacket:dm9000 io mode is 16bit.....!\r\n");
 	}
     iow(DM9000_TXPLH, (len>>8) & 0x0ff);
     iow(DM9000_TXPLL, len & 0x0ff);
 	
     iow(DM9000_TCR, 0x01);
 
-	while(!(ior(DM9000_NSR)&0x0C))
-	    dm9000_delay(5);    
-    
-    iow(DM9000_NSR, 0x2c);
+	while(!(ior(DM9000_NSR)&0x0C)) ;
 
+    iow(DM9000_NSR, 0x2c);
     iow(DM9000_IMR, 0x81);
 }
 
@@ -263,7 +263,7 @@ uint16_t dm9000x_receivepacket(uint8_t* packet, uint16_t maxlen)
             {
                  iow(DM9000_IMR, 0x80);
                  dm9000x_inital(dm9000_mac);
-				 printf("System is restart\n");
+				 dbg_string("System is restart\r\n");
                  iow(DM9000_IMR, 0x81);
             }
             return 0;

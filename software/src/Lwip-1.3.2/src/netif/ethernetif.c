@@ -47,11 +47,13 @@
 
 #define netifINTERFACE_TASK_STACK_SIZE		( 350 )
 
+#define BUFFER_MAX_LENGTH			(IP_FRAG_MAX_MTU + 16)
+
 #define IFNAME0 'S'
 #define IFNAME1 'T'
 
-static unsigned char Rx_Data_Buf[1516];
-static unsigned char Tx_Data_Buf[1516];
+static unsigned char Rx_Data_Buf[BUFFER_MAX_LENGTH];
+static unsigned char Tx_Data_Buf[BUFFER_MAX_LENGTH];
 
 struct ethernetif
 {
@@ -60,7 +62,7 @@ struct ethernetif
 
 static void low_level_init( struct netif *netif )
 {
-	netif->mtu = 1500;
+	netif->mtu = IP_FRAG_MAX_MTU;
 
 	/* broadcast capability */
 	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP;
@@ -80,17 +82,25 @@ static void low_level_init( struct netif *netif )
  * might be chained.
  */
 static err_t low_level_output( struct netif *netif, struct pbuf *p ) 
-{     
+{	  
 	struct pbuf *q;
-	int len = 0;   		                
+	int len = 0;						
 	
 	for(q = p; q != NULL; q = q->next) 
 	{
+		if(len >= BUFFER_MAX_LENGTH)
+		{
+			len = BUFFER_MAX_LENGTH;
+			break;
+		}
+		else
+		{
 			memcpy(&Tx_Data_Buf[len], (u8_t*)q->payload, q->len);
 			len = len + q->len;
+		}
 	}		
 										
-	dm9000x_sendpacket(Tx_Data_Buf,len);
+	dm9000x_sendpacket(Tx_Data_Buf, len);
 	
 	return ERR_OK;
 }
@@ -100,15 +110,14 @@ static err_t low_level_output( struct netif *netif, struct pbuf *p )
  * low_level_input(): Should allocate a pbuf and transfer the bytes of the 
  * incoming packet from the interface into the pbuf. 
  */
-
 static struct pbuf *low_level_input( struct netif *netif )	
 {	                                                   
 
 	struct pbuf *q, *p = NULL;
 	u16 Len = 0; 
-	int i =0;                  	
+	int i = 0;                  	
 
-	Len = dm9000x_receivepacket(Rx_Data_Buf, 1516);   
+	Len = dm9000x_receivepacket(Rx_Data_Buf, BUFFER_MAX_LENGTH);   
 
 	if ( Len == 0 ) return 0;
 		
@@ -153,7 +162,7 @@ err_t  ethernetif_input(struct netif *netif)
 			pbuf_free(p);
 			p = NULL;
 		}
-		vTaskDelay(5);
+		vTaskDelay(2);
   	}
 }
 

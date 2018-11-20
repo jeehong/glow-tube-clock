@@ -450,7 +450,7 @@
  * (requires IP_FRAG_USES_STATIC_BUF==1)
  */
 #if IP_FRAG_USES_STATIC_BUF && !defined(IP_FRAG_MAX_MTU)
-#define IP_FRAG_MAX_MTU                 2000
+#define IP_FRAG_MAX_MTU                 1500
 #endif
 
 /**
