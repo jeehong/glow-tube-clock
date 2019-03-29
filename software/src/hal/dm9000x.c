@@ -17,8 +17,8 @@
 #define  CS_PORT                   GPIOC
 #define  IOW_PORT                  GPIOC
 #define  IOR_PORT                  GPIOC
-#define  CONTROL_PORT              GPIOC
 #define  EXINT_PORT                GPIOB
+#define  CONTROL_PORT              GPIOC
 #define  DATA_PORT                 GPIOB         // PB0~15  
 
 #define  GPIOB_CRL                 (*(volatile unsigned long *)GPIOB_BASE) //GPIOB = 0x40011000
@@ -64,7 +64,7 @@ void dm9000x_gpio_inital(void)
 	RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB , ENABLE); 	
 	RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOC , ENABLE); 
 
-GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE); 
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE); 
 
 	/* Configure control io as output push-pull */
 	GPIO_dm9000x.GPIO_Pin = CMD | CS | IOW | IOR;
@@ -99,13 +99,13 @@ static __inline void dm9000_out_byte(u16 outdata, u16 reg)
 	GPIO_dm9000x.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init( DATA_PORT, &GPIO_dm9000x );
 	DM9000X_DATA_OUT(outdata);
-    DM9000X_CMD(reg);
-    DM9000X_CS(0);
-    DM9000X_IOR(1);
-    DM9000X_IOW(0);
+	DM9000X_CMD(reg);
+	DM9000X_CS(0);
+	DM9000X_IOR(1);
+	DM9000X_IOW(0);
 
-    DM9000X_IOW(1);				   
-    DM9000X_CS(1); 
+	DM9000X_IOW(1);
+	DM9000X_CS(1);
 }
 
 static __inline u16 dm9000_in_byte(u16 reg)
