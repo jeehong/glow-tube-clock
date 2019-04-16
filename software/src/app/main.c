@@ -39,19 +39,21 @@ int main( void )
 	dbg_string("------Glow tube clock!------\r\n");
 
 	sprintf(cmd_prefix, "%s-%d.%d.%d ", "clock", PRJ_VER_MAJOR, PRJ_VER_MINOR, PRJ_VER_REVISION);
-	app_cli_init(tskIDLE_PRIORITY + 1, cmd_prefix, &task_handle[TASK_HANDLE_CLI]);
+	app_cli_init(tskIDLE_PRIORITY + 2, cmd_prefix, &task_handle[TASK_HANDLE_CLI]);
 
 	/* establish lwip, create udp and tcp server */
 	LwIP_Init();
 
-	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, NULL, 3, &task_handle[TASK_HANDLE_DISPLAY]);
-	xTaskCreate((pdTASK_CODE)app_th_task, "sht10", 280, NULL, 3, &task_handle[TASK_HANDLE_SHT10]);
-	xTaskCreate((pdTASK_CODE)app_time_task, "time", 280, NULL, 4, &task_handle[TASK_HANDLE_DS3231]);
-	xTaskCreate((pdTASK_CODE)app_buzzer_task, "buz", 290, NULL, 3, &task_handle[TASK_HANDLE_BUZ]);
-	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led", 200, NULL, configMAX_PRIORITIES - 1, &task_handle[TASK_HANDLE_LED]);
-	xTaskCreate((pdTASK_CODE)app_data_store_task, "data", 200, NULL, 3, &task_handle[TASK_HANDLE_DATA]);
-		
-	/* Start the scheduler. */
+    #if (1)
+	xTaskCreate((pdTASK_CODE)app_display_task, "display", 280, NULL, 2, &task_handle[TASK_HANDLE_DISPLAY]);
+	xTaskCreate((pdTASK_CODE)app_th_task, "sht10", 280, NULL, 2, &task_handle[TASK_HANDLE_SHT10]);
+	xTaskCreate((pdTASK_CODE)app_time_task, "clock", 280, NULL, 2, &task_handle[TASK_HANDLE_DS3231]);
+	xTaskCreate((pdTASK_CODE)app_buzzer_task, "buzzer", 290, NULL, 2, &task_handle[TASK_HANDLE_BUZ]);
+	xTaskCreate((pdTASK_CODE)app_led_task_blink, "led-RGB", 200, NULL, tskIDLE_PRIORITY + 1, &task_handle[TASK_HANDLE_LED]);
+	xTaskCreate((pdTASK_CODE)app_data_store_task, "storage", 200, NULL, 2, &task_handle[TASK_HANDLE_DATA]);
+    #endif
+    
+	/* St0art the scheduler. */
 	vTaskStartScheduler();
 
 	return 0;

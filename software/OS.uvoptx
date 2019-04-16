@@ -157,50 +157,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>145</LineNumber>
+          <LineNumber>127</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134274944</Address>
+          <Address>134223710</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\src\Lwip-1.3.2\src\netif\ethernetif.c</Filename>
+          <Filename>.\src\app\netconfig.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\OS\src/Lwip-1.3.2/src/netif/ethernetif.c\145</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>143</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134274970</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\src\Lwip-1.3.2\src\netif\ethernetif.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OS\src/Lwip-1.3.2/src/netif/ethernetif.c\143</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>141</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134274932</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\src\Lwip-1.3.2\src\netif\ethernetif.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\OS\src/Lwip-1.3.2/src/netif/ethernetif.c\141</Expression>
+          <Expression>\\OS\src/app/netconfig.c\127</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -784,7 +752,7 @@
 
   <Group>
     <GroupName>lwip-core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1192,7 +1160,7 @@
       <GroupNumber>8</GroupNumber>
       <FileNumber>69</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\Lwip-1.3.2\src\api\tcpip.c</PathWithFileName>

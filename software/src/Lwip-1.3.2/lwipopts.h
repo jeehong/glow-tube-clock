@@ -33,16 +33,59 @@
 #define __LWIPOPTS_H__
 
 /* ------------------------ Generic options ------------------------------- */
-//#undef  LWIP_NOASSERT
+
+#define LWIP_DEBUG
+#undef  LWIP_DEBUG
+
+#define LWIP_DBG_TYPES_ON				(LWIP_DBG_ON|LWIP_DBG_TRACE|LWIP_DBG_STATE|LWIP_DBG_FRESH|LWIP_DBG_HALT)
+
+/* ------------------------                 ------------------------------- */
+#define TCP_LISTEN_BACKLOG              1
+//#define LWIP_SO_RCVBUF                  1
+#define LWIP_NETCONN                    1
+#define LWIP_NETBUF_RECVINFO            1
+#define LWIP_NETCONN_SEM_PER_THREAD     1
 #define LWIP_NOASSERT
 #define LWIP_NOERROR
 
+#ifdef LWIP_DEBUG
+	#define LWIP_DBG_MIN_LEVEL		 	0
+	#define PPP_DEBUG					LWIP_DBG_OFF
+	#define MEM_DEBUG					LWIP_DBG_OFF
+	#define MEMP_DEBUG					LWIP_DBG_OFF
+	#define PBUF_DEBUG					LWIP_DBG_OFF
+	#define API_LIB_DEBUG				LWIP_DBG_OFF
+	#define API_MSG_DEBUG				LWIP_DBG_OFF
+	#define TCPIP_DEBUG					LWIP_DBG_ON
+	#define NETIF_DEBUG					LWIP_DBG_OFF
+	#define SOCKETS_DEBUG				LWIP_DBG_OFF
+	#define DNS_DEBUG					LWIP_DBG_OFF
+	#define AUTOIP_DEBUG				LWIP_DBG_OFF
+	#define DHCP_DEBUG					LWIP_DBG_OFF
+	#define IP_DEBUG					LWIP_DBG_OFF
+	#define IP_REASS_DEBUG				LWIP_DBG_OFF
+	#define ICMP_DEBUG					LWIP_DBG_OFF
+	#define IGMP_DEBUG					LWIP_DBG_OFF
+	#define UDP_DEBUG					LWIP_DBG_OFF
+	#define TCP_DEBUG					LWIP_DBG_OFF
+	#define TCP_INPUT_DEBUG				LWIP_DBG_OFF
+	#define TCP_OUTPUT_DEBUG			LWIP_DBG_OFF
+	#define TCP_RTO_DEBUG				LWIP_DBG_OFF
+	#define TCP_CWND_DEBUG				LWIP_DBG_OFF
+	#define TCP_WND_DEBUG				LWIP_DBG_OFF
+	#define TCP_FR_DEBUG				LWIP_DBG_OFF
+	#define TCP_QLEN_DEBUG				LWIP_DBG_OFF
+	#define TCP_RST_DEBUG				LWIP_DBG_OFF
+#endif
 
-#define SYS_LIGHTWEIGHT_PROT    1
+/* ------------------------ Core locking -------------------------------- */
+#define NO_SYS                          0
+#define SYS_LIGHTWEIGHT_PROT            1
+#define LWIP_TCPIP_CORE_LOCKING         1
+#define LWIP_MPU_COMPATIBLE             0
+#define LWIP_TCPIP_CORE_LOCKING_INPUT   1
 
-//#define LWIP_DEBUG              1
-//#define DBG_TYPES_ON            ( DBG_LEVEL_WARNING | DBG_LEVEL_SEVERE | DBG_LEVEL_SERIOUS )
-//#define FEC_DEBUG               ( DBG_LEVEL_WARNING | DBG_ON )
+#define IP_FRAG_MAX_MTU         1500
 
 /* ------------------------ Memory options -------------------------------- */
 /* MEM_ALIGNMENT: should be set to the alignment of the CPU for which
@@ -52,12 +95,13 @@
 
 /* MEM_SIZE: the size of the heap memory. If the application will send
 a lot of data that needs to be copied, this should be set high. */
-#define MEM_SIZE                2000
+#define MEM_SIZE                (4 * 1024)
 
+#define MEMP_MEM_MALLOC         1
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
    should be set high. */
-#define MEMP_NUM_PBUF           20
+#define MEMP_NUM_PBUF           10
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
 #define MEMP_NUM_UDP_PCB        4
@@ -84,10 +128,6 @@ a lot of data that needs to be copied, this should be set high. */
    communication between the TCP/IP stack and the sequential
    programs. */
 //#define MEMP_NUM_API_MSG        8
-/* MEMP_NUM_TCPIPMSG: the number of struct tcpip_msg, which is used
-   for sequential API communication and incoming packets. Used in
-   src/api/tcpip.c. */
-//#define MEMP_NUM_TCPIP_MSG      8
 
 /* These two control is reclaimer functions should be compiled
    in. Should always be turned on (1). */
@@ -111,20 +151,21 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* Controls if TCP should queue segments that arrive out of
    order. Define to 0 if your device is low on memory. */
-#define TCP_QUEUE_OOSEQ         1
-
-/* TCP Maximum segment size. */
-#define TCP_MSS                 512
-
+#define TCP_QUEUE_OOSEQ         0 
+ 
+/* TCP Maximum segment size. */ 
+#define TCP_MSS                 (IP_FRAG_MAX_MTU - 40)
+ 
 /* TCP sender buffer space (bytes). */
-#define TCP_SND_BUF             512
+#define TCP_SND_BUF             (2 * TCP_MSS)
 
-/* TCP sender buffer space (pbufs). This must be at least = 2 *
-   TCP_SND_BUF/TCP_MSS for things to work. */
-#define TCP_SND_QUEUELEN        6 * TCP_SND_BUF/TCP_MSS
+/*  TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
+  as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. */
+#define TCP_SND_QUEUELEN        (4 * TCP_SND_BUF/TCP_MSS)
 
 /* TCP receive window. */
-#define TCP_WND                 512
+#define TCP_WND                 (8 * TCP_MSS)
+
 
 /* Maximum number of retransmissions of data segments. */
 #define TCP_MAXRTX              12
@@ -154,7 +195,13 @@ a lot of data that needs to be copied, this should be set high. */
 /* Define LWIP_DHCP to 1 if you want DHCP configuration of
    interfaces. DHCP is not implemented in lwIP 0.5.1, however, so
    turning this on does currently not work. */
-#define LWIP_DHCP               0
+#define LWIP_DHCP               1
+#define LWIP_AUTOIP             1
+#define LWIP_DHCP_AUTOIP_COOP   1
+
+/* MQTT */
+//#define LWIP_ALTCP              1
+//#define LWIP_ALTCP_TLS          1
 
 /* 1 if you want to do an ARP check on the offered address
    (recommended). */
@@ -164,25 +211,40 @@ a lot of data that needs to be copied, this should be set high. */
 #define LWIP_UDP                1
 #define UDP_TTL                 255
 
-
-#define LWIP_SOCKET	 1   //นุมห
-#define LWIP_DNS	1
-#define LWIP_COMPAT_SOCKETS   1
+#define LWIP_DNS	            0
+#define LWIP_COMPAT_SOCKETS     1
 /* ------------------------ Statistics options ---------------------------- */
-#define STATS
+#define LWIP_STATS				1
+#define LWIP_STATS_DISPLAY		0
 
-#ifdef STATS
-#define LINK_STATS              1
-#define IP_STATS                1
-#define ICMP_STATS              1
-#define UDP_STATS               1
-#define TCP_STATS               1
-#define MEM_STATS               1
-#define MEMP_STATS              1
-#define PBUF_STATS              1
-#define SYS_STATS               1
-#endif /* STATS */
+#if LWIP_STATS
+	#define LINK_STATS			1
+	#define IP_STATS			1
+	#define ICMP_STATS			0//1
+	#define IGMP_STATS			0
+	#define IPFRAG_STATS		0
+	#define UDP_STATS			1
+	#define TCP_STATS			1
+	#define MEM_STATS			1
+	#define MEMP_STATS			1
+	#define PBUF_STATS			1
+	#define SYS_STATS			1
+#endif /* LWIP_STATS */
 
 #define LWIP_PROVIDE_ERRNO      1
 
+/** Define LWIP_COMPAT_MUTEX if the port has no mutexes and binary semaphores
+    should be used instead */
+#define LWIP_COMPAT_MUTEX       1
+#define LWIP_COMPAT_MUTEX_ALLOWED
+
+#define TCPIP_MBOX_SIZE         16
+
+#define TCPIP_THREAD_STACKSIZE  450
+#define TCPIP_THREAD_PRIO       4
+
+#define EHTIF_THREAD_STACKSIZE  350
+#define EHTIF_THREAD_PRIO       1
+
 #endif /* __LWIPOPTS_H__ */
+

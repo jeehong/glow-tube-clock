@@ -8,7 +8,7 @@
 
 /* software version of project */
 #define PRJ_VER_MAJOR		2
-#define PRJ_VER_MINOR		0
+#define PRJ_VER_MINOR		1
 #define PRJ_VER_REVISION	0
 
 #define mainDELAY_MS(ms)			( ( TickType_t ) ms / portTICK_PERIOD_MS )

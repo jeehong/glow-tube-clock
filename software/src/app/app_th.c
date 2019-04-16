@@ -14,7 +14,7 @@ void app_th_task(void *parame)
 	
 	while(1)
 	{
-		vTaskDelay(1000);
+		vTaskDelay(2000);
 
 		if(mid_th_get_data(&th_data) != STATUS_NORMAL)
 		{

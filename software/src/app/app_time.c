@@ -25,7 +25,6 @@ struct time_event
 
 static U16 ontime = 0, offtime = 0;
 static struct time_event events;
-static TimerHandle_t xTimer500ms;
 
 
 void app_time_set_showtime(U16 on, U16 off)
@@ -165,63 +164,60 @@ static void integer_time_beep(rtc_time_attribute *tm)
 	{}
 }
 
-static void display_time(rtc_time_attribute *tm)
+/*
+ * switch states in every minute
+ * states includes display temperature&humidity,
+ * and display current time.
+ */
+static void refresh_time_every_500ms(U8 *r)
 {
+	struct rtc_time time;
 	U8 info[7];
 
-	if((tm->sec > 15 && tm->sec <= 20)
-		|| (tm->sec > 35 && tm->sec <= 40)
-		|| (tm->sec > 55 && tm->sec <= 59))
+    mid_rtc_get_time(&time);
+
+    if((time.sec > 15 && time.sec <= 20)
+		|| (time.sec > 35 && time.sec <= 40)
+		|| (time.sec > 55 && time.sec <= 59))
 	{
 		app_th_refresh_display();
 	}
 	else
 	{
-		if(xTimer500ms != NULL)
-		{
-	        xTimerStart(xTimer500ms, 0);
-	    }
-		info[0] = tm->hour / 10;
-		info[1] = tm->hour % 10;
-		info[2] = tm->min / 10;
-		info[3] = tm->min % 10;
-		info[4] = tm->sec / 10;
-		info[5] = tm->sec % 10;
-		info[6] = 0x33;
+		info[0] = time.hour / 10;
+		info[1] = time.hour % 10;
+		info[2] = time.min / 10;
+		info[3] = time.min % 10;
+		info[4] = time.sec / 10;
+		info[5] = time.sec % 10;
+        /* turn on and off colons in display time mode */
+        if(*r == 0)
+        {
+            *r = 1;
+		    info[6] = 0x33;
+        }
+        else
+        {
+            *r = 0;
+            info[6] = 0;
+        }
+
 		app_display_show_info(info);
 	}
-}
-
-static void timer_500ms_callback(TimerHandle_t xTimer)
-{
-	struct rtc_time time;
-	U8 info[7];
-	
-	mid_rtc_get_time(&time);
-	info[0] = time.hour / 10;
-	info[1] = time.hour % 10;
-	info[2] = time.min / 10;
-	info[3] = time.min % 10;
-	info[4] = time.sec / 10;
-	info[5] = time.sec % 10;
-	info[6] = 0;
-	app_display_show_info(info);
 }
 
 void app_time_task(void *parame)
 {
 	QueueHandle_t timeSync;
-	
 	struct rtc_time /*time1, */time2;
+	U8 roll = 0;	
 
 	mid_rtc_init(&timeSync);
 
 	vListInitialise(&events.list);
 	app_data_read_showtime(&ontime, &offtime);
-    xTimer500ms = xTimerCreate("Timer500ms", 500, pdFALSE, ( void * ) 0, timer_500ms_callback);
 	
 	app_time_init_event(TIME_EVENT_INTEGER_BEEP, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, integer_time_beep);
-	app_time_init_event(TIME_EVENT_DISPLAY_TIME, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, display_time);
 	app_time_init_event(TIME_EVENT_DISPLAY_ON1, 0xFF, 0xFF, 0xFF, ontime / 100, ontime % 100, 0, app_display_on);
 	app_time_init_event(TIME_EVENT_DISPLAY_OFF1, 0xFF, 0xFF, 0xFF, offtime / 100, offtime % 100, 0, app_display_off);
 	app_time_init_event(TIME_EVENT_DISPLAY_ON2, 0xFF, 0xFF, 0xFF, 7, 0, 0, app_display_on);	/* on 07:00 */
@@ -236,12 +232,19 @@ void app_time_task(void *parame)
 
 	while(1)
 	{
-		xSemaphoreTake(timeSync, portMAX_DELAY);
-		
-		mid_rtc_get_time(&time2);
-		mid_rtc_de_irq();
+		if(pdTRUE == xSemaphoreTake(timeSync, portTICK_PERIOD_MS * 500))
+		{
+    		mid_rtc_get_time(&time2);
+    		mid_rtc_de_irq();
 
-		events_triger_check(&time2);
+    		events_triger_check(&time2);
+		}
+		
+		/* 
+		 * the minimum resolution of event-triger function is 1s,
+		 * so we can not put the following function in.
+		 */
+		refresh_time_every_500ms(&roll);
 	}
 }
 

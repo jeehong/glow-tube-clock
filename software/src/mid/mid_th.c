@@ -14,7 +14,7 @@ ERROR_CODE mid_th_get_data(struct _mid_th_data_t *p)
 		dt.temperature = hal_sht10_get_data(TEMP);
 		if(dt.temperature < 0)
 		{
-			err = ERR_TIMEOUT;
+			err = ERR_TMOUT;
 		}
 	}
 	if(err == STATUS_NORMAL)
@@ -22,7 +22,7 @@ ERROR_CODE mid_th_get_data(struct _mid_th_data_t *p)
 		dt.humidity = hal_sht10_get_data(HUM);
 		if(dt.humidity < 0)
 		{
-			err = ERR_TIMEOUT;
+			err = ERR_TMOUT;
 		}
 		memcpy(p, &dt, sizeof(struct _mid_th_data_t));
 	}

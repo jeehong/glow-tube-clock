@@ -99,8 +99,9 @@ static err_t low_level_output( struct netif *netif, struct pbuf *p )
 			len = len + q->len;
 		}
 	}		
-										
+	portENTER_CRITICAL();							
 	dm9000x_sendpacket(Tx_Data_Buf, len);
+	portEXIT_CRITICAL();
 	
 	return ERR_OK;
 }
@@ -116,9 +117,10 @@ static struct pbuf *low_level_input( struct netif *netif )
 	struct pbuf *q, *p = NULL;
 	u16 Len = 0; 
 	int i = 0;                  	
-
+	
+	portENTER_CRITICAL();
 	Len = dm9000x_receivepacket(Rx_Data_Buf, BUFFER_MAX_LENGTH);   
-
+	portEXIT_CRITICAL();
 	if ( Len == 0 ) return 0;
 		
 	p = pbuf_alloc(PBUF_RAW, Len, PBUF_POOL);
@@ -131,7 +133,8 @@ static struct pbuf *low_level_input( struct netif *netif )
 			i = i + q->len;
 		}
 		if(i != p->tot_len)                    
-		{ 
+		{
+			pbuf_free(p);
 			return 0;
 		}                                 
 	}
@@ -152,9 +155,9 @@ err_t  ethernetif_input(struct netif *netif)
 	for(;;)
 	{
 		p = low_level_input(netif);
-
+		vTaskDelay(2);
+		
 		if (p == NULL) { continue;}
-		 
 		err = netif->input(p, netif);
 		if (err != ERR_OK)
 		{
@@ -162,7 +165,7 @@ err_t  ethernetif_input(struct netif *netif)
 			pbuf_free(p);
 			p = NULL;
 		}
-		vTaskDelay(2);
+		
   	}
 }
 

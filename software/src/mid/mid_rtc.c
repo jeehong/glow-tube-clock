@@ -25,9 +25,9 @@ int rtc_valid_tm(struct rtc_time *tm)
 		|| (tm->hour) >= 24
 		|| (tm->min) >= 60
 		|| (tm->sec) >= 60)
-		return 1;
+		return 0;
 
-	return 0;
+	return 1;
 }
 
 void mid_rtc_init(QueueHandle_t *p_time_sync)

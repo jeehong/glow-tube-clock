@@ -14,11 +14,12 @@
 
 #include "bsp.h"
 
+#include "lwip/netif.h"
 
 build_var(info, "Device information.", 0);
 build_var(clear, "Clear Terminal.", 0);
 build_var(date, "Read system current time.", 0);
-build_var(sdate, "Set system current time,\r\n		format: sdate Y[0,99] M[0,12] D[1,31] W[1-7] H[0-23] M[0-59] S[0-59]", 7);
+build_var(sdate, "Set system current time,\r\n		format: sdate Y[0,99] M[1,12] D[1,31] W[1-7] H[0-23] M[0-59] S[0-59]", 7);
 build_var(th, "Read the ambient temperature(C) and humidity(%).", 0);
 build_var(led, "Turn ON/OFF led blink,\r\n		format: led color[R,G,B] state[1:ON,0:OFF].", 2);
 build_var(reboot, "Reboot system.", 0);
@@ -26,7 +27,8 @@ build_var(lcd, "Turn ON/OFF lcd display,\r\n		format: lcd state[1:ON,0:OFF].", 1
 #if ( configUSE_TRACE_FACILITY == 1 )
 build_var(top, "List all the tasks state.", 0);
 #endif
-build_var(setlcd, "Time ON/OFF lcd display and led blink,\r\n		format: setlcd on[800] off[1930]", 2);
+build_var(setlcd, "Time ON/OFF lcd display and led blink.\r\n		format: setlcd on[800] off[1930]", 2);
+build_var(ip, "Report network infomation of host.\r\n		format: ip", 0);
 
 static void app_cli_register(void)
 {
@@ -39,6 +41,7 @@ static void app_cli_register(void)
 	mid_cli_register(&reboot);
 	mid_cli_register(&lcd);
 	mid_cli_register(&setlcd);
+    mid_cli_register(&ip);
 	#if ( configUSE_TRACE_FACILITY == 1 )
 	mid_cli_register(&top);
 	#endif
@@ -198,6 +201,7 @@ cmd_handle(led)
 			vTaskSuspend(pled);
 		}
 		sprintf(dest, "\tLed task is %s\r\n", state ? "working." : "stoped.");
+        ret = pdFALSE;
 	}
 	return ret;
 }
@@ -208,6 +212,35 @@ cmd_handle(reboot)
 	configASSERT(dest);
 
 	NVIC_SystemReset();
+	
+	return pdFALSE;
+}
+
+cmd_handle(ip)
+{
+    struct ip_addr ipaddr, netmask, gw;
+    u8_t mac[NETIF_MAX_HWADDR_LEN];
+    
+	(void) help_info;
+	configASSERT(dest);
+
+	LwIP_get_network_info(&ipaddr, &netmask, &gw, mac);
+    
+    sprintf(dest, "\tip_addr: %d.%d.%d.%d\r\n\tnetmask: %d.%d.%d.%d\r\n\tgateway: %d.%d.%d.%d\r\n\tmac    : %02X-%02X-%02X-%02X-%02X-%02X\r\n",
+                        ip4_addr1(&ipaddr),
+                        ip4_addr2(&ipaddr),
+                        ip4_addr3(&ipaddr),
+                        ip4_addr4(&ipaddr),
+                        ip4_addr1(&netmask),
+                        ip4_addr2(&netmask),
+                        ip4_addr3(&netmask),
+                        ip4_addr4(&netmask),
+                        ip4_addr1(&gw),
+                        ip4_addr2(&gw),
+                        ip4_addr3(&gw),
+                        ip4_addr4(&gw),
+                        mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    
 	
 	return pdFALSE;
 }

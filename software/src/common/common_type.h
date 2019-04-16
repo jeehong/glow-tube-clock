@@ -136,7 +136,7 @@ typedef unsigned short   COUNTER;
 #define ERR_EMPTY -6
 #define ERR_RAM -7
 #define ERR_BUS -8
-#define ERR_TIMEOUT -9
+#define ERR_TMOUT -9
 #define ERR_ALREADY_INIT -10
 #define ERR_RESPONSE -11
 #define ERR_IO -12
